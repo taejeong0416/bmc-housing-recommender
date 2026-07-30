@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "purpose": "부산 전체 A/B/C/D 및 결합태그 재현용 외부데이터 스냅샷",
+  "files": [
+    {
+      "path": "tag/data/external/all_metro_20260630.xlsx",
+      "dataName": "전체_도시철도역사정보_20260630",
+      "provider": "한국철도산업정보센터(KRIC), 철도 운영기관",
+      "sourceUrl": "https://data.kric.go.kr/rips/M_01_01/detail.do?id=32",
+      "portalReferenceUrl": "https://www.data.go.kr/data/15013205/standard.do",
+      "dataDate": "2026-06-30",
+      "recordCount": 1099,
+      "encoding": "XLSX",
+      "sha256": "cdf1d84a7e5c898b2aacd622783ba8ba9af35c40bee0561dc97d55ce8e063f94",
+      "usedBy": [
+        "rail_access",
+        "metro_access",
+        "donghae_access",
+        "bgl_access",
+        "transfer_access"
+      ],
+      "licenseNote": "원문 상세페이지의 최신 이용조건을 재배포 전 다시 확인"
+    },
+    {
+      "path": "tag/data/external/busan_rail_stations.json",
+      "dataName": "전체 도시철도 역사 중 부산 1~4호선·동해선·부산김해경전철 정규화본",
+      "derivedFrom": "tag/data/external/all_metro_20260630.xlsx",
+      "recordCount": 158,
+      "derivation": "prepare-rail.py: 부산교통공사 114, 한국철도공사 동해선 23, 부산김해경전철 21",
+      "sha256": "a77ff0f1c081480701926beea73b8068574d8ecbbc7bdfab8bef95e2d02ac43c"
+    },
+    {
+      "path": "tag/data/external/busan_bus_stops_20250121.zip",
+      "dataName": "부산광역시_버스 정류소 정보(SHP)_20250121",
+      "provider": "부산광역시",
+      "sourceUrl": "https://www.data.go.kr/data/15084251/fileData.do",
+      "portalModifiedDate": "2025-09-02",
+      "recordCount": 8522,
+      "encoding": "SHP ZIP, UTF-8",
+      "sha256": "f34a6f1034b479fea6e48c5e5b8fba7de30a52136bac39d2f09b179f8d31d22f",
+      "usedBy": ["bus_stop_proximity", "bus_stop_walk_300"],
+      "qualityNote": "ZIP 내부 파일 수정일은 2022-08-18이다. 노선·배차 정보가 없어 추천가중치가 아닌 근거·표시용으로만 사용한다.",
+      "licenseNote": "공공데이터포털 표시 이용허락범위 제한 없음"
+    },
+    {
+      "path": "tag/data/external/busan_bus_stops.json",
+      "dataName": "부산 버스정류소 정규화본",
+      "derivedFrom": "tag/data/external/busan_bus_stops_20250121.zip",
+      "recordCount": 8522,
+      "derivation": "prepare-shapefiles.mjs",
+      "sha256": "2012137d5f97a2b8244b4b237e2491f38c2b6ade3ada6fdd4d6939a423d73618"
+    },
+    {
+      "path": "tag/data/external/busan_public_sports_20250414.zip",
+      "dataName": "부산광역시_공공체육시설 현황(SHP)_20250414",
+      "provider": "부산광역시",
+      "sourceUrl": "https://www.data.go.kr/data/15143067/fileData.do",
+      "dataDate": "2025-04-14",
+      "recordCount": 239,
+      "encoding": "SHP ZIP, UTF-8",
+      "sha256": "ba9c1888cac4e5832700be46bc8de42c897f82387e5043e2ddf8dd408c6c37ca",
+      "usedBy": ["fitness_access"],
+      "licenseNote": "공공데이터포털 표시 이용허락범위 제한 없음"
+    },
+    {
+      "path": "tag/data/external/busan_public_sports.json",
+      "dataName": "부산 공공체육시설 정규화본",
+      "derivedFrom": "tag/data/external/busan_public_sports_20250414.zip",
+      "recordCount": 239,
+      "derivation": "prepare-shapefiles.mjs",
+      "sha256": "4c53eb07aa7d960c020119bd9f65dce133874b894c71d04d2ef625f6124db3c3"
+    },
+    {
+      "path": "tag/data/external/busan_medical_facilities_20260630.json",
+      "dataName": "건강보험심사평가원 전국 병의원 및 약국 현황 중 부산 의료시설 정규화본",
+      "provider": "건강보험심사평가원",
+      "sourceUrl": "https://opendata.hira.or.kr/op/opc/selectOpenData.do?sno=11925",
+      "portalReferenceUrl": "https://www.data.go.kr/data/15051059/fileData.do",
+      "dataDate": "2026-06-30",
+      "recordCount": 4505,
+      "recordBreakdown": {
+        "primaryCare": 2743,
+        "pharmacy": 1733,
+        "emergency": 29
+      },
+      "derivation": "prepare-medical.py: 부산 시도 필터 후 의원·보건소·보건지소·보건진료소, 약국, 특수진료 검색코드명 '응급의료기관'을 정규화",
+      "sourceAttachmentId": "326801",
+      "sourceZipSha256": "eed609c3ee13018d70367c83e84cdc456e91d7036cf68e6c72574df1520c2907",
+      "sha256": "dc9adabf3050d60a0c80ddb5a1cf37ca40e38ac688e14ed953d01cf6c5172a28",
+      "usedBy": [
+        "pharmacy_access",
+        "primary_care_access",
+        "emergency_access",
+        "medical_daily_access"
+      ],
+      "qualityNote": "선정된 부산 의료시설 좌표 결측 0건. 응급의료기관 분류는 실시간 운영·진료·수용 가능 여부를 뜻하지 않는다.",
+      "licenseNote": "공공누리 제1유형(출처표시)"
+    },
+    {
+      "path": "tag/data/external/busan_urban_parks.csv",
+      "dataName": "전국도시공원정보표준데이터 중 부산광역시 전체",
+      "provider": "부산광역시 및 부산광역시 구·군",
+      "sourceUrl": "https://www.data.go.kr/data/15012890/standard.do",
+      "portalModifiedDate": "2026-06-22",
+      "recordReferenceDateMin": "2024-06-30",
+      "recordReferenceDateMax": "2026-06-09",
+      "recordCount": 652,
+      "encoding": "UTF-8 with BOM CSV",
+      "sha256": "4f42c9554a8cd5fc34f16f21bf5e490b305cde98c3ae70372edcb3e929ffeb4c",
+      "usedBy": ["park_walk"],
+      "licenseNote": "공공데이터포털 표준데이터. 최신 이용조건을 재배포 전 다시 확인"
+    },
+    {
+      "path": "tag/data/external/raw/national_universities_20260318.json",
+      "dataName": "전국대학및전문대학정보표준데이터",
+      "provider": "한국대학교육협의회",
+      "sourceUrl": "https://www.data.go.kr/data/15107736/standard.do?recommendDataYn=Y",
+      "sourceReferenceYear": "2025",
+      "dataDate": "2026-03-18",
+      "recordCount": 1995,
+      "encoding": "UTF-8 JSON 배열(영문 필드)",
+      "sha256": "7865cee7fdc1ebddb7099eef2c138a4c61a15003cf5656c59ef2fa904ed370f0",
+      "usedBy": ["university_walk_access", "university_commercial_area"],
+      "licenseNote": "공공데이터포털 표준데이터. 최신 이용조건을 재배포 전 다시 확인"
+    },
+    {
+      "path": "tag/data/external/busan_university_campuses_2025.json",
+      "dataName": "부산 대면 대학·전문대학 대표 캠퍼스 정규화본",
+      "derivedFrom": "tag/data/external/raw/national_universities_20260318.json",
+      "recordCount": 25,
+      "derivation": "prepare-universities.mjs: 부산 필터 → 대학·전문대학 → 사이버·폐교·통합·대학원 제외 → 선도소프트 addressPoints 정확주소 좌표 결합",
+      "sha256": "070ca7b2ff2eea9aff84075b195a3cbf94b877f5228b34465f36005c6d52f2fb"
+    }
+  ],
+  "additionalDataDecisions": [
+    {
+      "dataName": "부산도시공사 실제 모집공고·정정공고 구조화 규칙",
+      "sourceUrl": "https://apply.bmc.busan.kr/smw/smw113010/selectPbancRentHouseList.do",
+      "reason": "A 자격판정은 공고·공급트랙·기준일별 규칙 없이는 확정할 수 없다.",
+      "status": "tag/data/contracts/notice_rules.json에 공고 5건 구조화 완료"
+    },
+    {
+      "dataName": "부산시 버스정보시스템 정류소·노선 정보 API",
+      "sourceUrl": "https://www.data.go.kr/data/15092750/openapi.do",
+      "reason": "정류소 근접을 실제 버스 서비스 접근성으로 승격하려면 노선·방향·배차·첫차·막차가 필요하다.",
+      "status": "최종 공모전 범위 제외. 버스는 정류소 근접 표시만 사용"
+    },
+    {
+      "dataName": "전국초중등학교위치표준데이터",
+      "sourceUrl": "https://www.data.go.kr/data/15021148/standard.do",
+      "reason": "가구 구성과 통학 수요가 확인될 때만 가족 인프라 태그로 확장할 수 있다.",
+      "status": "최종 공모전 태그에서 제외"
+    }
+  ]
+}

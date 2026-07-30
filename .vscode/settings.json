@@ -1,0 +1,5 @@
+{
+  // 원천 CSV(data/source/*.csv)는 CP949 인코딩(실 BMC 데이터 포맷). 기본 UTF-8로 열면
+  // 한글이 깨져 보이므로 자동 감지를 켜 파일별 인코딩으로 연다. 파일은 변환하지 않는다.
+  "files.autoGuessEncoding": true
+}

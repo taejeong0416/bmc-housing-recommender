@@ -1,0 +1,11 @@
+node_modules
+dist
+frontend/dist
+frontend/src/generated
+frontend/public/mockServiceWorker.js
+data/out
+data/cache
+package-lock.json
+
+# 마크다운은 손으로 관리하는 산문 문서 — prettier reflow 대상에서 제외
+**/*.md

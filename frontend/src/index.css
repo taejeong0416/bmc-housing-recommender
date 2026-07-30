@@ -1,0 +1,146 @@
+@import 'tailwindcss';
+
+/* 디자인 토큰 — 신뢰형 공공서비스. teal 앵커 + gold(청약/최상위 CTA) + teal로 미세 틴트한 뉴트럴. */
+@theme {
+  /* 브랜드 teal */
+  --color-teal: #047480;
+  --color-teal-dark: #035b64; /* hover/active */
+  --color-teal-soft: #e4f5f2; /* 칩·hover 표면 */
+  --color-teal-ghost: #f1faf8; /* 아주 옅은 강조 배경 */
+  --color-soft: #e4f5f2; /* 기존 사용처 호환 */
+
+  /* 행동/청약 강조 gold */
+  --color-gold: #f6c026;
+  --color-gold-dark: #e7ac10;
+  --color-gold-ink: #3a2f00;
+
+  /* 관심(하트) */
+  --color-heart: #e05b6b;
+
+  /* 뉴트럴 — teal로 미세 틴트 */
+  --color-ink: #18262a; /* 제목·본문 강조 */
+  --color-body: #34433f; /* 일반 본문 */
+  --color-sub: #5f6d67; /* 보조 텍스트 — WCAG AA 5.4:1 on white */
+  --color-faint: #697770; /* 플레이스홀더·3차 텍스트 — WCAG AA 4.7:1 on white */
+  --color-line: #e2e8e5; /* 경계선 */
+  --color-line-soft: #eef2f0; /* 옅은 구분선 */
+  --color-paper: #ffffff; /* 페이지 배경 — 흰색 웹 캔버스 */
+  --color-panel: #f5f8f7; /* 카드 안쪽 옅은 패널 */
+
+  --font-sans: 'Pretendard', -apple-system, sans-serif;
+
+  /* 그림자 — 흰 배경 웹 패널. 떠 있는 카드가 아니라 얇은 테두리 + 아주 옅은 리프트. */
+  --shadow-sm: 0 0 0 1px rgba(18, 52, 47, 0.05);
+  --shadow-card:
+    0 0 0 1px rgba(18, 52, 47, 0.06), 0 1px 2px rgba(18, 52, 47, 0.03);
+  --shadow-pop:
+    0 0 0 1px rgba(18, 52, 47, 0.06), 0 8px 24px -10px rgba(18, 52, 47, 0.16);
+  --shadow-header:
+    0 1px 0 rgba(18, 52, 47, 0.05), 0 6px 20px -12px rgba(18, 52, 47, 0.12);
+
+  /* 모션 — transform·opacity만, 자연 감속(ease-out) */
+  --animate-toast-in: toast-in 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-rise: rise 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 지도 타일(img)이 Tailwind preflight의 img{max-width:100%;height:auto}에 눌려 안 보이는 문제 방지.
+   Naver SDK는 자체 CSS 리셋이 없어 직접 해제한다. 언레이어드(비-@layer)라 preflight를 이긴다. */
+.naver-map img {
+  max-width: none;
+  height: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 전역 기본 스타일 — @layer base 안에 둬야 Tailwind 유틸리티(@layer utilities)가 button 등 리셋을 이길 수 있음. */
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background: var(--color-paper);
+    font-family:
+      'Pretendard',
+      -apple-system,
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--color-body);
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: var(--color-teal-soft);
+    color: var(--color-teal-dark);
+  }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+  input,
+  select {
+    font-family: inherit;
+  }
+  .ms {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    -webkit-font-feature-settings: 'liga';
+    display: inline-block;
+  }
+  select {
+    -webkit-appearance: none;
+    appearance: none;
+    background: #fff;
+  }
+  input[type='range'] {
+    accent-color: var(--color-teal);
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cfd8d5;
+    border-radius: 8px;
+  }
+  /* 접근성(P1-D-4): 키보드 포커스에만 링 표시 — 마우스 클릭에는 나타나지 않음. */
+  :focus-visible {
+    outline: 2px solid var(--color-teal);
+    outline-offset: 2px;
+  }
+}

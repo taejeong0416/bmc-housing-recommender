@@ -1,0 +1,1018 @@
+[
+  {
+    "id": "L001",
+    "name": "부산역",
+    "alias": [
+      "KTX부산역"
+    ],
+    "category": "교통",
+    "categoryMinor": "고속철도역",
+    "district": "동구",
+    "lat": 35.1151,
+    "lng": 129.0416,
+    "importance": 5,
+    "radiusM": 2000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L002",
+    "name": "구포역",
+    "alias": [],
+    "category": "교통",
+    "categoryMinor": "일반철도역",
+    "district": "북구",
+    "lat": 35.2098,
+    "lng": 128.9943,
+    "importance": 3,
+    "radiusM": 1500,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L003",
+    "name": "부전역",
+    "alias": [
+      "부전역(동해선)"
+    ],
+    "category": "교통",
+    "categoryMinor": "일반철도역",
+    "district": "부산진구",
+    "lat": 35.1631,
+    "lng": 129.0619,
+    "importance": 4,
+    "radiusM": 1500,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L004",
+    "name": "김해국제공항",
+    "alias": [
+      "부산김해공항"
+    ],
+    "category": "교통",
+    "categoryMinor": "공항",
+    "district": "강서구",
+    "lat": 35.1795,
+    "lng": 128.9382,
+    "importance": 5,
+    "radiusM": 10000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L005",
+    "name": "서면역",
+    "alias": [],
+    "category": "교통",
+    "categoryMinor": "환승역",
+    "district": "부산진구",
+    "lat": 35.158,
+    "lng": 129.0596,
+    "importance": 5,
+    "radiusM": 1000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L006",
+    "name": "연산역",
+    "alias": [],
+    "category": "교통",
+    "categoryMinor": "환승역",
+    "district": "연제구",
+    "lat": 35.1843,
+    "lng": 129.0787,
+    "importance": 4,
+    "radiusM": 1000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L007",
+    "name": "수영역",
+    "alias": [],
+    "category": "교통",
+    "categoryMinor": "환승역",
+    "district": "수영구",
+    "lat": 35.1635,
+    "lng": 129.1135,
+    "importance": 4,
+    "radiusM": 1000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L008",
+    "name": "동래역",
+    "alias": [],
+    "category": "교통",
+    "categoryMinor": "환승역",
+    "district": "동래구",
+    "lat": 35.2054,
+    "lng": 129.0784,
+    "importance": 4,
+    "radiusM": 1000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L009",
+    "name": "사상역",
+    "alias": [],
+    "category": "교통",
+    "categoryMinor": "환승역",
+    "district": "사상구",
+    "lat": 35.1625,
+    "lng": 128.9905,
+    "importance": 4,
+    "radiusM": 1000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L010",
+    "name": "덕천역",
+    "alias": [],
+    "category": "교통",
+    "categoryMinor": "환승역",
+    "district": "북구",
+    "lat": 35.2109,
+    "lng": 128.993,
+    "importance": 3,
+    "radiusM": 1000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L011",
+    "name": "미남역",
+    "alias": [],
+    "category": "교통",
+    "categoryMinor": "환승역",
+    "district": "동래구",
+    "lat": 35.2085,
+    "lng": 129.0705,
+    "importance": 3,
+    "radiusM": 1000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L012",
+    "name": "부산종합버스터미널",
+    "alias": [
+      "노포동터미널"
+    ],
+    "category": "교통",
+    "categoryMinor": "버스터미널",
+    "district": "금정구",
+    "lat": 35.2846,
+    "lng": 129.0876,
+    "importance": 4,
+    "radiusM": 2000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L013",
+    "name": "서부산버스터미널",
+    "alias": [
+      "사상터미널"
+    ],
+    "category": "교통",
+    "categoryMinor": "버스터미널",
+    "district": "사상구",
+    "lat": 35.1622,
+    "lng": 128.9906,
+    "importance": 3,
+    "radiusM": 2000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L014",
+    "name": "부산대학교",
+    "alias": [
+      "부산대",
+      "부산대학교 장전캠퍼스"
+    ],
+    "category": "교육",
+    "categoryMinor": "대학교",
+    "district": "금정구",
+    "lat": 35.2333,
+    "lng": 129.0844,
+    "importance": 5,
+    "radiusM": 3000,
+    "targetUser": [
+      "대학생",
+      "대학원생"
+    ]
+  },
+  {
+    "id": "L015",
+    "name": "부경대학교",
+    "alias": [
+      "부경대"
+    ],
+    "category": "교육",
+    "categoryMinor": "대학교",
+    "district": "남구",
+    "lat": 35.1339,
+    "lng": 129.1058,
+    "importance": 4,
+    "radiusM": 3000,
+    "targetUser": [
+      "대학생",
+      "대학원생"
+    ]
+  },
+  {
+    "id": "L016",
+    "name": "경성대학교",
+    "alias": [
+      "경성대"
+    ],
+    "category": "교육",
+    "categoryMinor": "대학교",
+    "district": "남구",
+    "lat": 35.14,
+    "lng": 129.101,
+    "importance": 4,
+    "radiusM": 3000,
+    "targetUser": [
+      "대학생",
+      "대학원생"
+    ]
+  },
+  {
+    "id": "L017",
+    "name": "동아대학교",
+    "alias": [
+      "동아대",
+      "승학캠퍼스"
+    ],
+    "category": "교육",
+    "categoryMinor": "대학교",
+    "district": "사하구",
+    "lat": 35.1147,
+    "lng": 128.9686,
+    "importance": 4,
+    "radiusM": 3000,
+    "targetUser": [
+      "대학생",
+      "대학원생"
+    ]
+  },
+  {
+    "id": "L018",
+    "name": "동의대학교",
+    "alias": [
+      "동의대"
+    ],
+    "category": "교육",
+    "categoryMinor": "대학교",
+    "district": "부산진구",
+    "lat": 35.1385,
+    "lng": 129.0258,
+    "importance": 4,
+    "radiusM": 3000,
+    "targetUser": [
+      "대학생",
+      "대학원생"
+    ]
+  },
+  {
+    "id": "L019",
+    "name": "한국해양대학교",
+    "alias": [
+      "해양대"
+    ],
+    "category": "교육",
+    "categoryMinor": "대학교",
+    "district": "영도구",
+    "lat": 35.0752,
+    "lng": 129.0855,
+    "importance": 3,
+    "radiusM": 3000,
+    "targetUser": [
+      "대학생",
+      "대학원생"
+    ]
+  },
+  {
+    "id": "L020",
+    "name": "부산외국어대학교",
+    "alias": [
+      "부산외대"
+    ],
+    "category": "교육",
+    "categoryMinor": "대학교",
+    "district": "금정구",
+    "lat": 35.2494,
+    "lng": 129.1069,
+    "importance": 3,
+    "radiusM": 3000,
+    "targetUser": [
+      "대학생",
+      "대학원생"
+    ]
+  },
+  {
+    "id": "L021",
+    "name": "신라대학교",
+    "alias": [
+      "신라대"
+    ],
+    "category": "교육",
+    "categoryMinor": "대학교",
+    "district": "사상구",
+    "lat": 35.178,
+    "lng": 128.964,
+    "importance": 3,
+    "radiusM": 3000,
+    "targetUser": [
+      "대학생",
+      "대학원생"
+    ]
+  },
+  {
+    "id": "L022",
+    "name": "동서대학교",
+    "alias": [
+      "동서대"
+    ],
+    "category": "교육",
+    "categoryMinor": "대학교",
+    "district": "사상구",
+    "lat": 35.149,
+    "lng": 128.988,
+    "importance": 3,
+    "radiusM": 3000,
+    "targetUser": [
+      "대학생",
+      "대학원생"
+    ]
+  },
+  {
+    "id": "L023",
+    "name": "센텀시티",
+    "alias": [
+      "센텀"
+    ],
+    "category": "업무·상업",
+    "categoryMinor": "업무지구",
+    "district": "해운대구",
+    "lat": 35.169,
+    "lng": 129.13,
+    "importance": 5,
+    "radiusM": 5000,
+    "targetUser": [
+      "직장인"
+    ]
+  },
+  {
+    "id": "L024",
+    "name": "문현금융단지",
+    "alias": [
+      "BIFC",
+      "부산국제금융센터"
+    ],
+    "category": "업무·상업",
+    "categoryMinor": "금융업무지구",
+    "district": "남구",
+    "lat": 35.1372,
+    "lng": 129.065,
+    "importance": 5,
+    "radiusM": 5000,
+    "targetUser": [
+      "직장인"
+    ]
+  },
+  {
+    "id": "L025",
+    "name": "서면 상권",
+    "alias": [
+      "서면"
+    ],
+    "category": "업무·상업",
+    "categoryMinor": "상업지역",
+    "district": "부산진구",
+    "lat": 35.1576,
+    "lng": 129.0594,
+    "importance": 5,
+    "radiusM": 3000,
+    "targetUser": [
+      "직장인",
+      "전체"
+    ]
+  },
+  {
+    "id": "L026",
+    "name": "부산시청",
+    "alias": [],
+    "category": "업무·상업",
+    "categoryMinor": "행정기관",
+    "district": "연제구",
+    "lat": 35.1798,
+    "lng": 129.0752,
+    "importance": 4,
+    "radiusM": 3000,
+    "targetUser": [
+      "직장인"
+    ]
+  },
+  {
+    "id": "L027",
+    "name": "명지국제신도시",
+    "alias": [
+      "명지신도시"
+    ],
+    "category": "업무·상업",
+    "categoryMinor": "업무·주거지구",
+    "district": "강서구",
+    "lat": 35.093,
+    "lng": 128.911,
+    "importance": 4,
+    "radiusM": 5000,
+    "targetUser": [
+      "직장인",
+      "가족"
+    ]
+  },
+  {
+    "id": "L028",
+    "name": "녹산국가산업단지",
+    "alias": [
+      "녹산산단",
+      "명지녹산산단"
+    ],
+    "category": "업무·상업",
+    "categoryMinor": "산업단지",
+    "district": "강서구",
+    "lat": 35.093,
+    "lng": 128.862,
+    "importance": 4,
+    "radiusM": 8000,
+    "targetUser": [
+      "직장인"
+    ]
+  },
+  {
+    "id": "L029",
+    "name": "남포동·광복동 상권",
+    "alias": [
+      "남포동",
+      "광복동"
+    ],
+    "category": "업무·상업",
+    "categoryMinor": "상업지역",
+    "district": "중구",
+    "lat": 35.0989,
+    "lng": 129.0308,
+    "importance": 4,
+    "radiusM": 2000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L030",
+    "name": "부산항국제여객터미널",
+    "alias": [
+      "부산항여객터미널"
+    ],
+    "category": "업무·상업",
+    "categoryMinor": "항만·물류",
+    "district": "동구",
+    "lat": 35.114,
+    "lng": 129.057,
+    "importance": 3,
+    "radiusM": 3000,
+    "targetUser": [
+      "직장인",
+      "전체"
+    ]
+  },
+  {
+    "id": "L031",
+    "name": "부산대학교병원",
+    "alias": [
+      "부대병원"
+    ],
+    "category": "의료",
+    "categoryMinor": "대학병원",
+    "district": "서구",
+    "lat": 35.1043,
+    "lng": 129.0135,
+    "importance": 5,
+    "radiusM": 5000,
+    "targetUser": [
+      "고령층",
+      "가족"
+    ]
+  },
+  {
+    "id": "L032",
+    "name": "동아대학교병원",
+    "alias": [
+      "동아대병원"
+    ],
+    "category": "의료",
+    "categoryMinor": "대학병원",
+    "district": "서구",
+    "lat": 35.1155,
+    "lng": 129.017,
+    "importance": 4,
+    "radiusM": 5000,
+    "targetUser": [
+      "고령층",
+      "가족"
+    ]
+  },
+  {
+    "id": "L033",
+    "name": "부산백병원",
+    "alias": [
+      "인제대부산백병원"
+    ],
+    "category": "의료",
+    "categoryMinor": "대학병원",
+    "district": "부산진구",
+    "lat": 35.1502,
+    "lng": 129.0233,
+    "importance": 4,
+    "radiusM": 5000,
+    "targetUser": [
+      "고령층",
+      "가족"
+    ]
+  },
+  {
+    "id": "L034",
+    "name": "해운대백병원",
+    "alias": [
+      "인제대해운대백병원"
+    ],
+    "category": "의료",
+    "categoryMinor": "대학병원",
+    "district": "해운대구",
+    "lat": 35.1668,
+    "lng": 129.1739,
+    "importance": 4,
+    "radiusM": 5000,
+    "targetUser": [
+      "고령층",
+      "가족"
+    ]
+  },
+  {
+    "id": "L035",
+    "name": "부산의료원",
+    "alias": [],
+    "category": "의료",
+    "categoryMinor": "종합병원",
+    "district": "연제구",
+    "lat": 35.1885,
+    "lng": 129.07,
+    "importance": 4,
+    "radiusM": 5000,
+    "targetUser": [
+      "고령층",
+      "가족"
+    ]
+  },
+  {
+    "id": "L036",
+    "name": "고신대학교복음병원",
+    "alias": [
+      "고신대복음병원"
+    ],
+    "category": "의료",
+    "categoryMinor": "대학병원",
+    "district": "서구",
+    "lat": 35.081,
+    "lng": 129.013,
+    "importance": 4,
+    "radiusM": 5000,
+    "targetUser": [
+      "고령층",
+      "가족"
+    ]
+  },
+  {
+    "id": "L037",
+    "name": "부산성모병원",
+    "alias": [],
+    "category": "의료",
+    "categoryMinor": "종합병원",
+    "district": "남구",
+    "lat": 35.1215,
+    "lng": 129.115,
+    "importance": 3,
+    "radiusM": 5000,
+    "targetUser": [
+      "고령층",
+      "가족"
+    ]
+  },
+  {
+    "id": "L038",
+    "name": "롯데백화점 부산본점",
+    "alias": [
+      "롯데 서면점"
+    ],
+    "category": "생활편의",
+    "categoryMinor": "백화점",
+    "district": "부산진구",
+    "lat": 35.1567,
+    "lng": 129.0625,
+    "importance": 4,
+    "radiusM": 2000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L039",
+    "name": "신세계백화점 센텀시티점",
+    "alias": [
+      "신세계 센텀"
+    ],
+    "category": "생활편의",
+    "categoryMinor": "백화점",
+    "district": "해운대구",
+    "lat": 35.1691,
+    "lng": 129.129,
+    "importance": 4,
+    "radiusM": 2000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L040",
+    "name": "롯데백화점 광복점",
+    "alias": [
+      "롯데 광복점"
+    ],
+    "category": "생활편의",
+    "categoryMinor": "백화점",
+    "district": "중구",
+    "lat": 35.0985,
+    "lng": 129.0355,
+    "importance": 3,
+    "radiusM": 2000,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L041",
+    "name": "부전시장",
+    "alias": [],
+    "category": "생활편의",
+    "categoryMinor": "전통시장",
+    "district": "부산진구",
+    "lat": 35.1625,
+    "lng": 129.0605,
+    "importance": 3,
+    "radiusM": 1500,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L042",
+    "name": "국제시장",
+    "alias": [],
+    "category": "생활편의",
+    "categoryMinor": "전통시장",
+    "district": "중구",
+    "lat": 35.101,
+    "lng": 129.028,
+    "importance": 4,
+    "radiusM": 1500,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L043",
+    "name": "자갈치시장",
+    "alias": [],
+    "category": "생활편의",
+    "categoryMinor": "전통시장",
+    "district": "중구",
+    "lat": 35.0968,
+    "lng": 129.0305,
+    "importance": 4,
+    "radiusM": 1500,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L044",
+    "name": "롯데프리미엄아울렛 동부산점",
+    "alias": [
+      "동부산 아울렛"
+    ],
+    "category": "생활편의",
+    "categoryMinor": "복합쇼핑몰",
+    "district": "기장군",
+    "lat": 35.2,
+    "lng": 129.22,
+    "importance": 3,
+    "radiusM": 3000,
+    "targetUser": [
+      "가족",
+      "전체"
+    ]
+  },
+  {
+    "id": "L045",
+    "name": "이마트 문현점",
+    "alias": [],
+    "category": "생활편의",
+    "categoryMinor": "대형마트",
+    "district": "남구",
+    "lat": 35.145,
+    "lng": 129.064,
+    "importance": 2,
+    "radiusM": 1500,
+    "targetUser": [
+      "전체"
+    ]
+  },
+  {
+    "id": "L046",
+    "name": "부산시민공원",
+    "alias": [],
+    "category": "자연·여가",
+    "categoryMinor": "대형공원",
+    "district": "부산진구",
+    "lat": 35.172,
+    "lng": 129.0555,
+    "importance": 4,
+    "radiusM": 2000,
+    "targetUser": [
+      "가족",
+      "여가중시"
+    ]
+  },
+  {
+    "id": "L047",
+    "name": "온천천시민공원",
+    "alias": [
+      "온천천"
+    ],
+    "category": "자연·여가",
+    "categoryMinor": "하천공원",
+    "district": "연제구",
+    "lat": 35.193,
+    "lng": 129.076,
+    "importance": 3,
+    "radiusM": 1500,
+    "targetUser": [
+      "가족",
+      "여가중시"
+    ]
+  },
+  {
+    "id": "L048",
+    "name": "삼락생태공원",
+    "alias": [],
+    "category": "자연·여가",
+    "categoryMinor": "생태공원",
+    "district": "사상구",
+    "lat": 35.186,
+    "lng": 128.966,
+    "importance": 3,
+    "radiusM": 2000,
+    "targetUser": [
+      "가족",
+      "여가중시"
+    ]
+  },
+  {
+    "id": "L049",
+    "name": "광안리해수욕장",
+    "alias": [
+      "광안리"
+    ],
+    "category": "자연·여가",
+    "categoryMinor": "해수욕장",
+    "district": "수영구",
+    "lat": 35.1532,
+    "lng": 129.1187,
+    "importance": 5,
+    "radiusM": 2500,
+    "targetUser": [
+      "여가중시",
+      "가족"
+    ]
+  },
+  {
+    "id": "L050",
+    "name": "해운대해수욕장",
+    "alias": [
+      "해운대"
+    ],
+    "category": "자연·여가",
+    "categoryMinor": "해수욕장",
+    "district": "해운대구",
+    "lat": 35.1587,
+    "lng": 129.1604,
+    "importance": 5,
+    "radiusM": 2500,
+    "targetUser": [
+      "여가중시",
+      "가족"
+    ]
+  },
+  {
+    "id": "L051",
+    "name": "영화의전당",
+    "alias": [],
+    "category": "자연·여가",
+    "categoryMinor": "문화시설",
+    "district": "해운대구",
+    "lat": 35.1712,
+    "lng": 129.1284,
+    "importance": 3,
+    "radiusM": 2000,
+    "targetUser": [
+      "여가중시"
+    ]
+  },
+  {
+    "id": "L052",
+    "name": "BEXCO",
+    "alias": [
+      "벡스코"
+    ],
+    "category": "자연·여가",
+    "categoryMinor": "전시·컨벤션",
+    "district": "해운대구",
+    "lat": 35.1687,
+    "lng": 129.135,
+    "importance": 4,
+    "radiusM": 3000,
+    "targetUser": [
+      "직장인",
+      "여가중시"
+    ]
+  },
+  {
+    "id": "L053",
+    "name": "사직야구장",
+    "alias": [
+      "사직종합운동장"
+    ],
+    "category": "자연·여가",
+    "categoryMinor": "체육시설",
+    "district": "동래구",
+    "lat": 35.194,
+    "lng": 129.0615,
+    "importance": 4,
+    "radiusM": 2500,
+    "targetUser": [
+      "여가중시",
+      "가족"
+    ]
+  },
+  {
+    "id": "L054",
+    "name": "태종대",
+    "alias": [
+      "태종대유원지"
+    ],
+    "category": "자연·여가",
+    "categoryMinor": "관광·자연",
+    "district": "영도구",
+    "lat": 35.053,
+    "lng": 129.087,
+    "importance": 3,
+    "radiusM": 3000,
+    "targetUser": [
+      "여가중시"
+    ]
+  },
+  {
+    "id": "L055",
+    "name": "감천문화마을",
+    "alias": [],
+    "category": "자연·여가",
+    "categoryMinor": "관광·문화",
+    "district": "사하구",
+    "lat": 35.0975,
+    "lng": 129.0107,
+    "importance": 3,
+    "radiusM": 2000,
+    "targetUser": [
+      "여가중시"
+    ]
+  },
+  {
+    "id": "L056",
+    "name": "송도해수욕장",
+    "alias": [
+      "송도"
+    ],
+    "category": "자연·여가",
+    "categoryMinor": "해수욕장",
+    "district": "서구",
+    "lat": 35.076,
+    "lng": 129.017,
+    "importance": 3,
+    "radiusM": 2000,
+    "targetUser": [
+      "여가중시",
+      "가족"
+    ]
+  },
+  {
+    "id": "L057",
+    "name": "다대포해수욕장",
+    "alias": [
+      "다대포"
+    ],
+    "category": "자연·여가",
+    "categoryMinor": "해수욕장",
+    "district": "사하구",
+    "lat": 35.043,
+    "lng": 128.966,
+    "importance": 3,
+    "radiusM": 2000,
+    "targetUser": [
+      "여가중시",
+      "가족"
+    ]
+  },
+  {
+    "id": "L058",
+    "name": "이기대공원",
+    "alias": [
+      "이기대"
+    ],
+    "category": "자연·여가",
+    "categoryMinor": "자연공원",
+    "district": "남구",
+    "lat": 35.125,
+    "lng": 129.123,
+    "importance": 3,
+    "radiusM": 2000,
+    "targetUser": [
+      "여가중시"
+    ]
+  },
+  {
+    "id": "L059",
+    "name": "용두산공원",
+    "alias": [
+      "부산타워"
+    ],
+    "category": "자연·여가",
+    "categoryMinor": "도심공원",
+    "district": "중구",
+    "lat": 35.101,
+    "lng": 129.0325,
+    "importance": 3,
+    "radiusM": 1500,
+    "targetUser": [
+      "여가중시"
+    ]
+  },
+  {
+    "id": "L060",
+    "name": "아시아드주경기장",
+    "alias": [
+      "부산아시아드경기장"
+    ],
+    "category": "자연·여가",
+    "categoryMinor": "체육시설",
+    "district": "연제구",
+    "lat": 35.19,
+    "lng": 129.062,
+    "importance": 3,
+    "radiusM": 2500,
+    "targetUser": [
+      "여가중시"
+    ]
+  }
+]

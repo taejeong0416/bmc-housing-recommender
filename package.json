@@ -1,0 +1,42 @@
+{
+  "name": "bmc-housing-recommender",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "frontend",
+    "backend",
+    "packages/shared-types",
+    "scripts/ingest"
+  ],
+  "scripts": {
+    "ingest": "tsx scripts/ingest/index.ts",
+    "ingest:gis": "tsx scripts/ingest/gis/index.ts",
+    "gen:demo": "node scripts/demo/gen-demo-housings.mjs",
+    "gen:demo-fixtures": "node scripts/demo/gen-demo-fixtures.mjs",
+    "seed:demo": "node scripts/demo/seed-generated.mjs",
+    "gen:preference-features": "node scripts/demo/gen-preference-features.mjs",
+    "gen:listing-tags": "node scripts/demo/gen-listing-tags.mjs",
+    "prepare:universities": "node tag/src/prepare-universities.mjs",
+    "test": "vitest run",
+    "dev": "npm run dev -w frontend",
+    "build": "npm run build -w frontend",
+    "lint": "npm run lint -w frontend",
+    "typecheck": "npm run typecheck -w frontend",
+    "prepare": "husky && node scripts/demo/seed-generated.mjs"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,json,md,css}": "prettier --write"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "csv-parse": "^5.5.6",
+    "husky": "^9.1.7",
+    "iconv-lite": "^0.6.3",
+    "lint-staged": "^16.4.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8",
+    "zod": "^3.23.8"
+  }
+}

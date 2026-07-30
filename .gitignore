@@ -1,0 +1,41 @@
+node_modules/
+dist/
+.claude/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+
+# 원천 데이터(공고 샘플·실데이터) — 저장소에 올리지 않음
+부산도시공사 샘플데이터 및 참고자료(공고)/
+발제사 제공자료/
+data/source/
+data/cache/
+# 인제스천 중간 산출물(DB 시드용) — 비커밋
+data/out/
+
+# 발제사 과제 원문 — 저장소에 올리지 않음
+docs/발제사_과제설명.md
+
+# UI 초안·디자인 참고 이미지(앱 미참조) — 저장소에 올리지 않음
+docs/assets/
+
+# tag/ 외부 원천(재취득 가능·대용량) — manifest만 커밋
+tag/data/external/*
+!tag/data/external/manifest.json
+
+# 발제사 데이터 파생물 — 저장소는 공개이므로 올리지 않음(README §데이터 공개 정책)
+# 앱이 읽는 실데이터: `npm run ingest`가 생성. 공개 클론은 합성 픽스처로 대체된다.
+frontend/src/generated/housings.json
+frontend/src/generated/preference-features.json
+frontend/src/generated/listing-tags.json
+# tag/ 파이프라인 산출 — 입력이 주택정보·GIS 실데이터
+tag/output/
+data/enrich/physical-tags.csv
+# 모집공고에서 뽑은 자격 규칙 — 스키마 예시는 notice_rules.example.json
+tag/data/contracts/notice_rules.json
+
+# 인수인계·백업 압축본, 채팅 스크린샷 — 저장소에 올리지 않음(작업 후 삭제 가능)
+/*.zip
+KakaoTalk_*.png

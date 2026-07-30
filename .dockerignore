@@ -1,0 +1,11 @@
+**/node_modules
+**/dist
+.git
+.github
+**/.env
+data/source
+data/cache
+data/out
+부산도시공사 샘플데이터 및 참고자료(공고)
+docs
+*.log

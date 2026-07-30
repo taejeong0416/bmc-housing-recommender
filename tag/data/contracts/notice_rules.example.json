@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "description": "실제 공고 원문을 구조화할 때 사용할 최소 예시. 복사해 notice_rules.json으로 만들되 공고별 기준일과 근거 문구를 반드시 기록한다.",
+  "offers": {
+    "housing-id:offer:1": {
+      "noticeId": "BMC-YYYY-NNN",
+      "version": "YYYY-MM-DD",
+      "effectiveFrom": "YYYY-MM-DD",
+      "sourceUrl": "https://apply.bmc.busan.kr/",
+      "rules": [
+        {
+          "id": "age_max",
+          "profileField": "age",
+          "operator": "<=",
+          "value": 39,
+          "sourcePage": 1,
+          "sourceText": "원문에서 확인한 기준을 짧게 기록"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,42 @@
+# 로컬·시연 단일 진입점(HARNESS §2). web은 dev에선 호스트 Vite → 여기엔 db·api(+redis 정의만).
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: bmc
+      POSTGRES_PASSWORD: bmc
+      POSTGRES_DB: bmc
+    ports:
+      - '55432:5432' # 호스트 5432가 Windows 예약 포트 범위(5415-5514)에 걸려 55432로 매핑(컨테이너 내부는 5432)
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U bmc -d bmc']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    profiles: ['cache'] # 기본 미기동 — 트래픽 검증 후 사용(HARNESS §2)
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://bmc:bmc@db:5432/bmc
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-} # 미설정 시 /api/search/nl은 503(설정 안내)
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-flash-lite-latest}
+    ports:
+      - '3000:3000'
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db-data:

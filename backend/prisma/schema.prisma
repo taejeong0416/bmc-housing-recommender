@@ -1,0 +1,125 @@
+// P0 canonical(complexes/units/pricing) + P3 상권 GIS의 DB 표현.
+// 공간 컬럼은 Unsupported + raw SQL(ST_DWithin 등). 사용자 도메인은 이후 단계에서 추가.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // PostGIS 확장은 postgis/postgis 이미지가 기본 제공(Prisma가 관리하지 않음).
+}
+
+model Complex {
+  id         String                                @id
+  type       String
+  name       String
+  address    String
+  district   String
+  dong       String
+  builtDate  DateTime?                             @map("built_date") @db.Date
+  totalUnits Int                                   @map("total_units")
+  elevator   Boolean
+  parking    Int
+  lat        Float?
+  lng        Float?
+  geom       Unsupported("geometry(Point, 4326)")?
+
+  units   HousingUnit[]
+  pricing HousingPricing[]
+
+  @@map("complexes")
+}
+
+model HousingUnit {
+  id        Int     @id @default(autoincrement())
+  complexId String  @map("complex_id")
+  dong      String?
+  ho        String
+  unitType  String? @map("unit_type")
+  rooms     Int
+  areaM2    Float   @map("area_m2")
+
+  complex Complex @relation(fields: [complexId], references: [id], onDelete: Cascade)
+
+  @@index([complexId])
+  @@map("housing_units")
+}
+
+model HousingPricing {
+  id            Int       @id @default(autoincrement())
+  complexId     String    @map("complex_id")
+  unitType      String?   @map("unit_type")
+  ho            String?
+  supplyClass   String?   @map("supply_class")
+  incomeBand    String?   @map("income_band")
+  householdSize Int?      @map("household_size")
+  protection    String?
+  deposit       Int
+  rent          Int
+  registeredAt  DateTime? @map("registered_at") @db.Date
+
+  complex Complex @relation(fields: [complexId], references: [id], onDelete: Cascade)
+
+  @@index([complexId])
+  @@map("housing_pricing")
+}
+
+// ── 선도소프트 상권 GIS (P3-A-2) — DATA_SCHEMA §6 ──────────────────────────────
+
+// 상가-건물 GIS의 태그화된 점 POI. 1 POI가 복수 태그면 태그당 1행(ST_DWithin 조회 단순화).
+// tag: cafe/cvs/gym/shop/culture/nightlife(quiet 역가중용).
+model CommercePoi {
+  id       Int                                   @id @default(autoincrement())
+  tag      String
+  category String // CMSC_S_CD (설명·추적)
+  name     String?
+  source   String // 'sundo-buld'
+  geom     Unsupported("geometry(Point, 4326)")?
+
+  @@index([tag])
+  @@map("commerce_pois")
+}
+
+// 5대 업종-인구 밀집도 격자(100m). 히트맵(P6-A-3)·상권강도 소스. D_* = 격자 내 업종 점포수.
+model IndustryDensity {
+  id      Int                                     @id @default(autoincrement())
+  gridId  String                                  @map("grid_id")
+  pop     Int
+  dCsv    Int                                     @map("d_csv")
+  dCoffee Int                                     @map("d_coffee")
+  dKfood  Int                                     @map("d_kfood")
+  dPharm  Int                                     @map("d_pharm")
+  dSalon  Int                                     @map("d_salon")
+  geom    Unsupported("geometry(Polygon, 4326)")?
+
+  @@map("industry_density")
+}
+
+// 상권·용도지역 격자. hasCommerce(BSST_YN) = "상권 형성된 임대주택" 서사 근거.
+model CommercialZone {
+  id          Int                                     @id @default(autoincrement())
+  gridId      String                                  @map("grid_id")
+  zoneCode    String                                  @map("zone_code")
+  zoneType    String                                  @map("zone_type")
+  hasCommerce Boolean                                 @map("has_commerce")
+  geom        Unsupported("geometry(Polygon, 4326)")?
+
+  @@map("commercial_zones")
+}
+
+// 태그별 접근성 점수 사전계산(RECOMMENDER §2·4.1). 요청 시엔 가중합만 실시간(§6).
+model ComplexTagScore {
+  id         Int    @id @default(autoincrement())
+  complexId  String @map("complex_id")
+  tag        String
+  poiCount   Int    @map("poi_count")
+  nearestM   Float? @map("nearest_m")
+  raw        Float
+  percentile Float
+
+  @@unique([complexId, tag])
+  @@index([complexId])
+  @@map("complex_tag_scores")
+}

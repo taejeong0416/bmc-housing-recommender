@@ -1,0 +1,1302 @@
+{
+  "meta": {
+    "source": "합성 데모 데이터 — 발제사 제공 데이터 파생물이 아니다.",
+    "listings": 280
+  },
+  "listings": {
+    "demo-001": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.52
+    },
+    "demo-002": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.343
+    },
+    "demo-003": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.396
+    },
+    "demo-004": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.355
+    },
+    "demo-005": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.242
+    },
+    "demo-006": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.725
+    },
+    "demo-007": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.544
+    },
+    "demo-008": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.851
+    },
+    "demo-009": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.304
+    },
+    "demo-010": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.527
+    },
+    "demo-011": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.343
+    },
+    "demo-012": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.68
+    },
+    "demo-013": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 738
+      },
+      "medicalDaily": 0.521
+    },
+    "demo-014": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.844
+    },
+    "demo-015": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 457
+      },
+      "medicalDaily": 0.727
+    },
+    "demo-016": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.332
+    },
+    "demo-017": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.574
+    },
+    "demo-018": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.815
+    },
+    "demo-019": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.843
+    },
+    "demo-020": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.098
+    },
+    "demo-021": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 301
+      },
+      "medicalDaily": 0.862
+    },
+    "demo-022": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 326
+      },
+      "medicalDaily": 0.266
+    },
+    "demo-023": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.793
+    },
+    "demo-024": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.748
+    },
+    "demo-025": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.993
+    },
+    "demo-026": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.613
+    },
+    "demo-027": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.241
+    },
+    "demo-028": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.338
+    },
+    "demo-029": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 784
+      },
+      "medicalDaily": 0.191
+    },
+    "demo-030": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.352
+    },
+    "demo-031": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.461
+    },
+    "demo-032": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.366
+    },
+    "demo-033": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 952
+      },
+      "medicalDaily": 0.44
+    },
+    "demo-034": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.535
+    },
+    "demo-035": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.224
+    },
+    "demo-036": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.058
+    },
+    "demo-037": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.457
+    },
+    "demo-038": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.079
+    },
+    "demo-039": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.803
+    },
+    "demo-040": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 819
+      },
+      "medicalDaily": 0.432
+    },
+    "demo-041": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.375
+    },
+    "demo-042": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 326
+      },
+      "medicalDaily": 0.654
+    },
+    "demo-043": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.515
+    },
+    "demo-044": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.24
+    },
+    "demo-045": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.005
+    },
+    "demo-046": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.946
+    },
+    "demo-047": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 674
+      },
+      "medicalDaily": 0.629
+    },
+    "demo-048": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.756
+    },
+    "demo-049": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.863
+    },
+    "demo-050": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.225
+    },
+    "demo-051": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 336
+      },
+      "medicalDaily": 0.059
+    },
+    "demo-052": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.506
+    },
+    "demo-053": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 773
+      },
+      "medicalDaily": 0.708
+    },
+    "demo-054": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.882
+    },
+    "demo-055": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.085
+    },
+    "demo-056": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.611
+    },
+    "demo-057": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.985
+    },
+    "demo-058": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.228
+    },
+    "demo-059": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.956
+    },
+    "demo-060": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.257
+    },
+    "demo-061": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.263
+    },
+    "demo-062": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 774
+      },
+      "medicalDaily": 0.747
+    },
+    "demo-063": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.953
+    },
+    "demo-064": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.154
+    },
+    "demo-065": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.009
+    },
+    "demo-066": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.108
+    },
+    "demo-067": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 813
+      },
+      "medicalDaily": 0.434
+    },
+    "demo-068": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 521
+      },
+      "medicalDaily": 0.016
+    },
+    "demo-069": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.136
+    },
+    "demo-070": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.558
+    },
+    "demo-071": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.186
+    },
+    "demo-072": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.376
+    },
+    "demo-073": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.576
+    },
+    "demo-074": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.727
+    },
+    "demo-075": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.59
+    },
+    "demo-076": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.116
+    },
+    "demo-077": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.924
+    },
+    "demo-078": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.736
+    },
+    "demo-079": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 997
+      },
+      "medicalDaily": 0.529
+    },
+    "demo-080": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.787
+    },
+    "demo-081": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 454
+      },
+      "medicalDaily": 0.709
+    },
+    "demo-082": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.464
+    },
+    "demo-083": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.716
+    },
+    "demo-084": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.471
+    },
+    "demo-085": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.764
+    },
+    "demo-086": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.749
+    },
+    "demo-087": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.807
+    },
+    "demo-088": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 247
+      },
+      "medicalDaily": 0.585
+    },
+    "demo-089": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.475
+    },
+    "demo-090": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.133
+    },
+    "demo-091": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 888
+      },
+      "medicalDaily": 0.984
+    },
+    "demo-092": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.646
+    },
+    "demo-093": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.667
+    },
+    "demo-094": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.096
+    },
+    "demo-095": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.802
+    },
+    "demo-096": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 266
+      },
+      "medicalDaily": 0.195
+    },
+    "demo-097": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.378
+    },
+    "demo-098": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 703
+      },
+      "medicalDaily": 0.479
+    },
+    "demo-099": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 724
+      },
+      "medicalDaily": 0.75
+    },
+    "demo-100": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.848
+    },
+    "demo-101": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.659
+    },
+    "demo-102": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.324
+    },
+    "demo-103": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.278
+    },
+    "demo-104": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.562
+    },
+    "demo-105": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 767
+      },
+      "medicalDaily": 0.242
+    },
+    "demo-106": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 237
+      },
+      "medicalDaily": 0.373
+    },
+    "demo-107": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.816
+    },
+    "demo-108": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.607
+    },
+    "demo-109": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.834
+    },
+    "demo-110": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.037
+    },
+    "demo-111": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 935
+      },
+      "medicalDaily": 0.147
+    },
+    "demo-112": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.874
+    },
+    "demo-113": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.928
+    },
+    "demo-114": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.03
+    },
+    "demo-115": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.946
+    },
+    "demo-116": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.62
+    },
+    "demo-117": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.644
+    },
+    "demo-118": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.115
+    },
+    "demo-119": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.016
+    },
+    "demo-120": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.711
+    },
+    "demo-121": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.68
+    },
+    "demo-122": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 205
+      },
+      "medicalDaily": 0.899
+    },
+    "demo-123": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.079
+    },
+    "demo-124": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.318
+    },
+    "demo-125": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 356
+      },
+      "medicalDaily": 0.38
+    },
+    "demo-126": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.083
+    },
+    "demo-127": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 221
+      },
+      "medicalDaily": 0.179
+    },
+    "demo-128": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.615
+    },
+    "demo-129": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 469
+      },
+      "medicalDaily": 0.558
+    },
+    "demo-130": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.78
+    },
+    "demo-131": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.305
+    },
+    "demo-132": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.546
+    },
+    "demo-133": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.639
+    },
+    "demo-134": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.044
+    },
+    "demo-135": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 640
+      },
+      "medicalDaily": 0.863
+    },
+    "demo-136": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.11
+    },
+    "demo-137": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 361
+      },
+      "medicalDaily": 0.852
+    },
+    "demo-138": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.287
+    },
+    "demo-139": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.736
+    },
+    "demo-140": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.526
+    },
+    "demo-141": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.869
+    },
+    "demo-142": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.421
+    },
+    "demo-143": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 978
+      },
+      "medicalDaily": 0.188
+    },
+    "demo-144": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.705
+    },
+    "demo-145": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.547
+    },
+    "demo-146": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.506
+    },
+    "demo-147": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.049
+    },
+    "demo-148": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.718
+    },
+    "demo-149": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.543
+    },
+    "demo-150": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 533
+      },
+      "medicalDaily": 0.79
+    },
+    "demo-151": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.007
+    },
+    "demo-152": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 223
+      },
+      "medicalDaily": 0.431
+    },
+    "demo-153": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 320
+      },
+      "medicalDaily": 0.392
+    },
+    "demo-154": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.186
+    },
+    "demo-155": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.967
+    },
+    "demo-156": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.03
+    },
+    "demo-157": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.341
+    },
+    "demo-158": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.135
+    },
+    "demo-159": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.707
+    },
+    "demo-160": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.834
+    },
+    "demo-161": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 231
+      },
+      "medicalDaily": 0.018
+    },
+    "demo-162": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.525
+    },
+    "demo-163": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.214
+    },
+    "demo-164": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.702
+    },
+    "demo-165": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 407
+      },
+      "medicalDaily": 0.998
+    },
+    "demo-166": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.547
+    },
+    "demo-167": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.009
+    },
+    "demo-168": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 258
+      },
+      "medicalDaily": 0.169
+    },
+    "demo-169": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.967
+    },
+    "demo-170": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 919
+      },
+      "medicalDaily": 0.242
+    },
+    "demo-171": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.688
+    },
+    "demo-172": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.068
+    },
+    "demo-173": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 737
+      },
+      "medicalDaily": 0.783
+    },
+    "demo-174": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.522
+    },
+    "demo-175": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.495
+    },
+    "demo-176": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.097
+    },
+    "demo-177": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.539
+    },
+    "demo-178": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 248
+      },
+      "medicalDaily": 0.449
+    },
+    "demo-179": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.478
+    },
+    "demo-180": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.651
+    },
+    "demo-181": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.083
+    },
+    "demo-182": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 940
+      },
+      "medicalDaily": 0.87
+    },
+    "demo-183": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.26
+    },
+    "demo-184": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.281
+    },
+    "demo-185": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.373
+    },
+    "demo-186": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.864
+    },
+    "demo-187": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.319
+    },
+    "demo-188": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.107
+    },
+    "demo-189": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.247
+    },
+    "demo-190": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.286
+    },
+    "demo-191": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.606
+    },
+    "demo-192": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.69
+    },
+    "demo-193": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.931
+    },
+    "demo-194": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.859
+    },
+    "demo-195": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.529
+    },
+    "demo-196": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.005
+    },
+    "demo-197": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.838
+    },
+    "demo-198": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.13
+    },
+    "demo-199": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.174
+    },
+    "demo-200": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.761
+    },
+    "demo-201": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.308
+    },
+    "demo-202": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.173
+    },
+    "demo-203": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.619
+    },
+    "demo-204": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.187
+    },
+    "demo-205": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 904
+      },
+      "medicalDaily": 0.139
+    },
+    "demo-206": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.994
+    },
+    "demo-207": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 350
+      },
+      "medicalDaily": 0.258
+    },
+    "demo-208": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.596
+    },
+    "demo-209": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.979
+    },
+    "demo-210": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.942
+    },
+    "demo-211": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.594
+    },
+    "demo-212": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.144
+    },
+    "demo-213": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.841
+    },
+    "demo-214": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.281
+    },
+    "demo-215": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.981
+    },
+    "demo-216": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.693
+    },
+    "demo-217": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.394
+    },
+    "demo-218": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.107
+    },
+    "demo-219": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 521
+      },
+      "medicalDaily": 0.307
+    },
+    "demo-220": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 508
+      },
+      "medicalDaily": 0.421
+    },
+    "demo-221": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.377
+    },
+    "demo-222": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.243
+    },
+    "demo-223": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.711
+    },
+    "demo-224": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.146
+    },
+    "demo-225": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.611
+    },
+    "demo-226": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 882
+      },
+      "medicalDaily": 0.316
+    },
+    "demo-227": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.331
+    },
+    "demo-228": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.146
+    },
+    "demo-229": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.558
+    },
+    "demo-230": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.167
+    },
+    "demo-231": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.389
+    },
+    "demo-232": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 365
+      },
+      "medicalDaily": 0.561
+    },
+    "demo-233": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 468
+      },
+      "medicalDaily": 0.916
+    },
+    "demo-234": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.568
+    },
+    "demo-235": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.084
+    },
+    "demo-236": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.354
+    },
+    "demo-237": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.629
+    },
+    "demo-238": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.604
+    },
+    "demo-239": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.553
+    },
+    "demo-240": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.109
+    },
+    "demo-241": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.393
+    },
+    "demo-242": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 605
+      },
+      "medicalDaily": 0.35
+    },
+    "demo-243": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.044
+    },
+    "demo-244": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.962
+    },
+    "demo-245": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.692
+    },
+    "demo-246": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 811
+      },
+      "medicalDaily": 0.888
+    },
+    "demo-247": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.966
+    },
+    "demo-248": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.731
+    },
+    "demo-249": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.345
+    },
+    "demo-250": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.875
+    },
+    "demo-251": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.812
+    },
+    "demo-252": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.756
+    },
+    "demo-253": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 641
+      },
+      "medicalDaily": 0.941
+    },
+    "demo-254": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 309
+      },
+      "medicalDaily": 0.949
+    },
+    "demo-255": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 812
+      },
+      "medicalDaily": 0.81
+    },
+    "demo-256": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.801
+    },
+    "demo-257": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.278
+    },
+    "demo-258": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 251
+      },
+      "medicalDaily": 0.908
+    },
+    "demo-259": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.687
+    },
+    "demo-260": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.555
+    },
+    "demo-261": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 835
+      },
+      "medicalDaily": 0.1
+    },
+    "demo-262": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.249
+    },
+    "demo-263": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.552
+    },
+    "demo-264": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.204
+    },
+    "demo-265": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.881
+    },
+    "demo-266": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.843
+    },
+    "demo-267": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.207
+    },
+    "demo-268": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 637
+      },
+      "medicalDaily": 0.143
+    },
+    "demo-269": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.107
+    },
+    "demo-270": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.428
+    },
+    "demo-271": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.811
+    },
+    "demo-272": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.743
+    },
+    "demo-273": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.632
+    },
+    "demo-274": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.936
+    },
+    "demo-275": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.25
+    },
+    "demo-276": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 239
+      },
+      "medicalDaily": 0.249
+    },
+    "demo-277": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.378
+    },
+    "demo-278": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.273
+    },
+    "demo-279": {
+      "universityCommercialArea": {
+        "campusName": null,
+        "meters": 608
+      },
+      "medicalDaily": 0.368
+    },
+    "demo-280": {
+      "universityCommercialArea": null,
+      "medicalDaily": 0.696
+    }
+  }
+}

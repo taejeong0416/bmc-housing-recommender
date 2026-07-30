@@ -1,0 +1,23 @@
+[
+  { "file": "매입임대 주택정보_20260630.csv", "adapter": "maeip-units" },
+  {
+    "file": "행복, 통합, 재개발 주택정보_20260630.csv",
+    "adapter": "typed-units"
+  },
+  {
+    "file": "매입임대 표준보증금 및 임대료_20260630.csv",
+    "adapter": "maeip-pricing"
+  },
+  {
+    "file": "재개발임대 표준보증금 및 임대료_20260630.csv",
+    "adapter": "redev-pricing"
+  },
+  {
+    "file": "통합공공임대 표준보증금 및 임대료_20260630.csv",
+    "adapter": "tonghap-pricing"
+  },
+  {
+    "file": "행복주택 표준보증금 및 임대료_20260630.csv",
+    "adapter": "haengbok-pricing"
+  }
+]

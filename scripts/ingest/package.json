@@ -1,0 +1,10 @@
+{
+  "name": "@bmc/ingest",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": {
+    "@bmc/shared-types": "*",
+    "shpjs": "^6.2.0"
+  }
+}
