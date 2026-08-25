@@ -16,6 +16,8 @@ import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { Chip } from '../components/ui/Chip'
 import { Select } from '../components/ui/Select'
+import { Toggle } from '../components/ui/Toggle'
+import { toast } from '../components/ui/toastStore'
 import type { ArrayKey, StoreState } from '../types'
 
 const MIN_COMPARISON_CANDIDATES = 2
@@ -150,22 +152,44 @@ export default function SetupScreen() {
       elevatorRequired: false,
       parkingRequired: false,
     })
-  const goBack = s.comparisonRounds > 0 ? go('map') : go('login')
   const goSwipe = go('swipe')
   const goMap = go('map')
+  // 추천 설정 — 랭킹에 실제로 반영되는 두 스위치. 로그인이 없으므로 이 화면이 유일한 변경 지점.
+  const toggleLearning = () => {
+    const next = !s.favoriteLearningEnabled
+    patch({ favoriteLearningEnabled: next, learningPromptSeen: true })
+    toast(next ? '취향 학습을 켰어요' : '취향 학습을 껐어요')
+  }
+  const toggleMedical = () => {
+    const next = !s.medicalPreferred
+    patch({ medicalPreferred: next })
+    toast(next ? '의료 접근을 추천에 반영해요' : '의료 접근 반영을 껐어요')
+  }
 
   return (
     <div className="w-full max-w-[860px] animate-rise">
+      {/* 서비스 성격 고지 — 첫 화면. 수집하지 않는다는 사실을 들어오자마자 알린다. */}
+      <div className="mb-3.5 flex items-start gap-2.5 rounded-[13px] border border-teal/20 bg-teal-ghost px-4 py-3.5">
+        <span className="ms mt-px shrink-0 text-[19px] text-teal">
+          shield_person
+        </span>
+        <p className="text-[12.5px] leading-[1.6] text-body">
+          <b className="block text-ink">
+            시민 개인정보를 수집·보관하지 않습니다.
+          </b>
+          로그인이 없고, 선택한 조건·취향·관심 목록은 사용자 브라우저에만
+          저장되며 서버로 전송되지 않습니다. 실제 청약 신청·자격 조회는 BMC
+          청약센터에서 진행해 주세요.
+        </p>
+      </div>
+
       <Card className="px-7 py-6">
         {/* 진행 헤더 — 필수조건(1) → 가상 생활권 비교(2) → 취향 요약(3) */}
         <div className="mb-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-baseline gap-2">
-              <span className="text-[19px] font-extrabold tracking-[-0.5px] text-teal">
-                Be:live
-              </span>
-              <span className="text-[12px] text-sub">비교 전 필수조건</span>
-            </div>
+            <span className="text-[13px] font-bold text-body">
+              비교 전 필수조건
+            </span>
             <span className="rounded-full bg-teal-ghost px-2.5 py-1 text-[11.5px] font-bold text-teal">
               1 / 3 단계
             </span>
@@ -325,6 +349,31 @@ export default function SetupScreen() {
           </section>
         </div>
 
+        {/* 추천 설정 — 하드필터가 아니라 랭킹 반영 스위치. 언제든 여기서 끄고 켠다. */}
+        <section className="mt-7">
+          <Head
+            icon="tune"
+            title="추천 설정"
+            sub="조건을 거르지 않고 순서만 바꿔요"
+          />
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <SettingToggle
+              icon="psychology"
+              label="취향 학습"
+              sub="찜·둘러본 집으로 추천을 정교하게 맞춰요"
+              on={s.favoriteLearningEnabled}
+              onClick={toggleLearning}
+            />
+            <SettingToggle
+              icon="local_hospital"
+              label="의료 접근 중요"
+              sub="병원·약국이 가까운 집을 더 높여요"
+              on={s.medicalPreferred}
+              onClick={toggleMedical}
+            />
+          </div>
+        </section>
+
         <div
           className={`mt-7 flex flex-wrap items-center gap-3 rounded-[13px] border px-4 py-3.5 ${
             canCompare
@@ -390,17 +439,10 @@ export default function SetupScreen() {
         {/* 액션 바 */}
         <div className="mt-8 flex items-center justify-between gap-3 border-t border-line-soft pt-5">
           <span className="hidden items-center gap-1.5 text-[12px] text-faint sm:flex">
-            <span className="ms text-[15px]">info</span>설정은 마이페이지에서
-            언제든 바꿀 수 있어요
+            <span className="ms text-[15px]">info</span>설정은 상단 '취향·조건'
+            에서 언제든 바꿀 수 있어요
           </span>
           <div className="flex flex-1 gap-2.5 sm:flex-none">
-            <Button
-              variant="outline"
-              onClick={goBack}
-              className="flex-1 rounded-[11px] px-6 py-[11px] text-[13.5px] sm:flex-none"
-            >
-              이전
-            </Button>
             <Button
               onClick={goSwipe}
               disabled={!canCompare || housingsLoading || !eligibilityComplete}
@@ -449,6 +491,33 @@ function MustHaveToggle({
         {active ? 'check_circle' : 'radio_button_unchecked'}
       </span>
     </button>
+  )
+}
+
+function SettingToggle({
+  icon,
+  label,
+  sub,
+  on,
+  onClick,
+}: {
+  icon: string
+  label: string
+  sub: string
+  on: boolean
+  onClick: () => void
+}) {
+  return (
+    <div className="flex items-center gap-2.5 rounded-[11px] border border-line bg-white px-3 py-2.5">
+      <span className="ms text-[18px] text-teal">{icon}</span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[12.5px] font-bold text-ink">{label}</span>
+        <span className="mt-0.5 block text-[11.5px] leading-snug text-sub">
+          {sub}
+        </span>
+      </span>
+      <Toggle on={on} onClick={onClick} ariaLabel={`${label} 켜기/끄기`} />
+    </div>
   )
 }
 

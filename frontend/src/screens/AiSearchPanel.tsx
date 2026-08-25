@@ -435,6 +435,13 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
         </button>
       </div>
 
+      {/* 외부 처리 고지 — 입력 문장만 외부 AI로 나간다. 유일한 외부 전송 지점이라 여기서 알린다. */}
+      <p className="flex items-start gap-1.5 border-b border-line-soft bg-panel/60 px-4 py-2 text-[11px] leading-[1.5] text-sub">
+        <span className="ms mt-px text-[13px] text-faint">info</span>
+        입력한 검색 문장만 외부 AI(Google Gemini)로 전송해 조건을 해석합니다.
+        개인을 식별하는 정보는 보내지 않습니다.
+      </p>
+
       {/* 대화/빈상태 */}
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
         {started ? (

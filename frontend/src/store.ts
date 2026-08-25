@@ -8,7 +8,6 @@ import type { StatePatch, StoreState, StoreValue } from './types'
 // Provider 없는 Zustand 단일 스토어 — Context 대비 트리 정리 + 선택적 구독 여지.
 // 조건은 실제 필터로 동작하므로 기본값은 '열린 상태'(전체) — 사용자가 좁혀나가는 방향.
 const initialState: StoreState = {
-  loggedIn: false,
   weights: uniformWeights(), // 균등 사전분포 — 온보딩 전 콜드스타트
   onboardingLeans: null,
   onboardingLog: null,
@@ -31,9 +30,6 @@ const initialState: StoreState = {
   favorites: {},
   favoriteLearningEnabled: false, // 기본 OFF — 첫 찜 맥락 동의로만 켜짐
   medicalPreferred: false, // 기본 OFF — 사용자가 명시적으로 켤 때만 의료축 랭킹 반영
-  consentPersonalize: false,
-  consentAiExternal: false,
-  consentCompleted: false,
   learningPromptSeen: false,
   learningPromptOpen: false,
   advancedOpen: false,
@@ -47,9 +43,8 @@ const noopStorage = {
   removeItem: () => {},
 }
 
-// 영속 대상은 세션·관심목록·취향/조건만. 일시적 UI 상태(advancedOpen·advanced)는 제외.
+// 영속 대상은 관심목록·취향/조건만. 일시적 UI 상태(advancedOpen·advanced)는 제외.
 const persistKeys = [
-  'loggedIn',
   'weights',
   'onboardingLog',
   'preferenceModel',
@@ -71,9 +66,6 @@ const persistKeys = [
   'favorites',
   'favoriteLearningEnabled',
   'medicalPreferred',
-  'consentPersonalize',
-  'consentAiExternal',
-  'consentCompleted',
   'learningPromptSeen',
 ] as const
 
@@ -81,7 +73,7 @@ type PersistedState = {
   state: Pick<StoreState, (typeof persistKeys)[number]>
 }
 
-// 가짜 세션·관심목록·취향(조건저장)을 localStorage에 영속(P4 프론트 로컬). 서버 미사용.
+// 관심목록·취향(조건저장)을 이 브라우저의 localStorage에만 영속. 서버 전송 없음.
 export const useStore = create<StoreValue>()(
   persist(
     (set) => ({
@@ -97,31 +89,19 @@ export const useStore = create<StoreValue>()(
     }),
     {
       name: 'bmc-store',
-      version: 9,
-      // v9: 진단 화면 직접 보정(preferenceOverrides)을 도입. 과거 학습 로그는 의미가 달라
-      // 새 온보딩에서 다시 학습하고 보정은 초기화한다.
+      version: 10,
+      // 취향·조건은 초기값으로 되돌리고(과거 학습 로그는 스키마가 달라 그대로 못 쓴다)
+      // 관심목록과 추천 설정 토글만 이어받는다. 지난 저장분의 나머지 키는 버린다.
       migrate: (persisted) => {
-        const p = persisted as PersistedState
+        const { state } = persisted as PersistedState
         return {
           state: {
-            ...p.state,
-            weights: uniformWeights(),
-            onboardingLog: null,
-            preferenceModel: null,
-            preferenceHistory: [],
-            comparisonRounds: 0,
-            preferenceOverrides: {},
-            selectedTags: [],
-            tagWeights: {},
-            depositMax: OPEN_DEPOSIT,
-            rentMax: OPEN_RENT,
-            regions: [],
-            rentType: ALL_TYPE,
-            buildYear: '제한 없음',
-            area: '전체',
-            houseTypes: [],
-            elevatorRequired: false,
-            parkingRequired: false,
+            ...initialState,
+            buildingTypes: state.buildingTypes,
+            favorites: state.favorites,
+            favoriteLearningEnabled: state.favoriteLearningEnabled,
+            medicalPreferred: state.medicalPreferred,
+            learningPromptSeen: state.learningPromptSeen,
           },
         }
       },

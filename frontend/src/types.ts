@@ -3,8 +3,6 @@
 // them once real data ingestion lands.
 
 export type ScreenId =
-  | 'login'
-  | 'consent'
   | 'preference'
   | 'home'
   | 'map'
@@ -12,7 +10,6 @@ export type ScreenId =
   | 'swipe'
   | 'prefill'
   | 'detail'
-  | 'mypage'
   | 'favorites'
 
 export interface Tag {
@@ -52,13 +49,6 @@ import type {
   PreferenceOverrides,
 } from './onboarding/pairwise'
 
-export interface MyMenu {
-  icon: string
-  label: string
-  sub: string
-  to?: ScreenId
-}
-
 // State keys backing a multi-select chip group (SetupScreen.mkToggle).
 export type ArrayKey = 'houseTypes' | 'buildingTypes' | 'regions'
 
@@ -66,7 +56,6 @@ export type ArrayKey = 'houseTypes' | 'buildingTypes' | 'regions'
 export type SelKey = 'rentType' | 'buildYear' | 'area'
 
 export interface StoreState {
-  loggedIn: boolean
   // 취향 정본 = 연속 w 벡터(Σ=1, 각 ≥0.05). 온보딩 산출·엔진 입력·슬라이더가 공유(불변 ②).
   weights: WeightVector
   onboardingLeans: Record<string, number> | null // 1→2단계 축 lean 브릿지(비영속)
@@ -91,11 +80,7 @@ export interface StoreState {
   favorites: Record<string, boolean>
   favoriteLearningEnabled: boolean // 찜 기반 취향 정교화 반영 여부(§12.7) — 기본 OFF, 첫 찜 맥락 동의로 켜짐
   medicalPreferred: boolean // 선택형 의료축 — 사용자가 '의료 접근 중요'를 명시하면 랭킹에 medical_daily_access 반영(기본 OFF, 8축 학습과 분리)
-  // 개인정보 동의(공공기관 부가서비스 = 별도 동의). 개인화·AI 외부처리는 '선택', 미동의여도 서비스 제공.
-  consentPersonalize: boolean // ① 개인화 추천용 정보 수집·이용 동의(선택)
-  consentAiExternal: boolean // ④ AI 검색 시 외부 처리 동의(선택)
-  consentCompleted: boolean // 온보딩 동의 화면을 거쳤는지(재노출 방지)
-  learningPromptSeen: boolean // ② 취향 학습 맥락 동의를 한 번이라도 물었는지
+  learningPromptSeen: boolean // 취향 학습 맥락 물음을 한 번이라도 띄웠는지
   learningPromptOpen: boolean // 취향 학습 동의 모달 표시 상태(비영속)
   advancedOpen: boolean
   advanced: Record<string, string> // 고급 설정 선택값(라벨→값) — 필터 비관여, 세션 보관

@@ -34,7 +34,7 @@
 | 서비스 완성도(UI/UX) | 20 | 라우팅·상태·디자인시스템·반응형 = **P1**, 국내 지도 = **P6-A**. 프론트를 미루지 않고 구현 |
 | 정책 활용 가능성 | 15 | **canonical 스키마 + 어댑터 교체 설계**(타 기관·전 구 확산) = **P0-A-2·HARNESS §3**, 공공데이터포털 등록 데이터와 정합 |
 
-**전략 요지:** 최대 배점 묶음은 **데이터(활용 15 + 문제해결 20 = 35)** 와 **완성도 20**. 따라서 ① 두 제공 데이터를 실제로 관통시키는 추천 파이프라인과 ② 완성도 있는 UI를 동시에 세운다. 백엔드·추천 엔진은 원래 로드맵대로 구현하고(데이터 서사가 곧 점수), **로그인만 껍데기(가짜 세션)로 두어** 인증 실연동에 시간을 쓰지 않는다(채점 무관 항목).
+**전략 요지:** 최대 배점 묶음은 **데이터(활용 15 + 문제해결 20 = 35)** 와 **완성도 20**. 따라서 ① 두 제공 데이터를 실제로 관통시키는 추천 파이프라인과 ② 완성도 있는 UI를 동시에 세운다. 백엔드·추천 엔진은 원래 로드맵대로 구현하고(데이터 서사가 곧 점수), **로그인·개인정보 동의 화면은 두지 않는다** — 수집·보관하는 시민 개인정보가 없어 인증 실연동이 필요 없다(채점 무관 항목).
 
 ---
 
@@ -44,7 +44,7 @@
 ```
 [React SPA(TS)] ──HTTPS──> [API Gateway / BFF]
    │  TanStack Query          │  (NestJS, REST)
-   │  Zustand(UI state)       ├─> Auth (해커톤=가짜 세션 / 이후 Kakao OAuth+JWT)
+   │  Zustand(UI state)       ├─> Auth (해커톤=없음 / 이후 Kakao OAuth+JWT)
    │  React Router            ├─> 추천 엔진 (스코어링)
    │  Design System           ├─> LLM 검색 (Gemini API: NL→필터)
    └─ Naver/Kakao Map SDK     └─> 데이터 파이프라인
@@ -89,7 +89,7 @@
 | P1 | **프론트엔드 리팩토링** | 라우팅·타입·상태·디자인시스템·테스트 기반 확보 | - | ◐ (라우팅·타입·린트·상태분리(Query+Zustand)·3-상태 UI 완료; 디자인시스템·테스트 잔여) |
 | P2 | **백엔드 기반 구축** | API 서버·DB(PostGIS)·인프라 스켈레톤 | P1 병행 가능 | ◐ (스캐폴딩·DB·시드·housings·`/meta` API·compose 완료·**스택 실행검증 통과**; 잔여: 프론트 실연결(P2-E)·운영화(P2-D-2·3)) |
 | P3 | **도메인 데이터 & 추천 엔진** | 상권 GIS 적재 + 고정감쇠 스코어링(발제사 데이터 활용의 핵심) | P0, P2 | ◐ (GIS **부산 전역** 적재·`tag/` 고정감쇠·pairwise 8피처 프론트 랭킹 **✅ LIVE**·355후보 8축 전역 관측·옛 퍼센타일 백엔드 제거; P3-D 잔여) |
-| P4 | **사용자 도메인** | 관심·조건저장 (가짜 세션·localStorage) | P2 | ✅ |
+| P4 | **사용자 도메인** | 관심·조건저장 (계정 없음·localStorage) | P2 | ✅ |
 | P5 | **AI 자연어 검색** | Gemini 기반 NL→필터 검색 | P3 | ◐ (NL→필터·확인 UI·프록시 하드닝·개인화 병합·선제 제안·**AI 파싱→pairwise 8피처 연결**·멀티턴 되묻기 완료; 비용 모니터링 잔여) |
 | P6 | **국내 지도 전환** | Naver 지도 + 개수 클러스터·리스트 연동 | P3 | ◐ (Naver 전환·클러스터·리스트 연동 완료; 서버 bbox 조회 잔여) |
 | P7 | **CI** | lint·typecheck·test·build 파이프라인 | P1~P6 | ⬜ |
@@ -229,17 +229,17 @@
 
   | URL | 화면 | 비고 |
   |---|---|---|
-  | `/` | → `/map` 리다이렉트 | |
-  | `/login` | LoginScreen | 공개 |
-  | `/preference` → `/setup` | 온보딩 2단계 | |
+  | `/` | → `/setup` 리다이렉트 | 첫 화면 = 조건 설정 |
+  | `/setup` | SetupScreen | 조건·추천 설정 + 서비스 성격 고지 |
+  | `/preference` → `/swipe` | 온보딩 취향 비교 | |
   | `/map` | MapScreen | |
   | `/housings/:id` | DetailScreen | 현재 고정 목데이터 → `:id`로 `generated` 조회 |
   | `/ai` | AiScreen | |
-  | `/mypage` | MypageScreen | P4에서 가드 |
+  | `/favorites` | FavoritesScreen | |
 
   `screen`·`detailTab`은 스토어에서 제거(라우트·URL 파라미터·로컬 state로 이동). `/mobile`은 P1-D-3에서 제거.
   **GitHub Pages 제약:** SPA fallback이 없으므로 `basename: import.meta.env.BASE_URL` 설정 + 빌드 후 `dist/404.html`에 `index.html` 복사(배포 워크플로에 스텝 추가) → **검증:** 배포 환경에서 브라우저 뒤로가기·새로고침·딥링크 정상 동작.
-- P1-A-2. 레이아웃 분리: 루트 레이아웃 라우트(공통 Footer + `<Outlet/>`), 인증 필요 라우트에 `<RequireAuth>` 가드 컴포넌트 스캐폴딩(P4의 가짜 세션 기준으로 통과/차단).
+- P1-A-2. 레이아웃 분리: 루트 레이아웃 라우트(공통 헤더·Footer + `<Outlet/>`). 인증 개념이 없어 가드 라우트는 두지 않는다 — 전 화면 공개.
 - ~~P1-A-3. 개발용 화면 전환기~~ ✅ 제거 — 실제 사용자 흐름(각 화면의 헤더·버튼)으로 이동하므로 개발용 `TopSwitcher`·`navList` 삭제. 화면 점프가 필요하면 URL 직접 입력.
 
 #### P1-B. 타입스크립트 & 코드 품질 기반 ✅
@@ -263,13 +263,13 @@
 
 #### P1-D. 디자인 시스템 & 스타일 리팩토링 ✅ (axe 자동검증만 잔여)
 - ~~P1-D-1. Tailwind CSS v4 도입(`@tailwindcss/vite`), 디자인 토큰을 `@theme` CSS 변수로 이관~~ ✅ 완료 — `vite.config.ts` 플러그인, `index.css`에 `@import 'tailwindcss'` + `@theme`(teal/soft/sub/ink/line·font-sans). 전역 리셋은 `@layer base`(유틸리티가 리셋을 이기도록).
-- ~~P1-D-2. 공통 컴포넌트 추출(`src/components/ui/`) + 전 화면 Tailwind 치환~~ ✅ 완료 — Button(primary/outline)·Card·Chip·TagButton·Segmented·Toggle·Select(+기존 States). BottomSheet는 사용처가 없어 제외. 전 화면(로그인·취향·조건·지도·상세·AI·마이페이지)과 셸(App·TopSwitcher·Footer) 치환, `lib.ts css()`·`theme.ts` 삭제. 픽셀 동일 원칙: 폰트 크기는 arbitrary 값(`text-[13.5px]`)으로 line-height 변화 차단.
+- ~~P1-D-2. 공통 컴포넌트 추출(`src/components/ui/`) + 전 화면 Tailwind 치환~~ ✅ 완료 — Button(primary/outline)·Card·Chip·TagButton·Segmented·Toggle·Select(+기존 States). BottomSheet는 사용처가 없어 제외. 전 화면(취향·조건·지도·상세·AI·관심목록)과 셸(App·TopSwitcher·Footer) 치환, `lib.ts css()`·`theme.ts` 삭제. 픽셀 동일 원칙: 폰트 크기는 arbitrary 값(`text-[13.5px]`)으로 line-height 변화 차단.
 - ~~P1-D-3. 반응형·모바일 통합~~ ✅ 완료 — `MobileScreen`·`/mobile` 라우트·모바일 목데이터 제거, Setup 3열 그리드는 `md:` 브레이크포인트로 좁은 화면 1열 대응(지도는 기존 flex-wrap). 360px~1440px 세부 확인은 시연 리허설에서.
 - P1-D-4. ◐ 접근성 1차 반영 — 아이콘 전용 버튼 aria-label, `:focus-visible` teal 아웃라인(키보드 전용), `main`/`footer` 시맨틱 태그, Toggle `aria-pressed`. **잔여:** axe 자동 검사로 위반 0 확인(대비 포함).
 
 #### P1-E. 테스트 & 문서화 기반 ⬜
 - P1-E-1. ◐ Vitest 로직 테스트 확보 — 인제스천 어댑터(`adapters.test.ts`)·프론트 포맷터(`manwon`/`rangeLabel`)·DTO 변환(`toCard`/`toMarker`)·스토어 patch(`store.test.ts`) 커버(33 테스트). **RTL 컴포넌트 렌더 테스트는 P1-D 컴포넌트 안정화 후 추가.**
-- P1-E-2. Playwright E2E 뼈대: 로그인 → 취향 선택 → 지도 → 상세 플로우 1본(MSW 데이터 기준).
+- P1-E-2. Playwright E2E 뼈대: 조건 설정 → 취향 비교 → 지도 → 상세 플로우 1본(MSW 데이터 기준).
 - P1-E-3. Storybook 선택 도입(후순위 — 공통 컴포넌트가 안정된 뒤) → **검증:** CI에서 test·build 그린.
 
 ---
@@ -359,7 +359,7 @@
 #### P3-C. 추천 스코어링 구현 ◐ (LIVE 경로 ✅·부산 전역 GIS 반영·옛 퍼센타일 백엔드 제거 — 골든테스트 잔여)
 - P3-C-1. ✅ **LIVE 경로**: `tag/` 파이프라인(고정감쇠) → `preference-features.json`(원자 8, 355후보) → 프론트 `pairwise.ts rankByLearnedPreference` → `useRecommendations` → Map·홈. 점수·정렬은 **후보 풀과 무관한 절대 적합도**(기획안 §8.3 `Σ|wⱼ|·fitⱼ/Σ|wⱼ|`, 결측 축은 분자·분모에서 제외) — 동일 시설구성이면 풀이 바뀌어도 같은 점수(§8.2 후보 내 백분위 금지). 화면 라벨은 "생활취향 적합도".
 - P3-C-2. ◐ 밀집도 격자(`industry_density`) 적재 완료 — 서사·근거용. 히트맵은 미채택(P6-A-3).
-- P3-C-3. ◐ **레거시 정리** — ✅ 백엔드 `recommend` 모듈(옛 퍼센타일)·프론트 API 클라이언트(`api/recommendations`)·엔진 프리뷰 경로·죽은 온보딩 계산함수(`computeWeights`군) 제거 → 프론트는 로컬 랭킹 단일 경로. **잔여:** `housings.json`.tagScores(옛 8키·미소비) 필드, `PreferenceScreen`(마이페이지 취향 재설정에서 도달 — pairwise 온보딩 재진입으로 대체 필요), prisma `score.ts`/`complex_tag_scores`.
+- P3-C-3. ◐ **레거시 정리** — ✅ 백엔드 `recommend` 모듈(옛 퍼센타일)·프론트 API 클라이언트(`api/recommendations`)·엔진 프리뷰 경로·죽은 온보딩 계산함수(`computeWeights`군) 제거 → 프론트는 로컬 랭킹 단일 경로. **잔여:** `housings.json`.tagScores(옛 8키·미소비) 필드, `PreferenceScreen`(UI 도달 경로 없는 `/preference` 라우트 — pairwise 온보딩 재진입으로 대체 필요), prisma `score.ts`/`complex_tag_scores`.
 - P3-C-4. 랭킹 지표(찜 전환) 로깅·가중치 튜닝은 지표 축적 후.
 
 #### P3-D. 상세·인프라 데이터
@@ -368,18 +368,18 @@
 
 ---
 
-### P4. 사용자 도메인 (가짜 세션 기반) ✅ (프론트 로컬 — localStorage 영속)
+### P4. 사용자 도메인 (계정 없음 — 브라우저 로컬 영속) ✅
 
-> **로그인은 껍데기(가짜 세션)** — 채점 무관이므로 실 OAuth에 시간을 안 쓴다. 관심목록·조건저장을 그 세션 위에서 정상 구현해 서비스 흐름 완결성(완성도 20점)을 채운다. **구현 노선: 프론트 로컬**(Zustand `persist`→localStorage). 서버 영속(preferences/favorites 테이블·동기화)은 규모 대비 데모 이득이 없어 채택 안 함(§4 "대회 후"). 실 OAuth·본인인증·청약·알림도 대회 후.
+> **계정이 없다.** 로그인·개인정보 동의 화면을 두지 않고, 관심목록·조건저장·취향을 이 브라우저의 localStorage에만 보관해 서비스 흐름 완결성(완성도 20점)을 채운다. **구현 노선: 프론트 로컬**(Zustand `persist`). 서버 영속(preferences/favorites 테이블·동기화)은 규모 대비 데모 이득이 없어 채택 안 함(§4 "대회 후"). 실 OAuth·본인인증·청약·알림도 대회 후.
 
-#### P4-A. 가짜 세션 & 가드
-- ~~P4-A-1. **가짜 세션**~~ ✅ — 로그인·소셜 버튼이 `loggedIn` 플래그 세팅 후 이동, 비회원 둘러보기는 미설정. localStorage 영속.
-- ~~P4-A-2. 라우트 가드~~ ✅ — `<RequireAuth>`가 `loggedIn`을 읽어 비로그인 시 `/login` 리다이렉트. 지도·상세는 공개, `/mypage`는 세션 필요.
+#### P4-A. 계정 없는 이용 & 고지
+- ~~P4-A-1. **계정 없는 이용**~~ ✅ — 전 화면 공개, 세션 플래그·라우트 가드 없음. 첫 화면(`/setup`)이 "개인정보를 수집·보관하지 않고 저장은 브라우저에만"임을 고지.
+- ~~P4-A-2. 취향 학습 맥락 물음~~ ✅ — 첫 찜 시점에 `LearningConsentModal`이 학습 on/off를 한 번 묻고(기본 OFF), 이후 변경은 `/setup`의 '추천 설정' 토글.
 
 #### P4-B. 사용자 데이터 도메인
 - ~~P4-B-1. 취향/조건 저장·복원~~ ✅ — 필터/취향 상태를 `persist`로 localStorage에 저장·복원(새로고침 유지).
-- ~~P4-B-2. 관심목록~~ ✅ — 지도에서 하트 토글 → localStorage 영속, 마이페이지 "관심 목록"이 실제 favorites 반영(빈 상태 안내 포함).
-- P4-B-3. 자격정보(현 `myQual`)는 정적 표시 유지 — 편집·영속은 필요 시 확장.
+- ~~P4-B-2. 관심목록~~ ✅ — 지도에서 하트 토글 → localStorage 영속, `/favorites`가 실제 favorites 반영(빈 상태 안내 포함).
+- ~~P4-B-3. 자격정보~~ ✅ — `/setup`의 '신청 자격' 셀렉트로 범주형 값만 세션 스토어에 보관. 개인 식별정보 없음.
 
 ---
 
@@ -431,7 +431,7 @@
 
 ## 4. 해커톤 제출 범위
 
-**포함(제출물 완결 기준):** P0(주택 CSV 인제스천) + P1(라우팅·상태·디자인시스템·반응형·린트) + P2(API·PostGIS·인프라) + P3(상권 GIS 적재 + 추천 설계·구현 + 설명가능성) + P4-A 가짜 세션·P4-B(관심·조건저장) + P5(AI 자연어 검색) + P6-A(국내 지도·개수 클러스터) + P7-A-1(CI).
+**포함(제출물 완결 기준):** P0(주택 CSV 인제스천) + P1(라우팅·상태·디자인시스템·반응형·린트) + P2(API·PostGIS·인프라) + P3(상권 GIS 적재 + 추천 설계·구현 + 설명가능성) + P4(계정 없는 이용 + 관심·조건저장 로컬 영속) + P5(AI 자연어 검색) + P6-A(국내 지도·개수 클러스터) + P7-A-1(CI).
 **대회 후(프로덕션 연장):** 실 Kakao OAuth·JWT/세션·본인인증(PASS), 청약 신청 실연동, 모집공고 알림(웹푸시/알림톡), 지오 검색 UX(주소·현위치·반경), 컨테이너 배포·환경 분리·DB 마이그레이션 자동화·백업/DR, 보안·컴플라이언스(시크릿·CORS·CSRF·개인정보처리방침), 관측성·성능(로깅/트레이싱·대시보드·Lighthouse).
 
 > 데이터 의존: P3의 상권 스코어링 **실값**은 선도소프트 GIS로 산출된다(부산 전역 편입 완료). 공원·교통 등 GIS 미포함 축은 외부 공개데이터로 보강한다.
@@ -474,7 +474,7 @@
 **취향 온보딩 — pairwise 가상매물 비교**([최종기획안](./공공임대_취향추천_최종기획안.md) §6~7): Login → Setup(하드필터) → **Swipe**(가상 생활권 A/B, 로지스틱 `w←(1-ηλ)w+η(y-p)diff` 갱신·이전질문 재계산) → Prefill(취향 진단·직접 보정). 찜 β≤0.25 정교화(`refine.ts`)까지 ✅. 문항수는 핵심 5(+선택 2)로 기획안(§6.3)과 정합.
 
 다음 착수:
-1. **레거시 잔여 정리** — `housings.json` tagScores(옛 8키·미소비) 필드 제거, `PreferenceScreen`(마이페이지 취향 재설정)을 pairwise 온보딩 재진입으로 대체, prisma `score.ts`/`complex_tag_scores` 정리. (백엔드 recommend·API 클라이언트·죽은 계산함수는 제거 완료.)
+1. **레거시 잔여 정리** — `housings.json` tagScores(옛 8키·미소비) 필드 제거, `PreferenceScreen`(UI 도달 경로 없는 `/preference` 라우트)을 pairwise 온보딩 재진입으로 대체, prisma `score.ts`/`complex_tag_scores` 정리. (백엔드 recommend·API 클라이언트·죽은 계산함수는 제거 완료.)
 2. **P2-E 프론트–백엔드 실연결(e2e)** — `VITE_API_BASE_URL`로 housings/meta/search를 실 API 연결·`docker compose up`으로 db→api→화면 왕복 검증(현재 프론트 로컬 계산).
 3. **부산 전역 GIS 편입 ✅** — KSIC 재매핑(`tags.ts`)·zone 게이팅 완화(density 기준)로 355 전역 8축 관측. 상권 정밀화(culture 외부데이터 등)는 필요 시.
 4. **P1-E 잔여**(RTL·Playwright·axe) · **P6-A** 서버 bbox 조회.

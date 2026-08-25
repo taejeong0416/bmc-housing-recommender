@@ -113,7 +113,7 @@ data/source/*.csv (CP949, 유형별 스키마 상이)
 | 인제스천 | 변환 유닛 테스트 | 샘플 6종 CSV 전 행이 canonical에 손실 없이 매핑 (P0-A-2) |
 | 단위 | Vitest + RTL | 핵심 컴포넌트·스코어링 함수 |
 | 스코어링 | 골든 테스트 | 실후보 표본의 고정 거리감쇠 점수 수기계산 재현 (`tag/test/pipeline.test.mjs`) |
-| E2E | Playwright | 로그인→추천→상세 플로우 |
+| E2E | Playwright | 조건→추천→상세 플로우 |
 
 성공 기준은 각 단계에 걸린 **검증 기준**(PRODUCTION_PLAN의 "→ 검증:")을 그대로 테스트로 승격한다.
 

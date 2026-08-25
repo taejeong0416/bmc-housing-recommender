@@ -1,7 +1,7 @@
 // Static content for the whole app. Anything requiring navigation or state
 // (onClick handlers) is built inside the screens; this file holds pure data.
 
-import type { MyMenu, SelKey, Tag } from './types'
+import type { SelKey, Tag } from './types'
 
 export const baseTags: Tag[] = [
   { id: 'cafe', label: '카페', icon: 'local_cafe' },
@@ -141,62 +141,6 @@ export const detailRows: Record<string, [string, string][]> = {
     ['부산역', '대중교통 35분'],
   ],
 }
-
-// Social login buttons
-export const socialLoginsData: {
-  label: string
-  icon: string
-  bg: string
-  color: string
-  border: string
-}[] = [
-  {
-    label: '카카오로 계속하기',
-    icon: 'chat_bubble',
-    bg: '#FEE500',
-    color: '#3B1E1E',
-    border: 'none',
-  },
-]
-
-// Mypage 메뉴 — 상위 그룹으로 묶음(내 정보 / 설정 / 지원). `to`가 있으면 이동, 없으면 준비중.
-export const myMenuGroups: { title: string; items: MyMenu[] }[] = [
-  {
-    title: '내 정보',
-    items: [
-      { icon: 'badge', label: '청약 자격 정보', sub: '3분위 · 무주택 4년' },
-      {
-        icon: 'assignment_turned_in',
-        label: '청약 신청 내역',
-        sub: '1건 진행중',
-      },
-      { icon: 'compare_arrows', label: '취향 다시 학습', sub: '', to: 'swipe' },
-    ],
-  },
-  {
-    title: '설정',
-    items: [
-      { icon: 'notifications', label: '알림 설정', sub: '' },
-      { icon: 'lock', label: '계정·보안', sub: '' },
-      { icon: 'contrast', label: '화면 설정', sub: '라이트' },
-      { icon: 'shield_person', label: '개인정보 설정', sub: '' },
-    ],
-  },
-  {
-    title: '지원',
-    items: [
-      { icon: 'support_agent', label: '고객센터 · 1:1 문의', sub: '' },
-      { icon: 'description', label: '이용약관 · 정책', sub: '' },
-    ],
-  },
-]
-
-export const myQual: { label: string; value: string }[] = [
-  { label: '소득 분위', value: '3분위' },
-  { label: '무주택 기간', value: '4년' },
-  { label: '청약통장', value: '가입 2년' },
-  { label: '거주지', value: '부산 수영구' },
-]
 
 export const footerLinks: string[] = [
   '이용약관',

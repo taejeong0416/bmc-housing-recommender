@@ -2,9 +2,6 @@ import ReactDOM from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import App from './App'
-import RequireAuth from './components/RequireAuth'
-import LoginScreen from './screens/LoginScreen'
-import ConsentScreen from './screens/ConsentScreen'
 import PreferenceScreen from './screens/PreferenceScreen'
 import SetupScreen from './screens/SetupScreen'
 import SwipeScreen from './screens/SwipeScreen'
@@ -12,7 +9,6 @@ import PrefillScreen from './screens/PrefillScreen'
 import HomeScreen from './screens/HomeScreen'
 import MapScreen from './screens/MapScreen'
 import DetailScreen from './screens/DetailScreen'
-import MypageScreen from './screens/MypageScreen'
 import FavoritesScreen from './screens/FavoritesScreen'
 import './index.css'
 
@@ -25,9 +21,7 @@ const router = createBrowserRouter(
     {
       element: <App />,
       children: [
-        { index: true, element: <Navigate to="/login" replace /> },
-        { path: 'login', element: <LoginScreen /> },
-        { path: 'consent', element: <ConsentScreen /> },
+        { index: true, element: <Navigate to="/setup" replace /> },
         { path: 'preference', element: <PreferenceScreen /> },
         { path: 'setup', element: <SetupScreen /> },
         { path: 'swipe', element: <SwipeScreen /> },
@@ -36,14 +30,6 @@ const router = createBrowserRouter(
         { path: 'map', element: <MapScreen /> },
         { path: 'housings/:id', element: <DetailScreen /> },
         { path: 'favorites', element: <FavoritesScreen /> },
-        {
-          path: 'mypage',
-          element: (
-            <RequireAuth>
-              <MypageScreen />
-            </RequireAuth>
-          ),
-        },
         { path: '*', element: <Navigate to="/map" replace /> },
       ],
     },

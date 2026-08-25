@@ -4,15 +4,9 @@ import Footer from './components/Footer'
 import LearningConsentModal from './components/LearningConsentModal'
 import { Toaster } from './components/ui/Toast'
 
-// 로그인·온보딩(취향·조건)은 몰입 흐름이라 전역 헤더를 숨긴다. 지도부터 노출.
-const NO_HEADER = [
-  '/login',
-  '/consent',
-  '/preference',
-  '/setup',
-  '/swipe',
-  '/prefill',
-]
+// 온보딩 비교 흐름(취향 학습)은 몰입 흐름이라 전역 헤더를 숨긴다.
+// 조건 설정(/setup)은 첫 화면이자 상시 재방문 지점이라 헤더를 유지한다.
+const NO_HEADER = ['/preference', '/swipe', '/prefill']
 
 export default function App() {
   const { pathname } = useLocation()

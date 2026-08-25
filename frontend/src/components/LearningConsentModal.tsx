@@ -1,9 +1,9 @@
 import { useStore } from '../store'
 import { Button } from './ui/Button'
 
-// ② 취향 학습 맥락 동의(just-in-time). 찜·스와이프 행동을 프로파일에 계속 반영하는 것은
-// '이미 준 정보를 쓰는 1회 동의'와 성격이 달라, 학습이 실제로 시작되는 첫 찜 시점에 한 번만
-// 물어 사용자가 확실히 인지하고 고르게 한다. 이후 변경은 마이페이지 토글로. (기본 OFF)
+// 취향 학습 맥락 물음(just-in-time). 찜·스와이프 행동을 프로파일에 계속 반영하는 기능이라
+// 학습이 실제로 시작되는 첫 찜 시점에 한 번만 물어 사용자가 인지하고 고르게 한다.
+// 이후 변경은 취향·조건 설정의 토글로. (기본 OFF, 학습 결과는 이 브라우저에만 남는다)
 export default function LearningConsentModal() {
   const open = useStore((s) => s.state.learningPromptOpen)
   const patch = useStore((s) => s.patch)
@@ -24,8 +24,8 @@ export default function LearningConsentModal() {
         </h2>
         <p className="mt-2 text-[13px] leading-[1.6] text-sub">
           찜하거나 넘겨본 집을 바탕으로 취향을 학습해 추천을 점점 더 정교하게
-          맞춰드려요. 학습은 <b className="text-body">선택</b>이고,
-          마이페이지에서 언제든 끌 수 있어요.
+          맞춰드려요. 학습 결과는 <b className="text-body">이 브라우저에만</b>{' '}
+          저장되고, '취향·조건'에서 언제든 끌 수 있어요.
         </p>
         <div className="mt-4 flex flex-col gap-2">
           <Button
