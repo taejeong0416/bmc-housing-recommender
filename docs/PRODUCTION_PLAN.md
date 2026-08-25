@@ -3,7 +3,7 @@
 > 상권·취향 기반 공공임대주택 추천 서비스. **부산도시공사 × ㈜선도소프트 글로벌 데이터 해커톤(2026.07)** 출품작.
 > React + Vite UX/UI 프로토타입(프론트 단독, 목데이터)에서 출발해 실서비스 수준으로 구현하는 전체 로드맵을 3-depth(큰 플랜 → 중간 플랜 → 세부 플랜)로 정리한다. 대회 제출물이 그대로 프로덕션 기반으로 연장되는 것을 전제로 한다.
 >
-> 관련: [`발제사_과제설명.md`](./발제사_과제설명.md)(과제 원문·채점표), [`STACK_DECISION.md`](./STACK_DECISION.md)(인프라 결정), [`HARNESS_DESIGN.md`](./HARNESS_DESIGN.md)(골격 설계).
+> 관련: [`발제사_과제설명.md`](./발제사_과제설명.md)(과제 원문·채점표), [`STACK_DECISION.md`](./STACK_DECISION.md)(인프라 결정), [`HARNESS_DESIGN.md`](./HARNESS_DESIGN.md)(골격 설계), [`SURVEY_DEPLOYMENT.md`](./SURVEY_DEPLOYMENT.md)(BMC 설문 운영 배포).
 > 상태 표기: ✅ 완료 · ◐ 부분 완료 · ⬜ 미착수.
 
 ---
