@@ -1,0 +1,3 @@
+# SPA 폴백 — /map, /housings/:id 같은 클라이언트 라우트로 직접 접속·새로고침해도 index.html을 돌려준다.
+# Pages Function(/api/*)이 정적 자산보다 먼저 매칭되므로 이 규칙에 삼켜지지 않는다.
+/*  /index.html  200
