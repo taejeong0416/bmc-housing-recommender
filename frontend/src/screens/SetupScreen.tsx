@@ -168,21 +168,6 @@ export default function SetupScreen() {
 
   return (
     <div className="w-full max-w-[860px] animate-rise">
-      {/* 서비스 성격 고지 — 첫 화면. 수집하지 않는다는 사실을 들어오자마자 알린다. */}
-      <div className="mb-3.5 flex items-start gap-2.5 rounded-[13px] border border-teal/20 bg-teal-ghost px-4 py-3.5">
-        <span className="ms mt-px shrink-0 text-[19px] text-teal">
-          shield_person
-        </span>
-        <p className="text-[12.5px] leading-[1.6] text-body">
-          <b className="block text-ink">
-            시민 개인정보를 수집·보관하지 않습니다.
-          </b>
-          로그인이 없고, 선택한 조건·취향·관심 목록은 사용자 브라우저에만
-          저장되며 서버로 전송되지 않습니다. 실제 청약 신청·자격 조회는 BMC
-          청약센터에서 진행해 주세요.
-        </p>
-      </div>
-
       <Card className="px-7 py-6">
         {/* 진행 헤더 — 필수조건(1) → 가상 생활권 비교(2) → 취향 요약(3) */}
         <div className="mb-6">

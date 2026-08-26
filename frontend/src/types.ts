@@ -80,6 +80,7 @@ export interface StoreState {
   favorites: Record<string, boolean>
   favoriteLearningEnabled: boolean // 찜 기반 취향 정교화 반영 여부(§12.7) — 기본 OFF, 첫 찜 맥락 동의로 켜짐
   medicalPreferred: boolean // 선택형 의료축 — 사용자가 '의료 접근 중요'를 명시하면 랭킹에 medical_daily_access 반영(기본 OFF, 8축 학습과 분리)
+  noticeSeen: boolean // 서비스 성격 고지 팝업을 확인했는지(첫 진입 1회)
   learningPromptSeen: boolean // 취향 학습 맥락 물음을 한 번이라도 띄웠는지
   learningPromptOpen: boolean // 취향 학습 동의 모달 표시 상태(비영속)
   advancedOpen: boolean

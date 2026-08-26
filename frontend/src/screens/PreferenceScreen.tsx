@@ -49,12 +49,7 @@ export default function PreferenceScreen() {
     <Card className="w-full max-w-[440px] animate-rise px-[30px] pb-[26px] pt-7 lg:max-w-[780px]">
       <div className="mb-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-baseline gap-2">
-            <span className="text-[19px] font-extrabold tracking-[-0.5px] text-teal">
-              Be:live
-            </span>
-            <span className="text-[12px] text-sub">취향 설정</span>
-          </div>
+          <span className="text-[13px] font-bold text-body">취향 설정</span>
           <span className="rounded-full bg-teal-ghost px-2.5 py-1 text-[11.5px] font-bold text-teal">
             1 / 2 단계
           </span>

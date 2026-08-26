@@ -189,14 +189,9 @@ export default function SwipeScreen() {
   return (
     <div className="w-full max-w-[920px] animate-rise">
       <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-baseline gap-2">
-          <span className="text-[19px] font-extrabold tracking-[-0.5px] text-teal">
-            Be:live
-          </span>
-          <span className="text-[12px] text-sub">
-            2 / 3 · 생활취향 알아보기
-          </span>
-        </div>
+        <span className="text-[13px] font-bold text-body">
+          2 / 3 · 생활취향 알아보기
+        </span>
         <div className="flex items-center gap-2">
           {answeredSteps.length > 0 && (
             <button

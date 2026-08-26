@@ -30,6 +30,7 @@ const initialState: StoreState = {
   favorites: {},
   favoriteLearningEnabled: false, // 기본 OFF — 첫 찜 맥락 동의로만 켜짐
   medicalPreferred: false, // 기본 OFF — 사용자가 명시적으로 켤 때만 의료축 랭킹 반영
+  noticeSeen: false,
   learningPromptSeen: false,
   learningPromptOpen: false,
   advancedOpen: false,
@@ -66,6 +67,7 @@ const persistKeys = [
   'favorites',
   'favoriteLearningEnabled',
   'medicalPreferred',
+  'noticeSeen',
   'learningPromptSeen',
 ] as const
 

@@ -127,12 +127,9 @@ export default function PrefillScreen() {
     <div className="mx-auto w-full min-w-0 max-w-[1120px] animate-rise">
       <div className="mb-5">
         <div className="flex items-center justify-between">
-          <div className="flex items-baseline gap-2">
-            <span className="text-[19px] font-extrabold tracking-[-0.5px] text-teal">
-              Be:live
-            </span>
-            <span className="text-[12px] text-sub">초기 취향 결과</span>
-          </div>
+          <span className="text-[13px] font-bold text-body">
+            초기 취향 결과
+          </span>
           <span className="rounded-full bg-teal-ghost px-2.5 py-1 text-[11.5px] font-bold text-teal">
             3 / 3 단계
           </span>
