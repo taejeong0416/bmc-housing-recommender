@@ -11,9 +11,8 @@ export default function NoticeModal() {
   return (
     <div className="fixed inset-0 z-[110] flex items-end justify-center bg-ink/40 p-4 sm:items-center">
       <div className="w-full max-w-[420px] animate-rise rounded-2xl bg-white p-5 shadow-card">
-        <h2 className="flex items-center gap-2 text-[16px] font-extrabold text-ink">
-          <span className="ms text-[21px] text-teal">shield_person</span>
-          시민 개인정보를 수집·보관하지 않습니다
+        <h2 className="text-[16px] font-extrabold text-ink">
+          개인정보를 수집·보관하지 않습니다
         </h2>
         <p className="mt-2.5 text-[13px] leading-[1.65] text-sub">
           로그인이 없고, 선택한 조건·취향·관심 목록은 사용자 브라우저에만
