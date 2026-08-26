@@ -197,18 +197,9 @@ export default function SetupScreen() {
             title="신청 자격"
             sub="신청할 수 있는 공고만 추천에 담아요"
             badge={
-              <>
-                <span className="rounded-full bg-teal px-2 py-0.5 text-[10.5px] font-bold text-white">
-                  필수
-                </span>
-                {/* 미완성일 때만 옆에 붙는 안내 — 비교 버튼이 왜 잠겼는지 그 자리에서 알린다. */}
-                {!housingsLoading && !eligibilityComplete && (
-                  <span className="flex items-center gap-1 text-[11.5px] font-bold text-body">
-                    <span className="ms text-[15px] text-gold-dark">error</span>
-                    신청 자격을 먼저 선택하면 비교를 시작할 수 있어요
-                  </span>
-                )}
-              </>
+              <span className="rounded-full bg-teal px-2 py-0.5 text-[10.5px] font-bold text-white">
+                필수
+              </span>
             }
           />
           <div className="grid grid-cols-1 gap-[14px] md:grid-cols-3">
