@@ -197,15 +197,27 @@ export default function SetupScreen() {
             title="신청 자격"
             sub="신청할 수 있는 공고만 추천에 담아요"
             badge={
-              <span className="rounded-full bg-teal px-2 py-0.5 text-[10.5px] font-bold text-white">
-                필수
-              </span>
+              <>
+                <span className="rounded-full bg-teal px-2 py-0.5 text-[10.5px] font-bold text-white">
+                  필수
+                </span>
+                {/* 미완성일 때만 옆에 붙는 안내 — 비교 버튼이 왜 잠겼는지 그 자리에서 알린다. */}
+                {!housingsLoading && !eligibilityComplete && (
+                  <span className="flex items-center gap-1 text-[11.5px] font-bold text-body">
+                    <span className="ms text-[15px] text-gold-dark">error</span>
+                    신청 자격을 먼저 선택하면 비교를 시작할 수 있어요
+                  </span>
+                )}
+              </>
             }
           />
           <div className="grid grid-cols-1 gap-[14px] md:grid-cols-3">
             {advancedSelects.map((a) => (
               <div key={a.label}>
-                <p className="mb-1.5 text-[12.5px] text-sub">{a.label}</p>
+                <p className="mb-1.5 text-[12.5px] text-sub">
+                  {a.label}
+                  <span className="ml-0.5 font-bold text-heart">*</span>
+                </p>
                 <Select
                   options={a.options}
                   value={s.advanced[a.label] ?? ''}
@@ -215,8 +227,7 @@ export default function SetupScreen() {
               </div>
             ))}
           </div>
-          <p className="mt-3.5 flex items-center gap-1.5 text-[11.5px] leading-relaxed text-sub">
-            <span className="ms text-[15px] text-teal">lock</span>
+          <p className="mt-3.5 text-[11.5px] leading-relaxed text-sub">
             자격 정보는 신청 가능한 공고를 가려내는 데만 쓰여요.
           </p>
         </section>
@@ -343,14 +354,12 @@ export default function SetupScreen() {
           />
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <SettingToggle
-              icon="psychology"
               label="취향 학습"
               sub="찜·둘러본 집으로 추천을 정교하게 맞춰요"
               on={s.favoriteLearningEnabled}
               onClick={toggleLearning}
             />
             <SettingToggle
-              icon="local_hospital"
               label="의료 접근 중요"
               sub="병원·약국이 가까운 집을 더 높여요"
               on={s.medicalPreferred}
@@ -414,13 +423,6 @@ export default function SetupScreen() {
           )}
         </div>
 
-        {!housingsLoading && !eligibilityComplete && (
-          <p className="mt-6 flex items-center gap-1.5 text-[12px] font-bold text-gold-dark">
-            <span className="ms text-[15px]">error</span>
-            신청 자격을 먼저 선택하면 비교를 시작할 수 있어요
-          </p>
-        )}
-
         {/* 액션 바 */}
         <div className="mt-8 flex items-center justify-between gap-3 border-t border-line-soft pt-5">
           <span className="hidden items-center gap-1.5 text-[12px] text-faint sm:flex">
@@ -480,13 +482,11 @@ function MustHaveToggle({
 }
 
 function SettingToggle({
-  icon,
   label,
   sub,
   on,
   onClick,
 }: {
-  icon: string
   label: string
   sub: string
   on: boolean
@@ -494,7 +494,6 @@ function SettingToggle({
 }) {
   return (
     <div className="flex items-center gap-2.5 rounded-[11px] border border-line bg-white px-3 py-2.5">
-      <span className="ms text-[18px] text-teal">{icon}</span>
       <span className="min-w-0 flex-1">
         <span className="block text-[12.5px] font-bold text-ink">{label}</span>
         <span className="mt-0.5 block text-[11.5px] leading-snug text-sub">
