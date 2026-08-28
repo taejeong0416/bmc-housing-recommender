@@ -15,9 +15,13 @@ export default function NoticeModal() {
           개인정보를 수집·보관하지 않습니다
         </h2>
         <p className="mt-2.5 text-[13px] leading-[1.65] text-sub">
-          로그인이 없고, 선택한 조건·취향·관심 목록은 사용자 브라우저에만
-          저장되며 서버로 전송되지 않습니다. 실제 청약 신청·자격 조회는 BMC
-          청약센터에서 진행해 주세요.
+          로그인이 없고, 선택한 조건·취향·관심 목록은{' '}
+          <b className="text-ink">사용자 브라우저에만</b> 저장되며{' '}
+          <b className="text-ink">서버로 전송되지 않습니다.</b>
+        </p>
+        <p className="mt-2 text-[13px] leading-[1.65] text-sub">
+          실제 청약 신청·자격 조회는 <b className="text-ink">BMC 청약센터</b>
+          에서 진행해 주세요.
         </p>
         <Button
           onClick={() => patch({ noticeSeen: true })}

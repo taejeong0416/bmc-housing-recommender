@@ -24,8 +24,11 @@ export default function LearningConsentModal() {
         </h2>
         <p className="mt-2 text-[13px] leading-[1.6] text-sub">
           찜하거나 넘겨본 집을 바탕으로 취향을 학습해 추천을 점점 더 정교하게
-          맞춰드려요. 학습 결과는 <b className="text-body">이 브라우저에만</b>{' '}
-          저장되고, '취향·조건'에서 언제든 끌 수 있어요.
+          맞춰드려요.
+        </p>
+        <p className="mt-2 text-[13px] leading-[1.6] text-sub">
+          학습 결과는 <b className="text-ink">이 브라우저에만</b> 저장되고,{' '}
+          <b className="text-ink">'취향·조건'에서 언제든</b> 끌 수 있어요.
         </p>
         <div className="mt-4 flex flex-col gap-2">
           <Button
