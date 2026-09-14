@@ -13,6 +13,7 @@ const NAV: { id: ScreenId; label: string; icon: string }[] = [
 // 전역 웹 헤더 — 전 화면 공통. 실제 웹사이트 상단 네비게이션.
 export default function SiteHeader() {
   const { pathname } = useLocation()
+  const isLanding = pathname === '/'
   const { go } = useNav()
   const favCount = useStore(
     (s) => Object.values(s.state.favorites).filter(Boolean).length,
@@ -34,31 +35,33 @@ export default function SiteHeader() {
           </span>
         </button>
 
+        {/* 랜딩에서는 네비를 감춘다 — 시작 CTA 하나로만 들어가게 둔다. */}
         <div className="ml-auto flex items-center gap-1">
-          {NAV.map((n) => {
-            const active = pathname === SCREEN_PATHS[n.id]
-            return (
-              <button
-                key={n.id}
-                onClick={go(n.id)}
-                aria-current={active ? 'page' : undefined}
-                aria-label={n.label}
-                className={`relative flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-[13.5px] font-semibold transition-colors ${
-                  active
-                    ? 'bg-teal-ghost text-teal'
-                    : 'text-body hover:bg-teal-ghost hover:text-teal'
-                }`}
-              >
-                <span className="ms text-[19px]">{n.icon}</span>
-                <span className="hidden sm:inline">{n.label}</span>
-                {n.id === 'favorites' && favCount > 0 && (
-                  <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-heart px-1 text-[10px] font-bold text-white sm:static sm:ml-0.5">
-                    {favCount}
-                  </span>
-                )}
-              </button>
-            )
-          })}
+          {!isLanding &&
+            NAV.map((n) => {
+              const active = pathname === SCREEN_PATHS[n.id]
+              return (
+                <button
+                  key={n.id}
+                  onClick={go(n.id)}
+                  aria-current={active ? 'page' : undefined}
+                  aria-label={n.label}
+                  className={`relative flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-[13.5px] font-semibold transition-colors ${
+                    active
+                      ? 'bg-teal-ghost text-teal'
+                      : 'text-body hover:bg-teal-ghost hover:text-teal'
+                  }`}
+                >
+                  <span className="ms text-[19px]">{n.icon}</span>
+                  <span className="hidden sm:inline">{n.label}</span>
+                  {n.id === 'favorites' && favCount > 0 && (
+                    <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-heart px-1 text-[10px] font-bold text-white sm:static sm:ml-0.5">
+                      {favCount}
+                    </span>
+                  )}
+                </button>
+              )
+            })}
         </div>
       </div>
     </header>

@@ -1,12 +1,15 @@
+import { useLocation } from 'react-router-dom'
 import { useStore } from '../store'
 import { Button } from './ui/Button'
 
-// 서비스 성격 고지 — 첫 진입에 한 번 띄운다. 수집하지 않는다는 사실과 저장 위치,
+// 서비스 성격 고지 — 서비스에 처음 들어설 때 한 번 띄운다. 수집하지 않는다는 사실과 저장 위치,
 // 실제 청약은 청약센터라는 역할 분담을 사용자가 시작 전에 인지하게 하는 것이 목적.
+// 랜딩(/)에서는 띄우지 않는다 — 첫인상을 가리지 않고, 랜딩을 떠나 서비스 화면에 들어설 때 한 번 알린다.
 export default function NoticeModal() {
+  const { pathname } = useLocation()
   const seen = useStore((s) => s.state.noticeSeen)
   const patch = useStore((s) => s.patch)
-  if (seen) return null
+  if (seen || pathname === '/') return null
 
   return (
     <div className="fixed inset-0 z-[110] flex items-end justify-center bg-ink/40 p-4 sm:items-center">

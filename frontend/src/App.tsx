@@ -5,7 +5,7 @@ import LearningConsentModal from './components/LearningConsentModal'
 import NoticeModal from './components/NoticeModal'
 import { Toaster } from './components/ui/Toast'
 
-// 브랜드 마크는 헤더 한 곳뿐 — 각 화면은 단계 라벨·진행바만 갖는다.
+// 브랜드 마크는 헤더와 랜딩 히어로에만 — 그 밖의 화면은 단계 라벨·진행바만 갖는다.
 export default function App() {
   return (
     <div className="flex min-h-screen flex-col">
