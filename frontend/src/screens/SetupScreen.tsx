@@ -223,7 +223,8 @@ export default function SetupScreen() {
           </p>
         </section>
 
-        <div className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-2">
+        {/* 필수인 신청 자격과 선택형 조건 사이는 한 단계 더 띄워 두 묶음을 구분한다. */}
+        <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* 지역·예산 */}
           <section>
             <Head icon="place" title="지역·예산" sub="어디서 얼마까지 볼까요" />
