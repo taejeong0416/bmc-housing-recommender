@@ -7,7 +7,7 @@ import { HousingsModule } from './housings/housings.module'
 import { MetaModule } from './meta/meta.module'
 import { SearchModule } from './search/search.module'
 
-// 모듈 골격(HARNESS §4): auth·users·notifications는 이후 단계에서 추가.
+// 모듈 골격: auth·users·notifications는 이후 단계에서 추가.
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),

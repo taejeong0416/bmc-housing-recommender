@@ -2,7 +2,7 @@
 // 정적 배포에서 유일하게 서버가 필요한 지점. 이유는 연산이 아니라 API 키 은닉이다.
 // 프롬프트·스키마는 backend/src/search/search.service.ts와 동형 사본이고,
 // 결과 shape의 단일 원천은 @bmc/shared-types의 ParsedFilter 타입.
-// 레이트리밋은 Cloudflare 대시보드 Rate limiting rules가 담당한다(SURVEY_DEPLOYMENT §6).
+// 레이트리밋은 Cloudflare 대시보드 Rate limiting rules가 담당한다.
 import { PREFERENCE_FEATURE_IDS } from '@bmc/shared-types'
 
 interface Env {

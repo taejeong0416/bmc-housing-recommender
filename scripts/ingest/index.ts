@@ -2,7 +2,7 @@
  * BMC 주택 인제스천 엔트리 (P0)
  *
  * 흐름: manifest 순회 → 어댑터 → canonical 검증 → 단지 집계 → 지오코딩 → 산출(housings.json) → 리포트
- * 실데이터 도착 시 교체점은 `data/source/`의 CSV + `adapters/` 뿐 (HARNESS_DESIGN §3).
+ * 실데이터 도착 시 교체점은 `data/source/`의 CSV + `adapters/` 뿐.
  */
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'

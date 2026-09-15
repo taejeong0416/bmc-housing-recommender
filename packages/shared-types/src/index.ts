@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 /**
  * 도메인 단일 원천 — canonical 스키마(zod) · GeneratedHousing · 집계 규칙.
- * 인제스천(scripts/ingest)·백엔드(backend)·프론트(frontend)가 같은 정의를 공유한다(HARNESS §1·§4).
+ * 인제스천(scripts/ingest)·백엔드(backend)·프론트(frontend)가 같은 정의를 공유한다.
  */
 
 // ── canonical 3엔티티 (P0-A-2) ──────────────────────────────────────────────

@@ -2,7 +2,7 @@ import type { Complex, HousingType, Pricing } from '@bmc/shared-types'
 
 /**
  * A. 자격·유형 태그 파생 — 하드컷 필터용(대분류 A).
- * canonical 필드에서 결정론적으로 뽑으므로, 실데이터도 같은 어댑터를 타면 자동 동일 적용(HARNESS §3).
+ * canonical 필드에서 결정론적으로 뽑으므로, 실데이터도 같은 어댑터를 타면 자동 동일 적용.
  * 세 갈래: (1) 유형 태그 (2) 공급계층 태그 (3) 유형 제도규칙 태그.
  */
 
