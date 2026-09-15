@@ -5,7 +5,7 @@ import type { GeneratedHousing } from '../types'
 // 인제스천 산출(generated/housings.json)을 /api로 서빙 — 백엔드 없이 실제 fetch 경로 개발.
 const data = housings as GeneratedHousing[]
 
-// `*/`로 BASE_URL 접두(예: /bmc-housing-recommender/)를 흡수 — 배포 base와 무관하게 매칭.
+// `*/`로 BASE_URL 접두를 흡수 — 배포 base와 무관하게 매칭.
 // 목데이터에서 distinct 옵션 계산 — 백엔드 /meta/filters와 동형.
 const uniqSorted = (vals: string[]) => [...new Set(vals)].sort()
 

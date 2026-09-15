@@ -24,8 +24,7 @@
     "lint": "npm run lint -w frontend",
     "typecheck": "npm run typecheck -w frontend",
     "prepare": "husky && node scripts/demo/seed-generated.mjs",
-    "build:deploy": "npm run build -w frontend -- --base=/",
-    "deploy": "npm run build:deploy && wrangler pages deploy frontend/dist --project-name=bmc-housing"
+    "deploy": "npm run build && wrangler pages deploy frontend/dist --project-name=bmc-housing"
   },
   "lint-staged": {
     "*.{js,ts,tsx,json,md,css}": "prettier --write"
