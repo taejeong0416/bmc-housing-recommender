@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNav } from '../nav'
 import { useStore } from '../store'
 import { useRecommendations } from '../hooks/useRecommendations'
@@ -32,6 +32,26 @@ export default function HomeScreen() {
   const dto = picks[cur]
   const prev = () => setIndex(Math.max(0, cur - 1))
   const next = () => setIndex(Math.min(picks.length - 1, cur + 1))
+
+  // 키보드 ←/→로 카드 전환. 입력 중이거나 모달이 떠 있을 때는 가로채지 않는다.
+  const modalOpen = useStore(
+    (s) => s.state.learningPromptOpen || !s.state.noticeSeen,
+  )
+  const count = picks.length
+  useEffect(() => {
+    if (modalOpen || count === 0) return
+    const onKey = (e: KeyboardEvent) => {
+      const el = e.target as HTMLElement | null
+      if (el?.closest('input, textarea, select, [contenteditable="true"]'))
+        return
+      if (e.key === 'ArrowLeft')
+        setIndex((i) => Math.max(0, Math.min(i, count - 1) - 1))
+      else if (e.key === 'ArrowRight')
+        setIndex((i) => Math.min(count - 1, Math.min(i, count - 1) + 1))
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [modalOpen, count])
 
   // 터치 스와이프 — 가로 이동이 세로보다 크고 임계값을 넘을 때만 카드 전환(세로 스크롤과 분리).
   const touch = useRef<{ x: number; y: number } | null>(null)
@@ -206,7 +226,7 @@ export default function HomeScreen() {
                         className="flex w-full items-center justify-center gap-1.5 rounded-[12px] bg-teal px-5 py-3 text-[14.5px] font-bold text-white shadow-sm transition-colors hover:bg-teal-dark"
                       >
                         상세 페이지 열기
-                        <span className="ms text-[19px]">open_in_new</span>
+                        <span className="ms text-[19px]">arrow_forward</span>
                       </button>
                     </div>
                   </div>
