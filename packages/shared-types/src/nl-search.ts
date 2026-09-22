@@ -242,6 +242,7 @@ async function callGemini(
   const res = await (cfg.fetch ?? fetch)(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    signal: AbortSignal.timeout(15_000), // 과부하(503) 응답이 늦게 와도 대화창 대기를 끊는다
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: NL_SYSTEM }] },
       contents,
