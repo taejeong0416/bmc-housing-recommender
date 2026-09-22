@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useStore } from '../store'
-import { detailTabDefs, detailRows } from '../data'
+import { detailTabDefs } from '../data'
 import {
   houseImage,
   manwon,
@@ -13,7 +13,13 @@ import { nearbyHighlights, formatDistance } from '../lib/landmarks'
 import { universityBadge } from '../lib/listingTags'
 import { LocationMap } from './LocationMap'
 import { ScoreBar } from './ScoreBar'
-import { candidateReason, candidateTradeoff } from '../onboarding/pairwise'
+import {
+  candidateReason,
+  candidateTradeoff,
+  featureDefinition,
+  getListingFeature,
+  type PreferenceFeatureId,
+} from '../onboarding/pairwise'
 import { finalPreferenceModel } from '../onboarding/refine'
 import type { GeneratedHousing, StoreState } from '../types'
 
@@ -51,16 +57,65 @@ function conditionChecks(
   return out
 }
 
+// 원천 면적은 소수 4자리(26.4136) — 표시는 소수 2자리까지.
+const m2 = (v: number): string => `${Math.round(v * 100) / 100}`
 const areaLabel = (r: { min: number; max: number }): string =>
-  r.max <= 0 ? '-' : r.min === r.max ? `${r.min}m²` : `${r.min} ~ ${r.max}m²`
+  r.max <= 0
+    ? '-'
+    : r.min === r.max
+      ? `${m2(r.min)}m²`
+      : `${m2(r.min)} ~ ${m2(r.max)}m²`
 const countLabel = (r: { min: number; max: number }): string =>
   r.max <= 0 ? '-' : r.min === r.max ? `${r.min}개` : `${r.min} ~ ${r.max}개`
 
-// 기본·비용 탭은 인제스천 실데이터로 렌더. 주변인프라·교통 탭은 상권 GIS 적재(P3-D) 전까지 목데이터 유지.
-function realRows(
-  dto: GeneratedHousing,
-  tab: string,
-): [string, string][] | null {
+// 주변 인프라 탭에 쓰는 생활환경 축 — 조용한 주거는 시설 수가 아니라 정온도 추정이라 제외.
+const INFRA_FEATURES: PreferenceFeatureId[] = [
+  'cafe_choice',
+  'restaurant_choice',
+  'fitness_access',
+  'supermarket_access',
+  'culture_access',
+  'park_walk',
+]
+
+// 추천 이유 문구(pairwise evidenceText)와 같은 값을 보이도록 1km 미만은 반올림하지 않는다.
+const meters = (m: number): string => (m < 1000 ? `${m}m` : formatDistance(m))
+
+const nearestLabel = (e: {
+  count: number
+  nearestMeters: number | null
+}): string =>
+  e.count <= 0
+    ? '주변에 없음'
+    : `${e.count.toLocaleString()}곳${
+        e.nearestMeters != null
+          ? ` · 가까운 곳 직선 ${meters(e.nearestMeters)}`
+          : ''
+      }`
+
+// 모든 탭을 실데이터로 렌더. 주변 인프라·교통은 선도소프트 GIS·공개 철도·공원 근거(tag/ 산출)가 있는 단지만 채우고,
+// 근거가 없는 단지는 빈 배열 — 화면이 '준비 중'을 안내한다.
+function realRows(dto: GeneratedHousing, tab: string): [string, string][] {
+  if (tab === 'infra' || tab === 'transit') {
+    const evidence = getListingFeature(dto.id)?.evidence
+    if (!evidence) return []
+    if (tab === 'transit') {
+      const rail = evidence.rail_access
+      return [
+        [
+          '가까운 도시철도역',
+          rail.nearestName
+            ? `${rail.nearestName}${rail.nearestMeters != null ? ` · 직선 ${meters(rail.nearestMeters)}` : ''}`
+            : '주변에 없음',
+        ],
+        ['주변 역', rail.count > 0 ? `${rail.count}곳` : '주변에 없음'],
+      ]
+    }
+    return INFRA_FEATURES.map((id) => [
+      featureDefinition[id].label,
+      nearestLabel(evidence[id]),
+    ])
+  }
   if (tab === 'basic')
     return [
       ['임대유형', dto.type],
@@ -87,7 +142,7 @@ function realRows(
       rows.push(['그 외 조건', `${dto.pricingRows.length - 6}건`])
     return rows
   }
-  return null
+  return []
 }
 
 // 대표장소 유형별 아이콘 — 사진 대신 아이콘으로 장소 성격만 전달한다.
@@ -136,7 +191,7 @@ export function HousingDetailBody({
   const h = toCard(dto)
   const learnedScore = dto.scoreSource === 'engine'
   const [tab, setTab] = useState('basic')
-  const rows = realRows(dto, tab) ?? detailRows[tab] ?? []
+  const rows = realRows(dto, tab)
   const reason = candidateReason(dto.id, model)
   const tradeoff = candidateTradeoff(dto.id, model)
   const conditions = conditionChecks(dto, st)
@@ -338,6 +393,12 @@ export function HousingDetailBody({
             </button>
           ))}
         </div>
+        {rows.length === 0 && (
+          <p className="mt-4 rounded-xl bg-panel px-4 py-3.5 text-[12.5px] text-sub">
+            이 단지는 주변 생활환경 데이터를 준비하고 있어요. 위치 지도와 주변
+            대표장소를 참고해 주세요.
+          </p>
+        )}
         <div className="mt-4 grid grid-cols-2 gap-x-7 gap-y-3.5">
           {rows.map(([k, v], idx) => (
             <div
