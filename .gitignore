@@ -6,6 +6,12 @@ dist/
 .env
 .env.*
 !.env.example
+# Cloudflare Pages 로컬 실행 상태·로컬 시크릿(wrangler pages dev)
+.wrangler/
+.dev.vars
+# Windows 썸네일 캐시, Office·한글 편집 잠금 파일
+Thumbs.db
+~$*
 
 # 원천 데이터(공고 샘플·실데이터) — 저장소에 올리지 않음
 부산도시공사 샘플데이터 및 참고자료(공고)/
@@ -17,6 +23,8 @@ data/out/
 
 # 발제사 과제 원문 — 저장소에 올리지 않음
 docs/발제사_과제설명.md
+# 발표 요약서 — 저장소에 올리지 않음
+docs/아이브_발표요약서.*
 
 # UI 초안·디자인 참고 이미지(앱 미참조) — 저장소에 올리지 않음
 docs/assets/
