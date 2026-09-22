@@ -567,13 +567,13 @@ const makePair = (
   const left = {
     ...template.left,
     id: `${kind}-${template.id}-left`,
-    imageFile: `${template.id}-left.png`,
+    imageFile: `${template.id}-left.webp`,
     vector: vectorFor(template.leftLevels, distribution),
   }
   const right = {
     ...template.right,
     id: `${kind}-${template.id}-right`,
-    imageFile: `${template.id}-right.png`,
+    imageFile: `${template.id}-right.webp`,
     vector: vectorFor(template.rightLevels, distribution),
   }
   return {

@@ -265,7 +265,7 @@ function VirtualListingChoice({
       <div className="flex justify-center px-4 pt-4">
         <img
           src={`${import.meta.env.BASE_URL}onboarding/questions/${profile.imageFile}`}
-          alt={`${profile.title}을 표현한 가상 생활환경 이미지`}
+          alt={`가상 생활환경 이미지: ${profile.title}`}
           loading="lazy"
           onError={(e) => {
             const wrapper = e.currentTarget.parentElement

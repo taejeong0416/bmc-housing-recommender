@@ -99,7 +99,7 @@ describe('실제 데이터 범위에 맞춘 가상 생활권 비교', () => {
         ['left', pair.left],
         ['right', pair.right],
       ] as const) {
-        expect(profile.imageFile).toBe(`${scenarioId}-${side}.png`)
+        expect(profile.imageFile).toBe(`${scenarioId}-${side}.webp`)
         expect(
           existsSync(
             new URL(
