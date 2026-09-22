@@ -206,16 +206,23 @@ describe('개인별 pairwise 온라인 학습', () => {
 })
 
 describe('추천 이유와 감수할 점', () => {
-  it('추천 이유로 든 축을 감수할 점으로 다시 말하지 않는다', () => {
-    // QA 재현: 도시철도 가중치가 가장 큰 모델에서 역 125m 단지(hb-22d6099d)
-    const model = {
-      weights: vector({ rail_access: 1, park_walk: 0.4 }),
-      comparisons: 5,
-    }
-    const reason = candidateReason('hb-22d6099d', model)
-    expect(reason).toMatch(/^도시철도 접근/)
-    expect(candidateTradeoff('hb-22d6099d', model)).not.toMatch(
-      /^도시철도 접근/,
-    )
-  })
+  // 실데이터 단지 id라 합성 데모 데이터(공개 클론)에는 없다 — 그때는 건너뛴다.
+  const hasQaListing = (housingsJson as GeneratedHousing[]).some(
+    (h) => h.id === 'hb-22d6099d',
+  )
+  it.skipIf(!hasQaListing)(
+    '추천 이유로 든 축을 감수할 점으로 다시 말하지 않는다',
+    () => {
+      // QA 재현: 도시철도 가중치가 가장 큰 모델에서 역 125m 단지(hb-22d6099d)
+      const model = {
+        weights: vector({ rail_access: 1, park_walk: 0.4 }),
+        comparisons: 5,
+      }
+      const reason = candidateReason('hb-22d6099d', model)
+      expect(reason).toMatch(/^도시철도 접근/)
+      expect(candidateTradeoff('hb-22d6099d', model)).not.toMatch(
+        /^도시철도 접근/,
+      )
+    },
+  )
 })

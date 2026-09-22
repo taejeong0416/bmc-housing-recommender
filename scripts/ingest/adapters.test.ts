@@ -1,9 +1,12 @@
+import { existsSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { adapters } from './adapters'
 import { Complex, Pricing, Unit } from './canonical'
 import { readCsv } from './util'
 
 const SRC = 'data/source'
+// 원천 CSV는 비공개 실데이터라 공개 클론에는 없다 — 그때 원천을 읽는 검증은 건너뛴다.
+const HAS_SOURCE = existsSync(SRC)
 
 const UNIT_CASES = [
   { file: '매입임대 주택정보(샘플)_수영구.csv', adapter: 'maeip-units' },
@@ -29,26 +32,31 @@ const PRICING_CASES = [
   },
 ] as const
 
-describe('전 행 손실 없이 매핑 (입력 = 산출 + 스킵)', () => {
-  for (const { file, adapter } of UNIT_CASES) {
-    it(`${adapter}: 입력 = 호 + 스킵`, () => {
-      const rows = readCsv(`${SRC}/${file}`)
-      const res = adapters[adapter](rows)
-      expect((res.units?.length ?? 0) + res.skipped.length).toBe(rows.length)
-      expect(rows.length).toBeGreaterThan(0)
-    })
-  }
-  for (const { file, adapter } of PRICING_CASES) {
-    it(`${adapter}: 입력 = 가격 + 스킵`, () => {
-      const rows = readCsv(`${SRC}/${file}`)
-      const res = adapters[adapter](rows)
-      expect((res.pricing?.length ?? 0) + res.skipped.length).toBe(rows.length)
-      expect(rows.length).toBeGreaterThan(0)
-    })
-  }
-})
+describe.skipIf(!HAS_SOURCE)(
+  '전 행 손실 없이 매핑 (입력 = 산출 + 스킵)',
+  () => {
+    for (const { file, adapter } of UNIT_CASES) {
+      it(`${adapter}: 입력 = 호 + 스킵`, () => {
+        const rows = readCsv(`${SRC}/${file}`)
+        const res = adapters[adapter](rows)
+        expect((res.units?.length ?? 0) + res.skipped.length).toBe(rows.length)
+        expect(rows.length).toBeGreaterThan(0)
+      })
+    }
+    for (const { file, adapter } of PRICING_CASES) {
+      it(`${adapter}: 입력 = 가격 + 스킵`, () => {
+        const rows = readCsv(`${SRC}/${file}`)
+        const res = adapters[adapter](rows)
+        expect((res.pricing?.length ?? 0) + res.skipped.length).toBe(
+          rows.length,
+        )
+        expect(rows.length).toBeGreaterThan(0)
+      })
+    }
+  },
+)
 
-describe('canonical zod 검증 통과', () => {
+describe.skipIf(!HAS_SOURCE)('canonical zod 검증 통과', () => {
   for (const { file, adapter } of [...UNIT_CASES, ...PRICING_CASES]) {
     it(`${adapter}: 전 산출물 스키마 유효`, () => {
       const res = adapters[adapter](readCsv(`${SRC}/${file}`))
@@ -62,7 +70,7 @@ describe('canonical zod 검증 통과', () => {
   }
 })
 
-describe('정규화 함정 처리', () => {
+describe.skipIf(!HAS_SOURCE)('정규화 함정 처리', () => {
   it('매입임대: 전용면적 트레일링 공백·사용승인일 YYYYMMDD→ISO', () => {
     const res = adapters['maeip-units'](
       readCsv(`${SRC}/매입임대 주택정보(샘플)_수영구.csv`),
@@ -140,7 +148,7 @@ describe('불량 행 방어', () => {
   })
 })
 
-describe('가격 → 단지 조인 (complexId 일치)', () => {
+describe.skipIf(!HAS_SOURCE)('가격 → 단지 조인 (complexId 일치)', () => {
   it('매입임대: 가격 주소가 주택정보 단지에 매칭', () => {
     const cids = new Set(
       adapters['maeip-units'](
