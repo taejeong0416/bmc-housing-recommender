@@ -1,4 +1,6 @@
+import { useCallback } from 'react'
 import { useStore } from '../store'
+import { useEscape } from '../hooks/useEscape'
 import { Button } from './ui/Button'
 
 // 취향 학습 맥락 물음(just-in-time). 찜·스와이프 행동을 프로파일에 계속 반영하는 기능이라
@@ -7,14 +9,19 @@ import { Button } from './ui/Button'
 export default function LearningConsentModal() {
   const open = useStore((s) => s.state.learningPromptOpen)
   const patch = useStore((s) => s.patch)
+  const choose = useCallback(
+    (enabled: boolean) =>
+      patch({
+        favoriteLearningEnabled: enabled,
+        learningPromptSeen: true,
+        learningPromptOpen: false,
+      }),
+    [patch],
+  )
+  // Esc는 기본값(끔)과 같은 '아니요'로 처리한다.
+  const decline = useCallback(() => choose(false), [choose])
+  useEscape(open, decline)
   if (!open) return null
-
-  const choose = (enabled: boolean) =>
-    patch({
-      favoriteLearningEnabled: enabled,
-      learningPromptSeen: true,
-      learningPromptOpen: false,
-    })
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center bg-ink/40 p-4 sm:items-center">
@@ -39,7 +46,7 @@ export default function LearningConsentModal() {
           </Button>
           <Button
             variant="outline"
-            onClick={() => choose(false)}
+            onClick={decline}
             className="w-full rounded-[12px] p-3 text-[14px]"
           >
             아니요, 켜지 않을게요

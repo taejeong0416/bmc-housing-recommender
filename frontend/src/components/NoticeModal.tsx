@@ -1,5 +1,7 @@
+import { useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useStore } from '../store'
+import { useEscape } from '../hooks/useEscape'
 import { Button } from './ui/Button'
 
 // 서비스 성격 고지 — 서비스에 처음 들어설 때 한 번 띄운다. 수집하지 않는다는 사실과 저장 위치,
@@ -9,7 +11,10 @@ export default function NoticeModal() {
   const { pathname } = useLocation()
   const seen = useStore((s) => s.state.noticeSeen)
   const patch = useStore((s) => s.patch)
-  if (seen || pathname === '/') return null
+  const open = !seen && pathname !== '/'
+  const confirm = useCallback(() => patch({ noticeSeen: true }), [patch])
+  useEscape(open, confirm)
+  if (!open) return null
 
   return (
     <div className="fixed inset-0 z-[110] flex items-end justify-center bg-ink/40 p-4 sm:items-center">
@@ -31,7 +36,7 @@ export default function NoticeModal() {
           에서 진행해 주세요.
         </p>
         <Button
-          onClick={() => patch({ noticeSeen: true })}
+          onClick={confirm}
           className="mt-4 w-full rounded-[12px] p-3 text-[14px]"
         >
           확인
