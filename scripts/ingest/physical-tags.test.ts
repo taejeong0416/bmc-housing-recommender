@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { complexId, stripAddrSuffix } from './util'
+import { complexId, isoFromYmd, stripAddrSuffix } from './util'
 import { derivePhysicalTags, unmappedPhysicalTag } from './physical-tags'
 
 /**
@@ -59,5 +59,15 @@ describe('derivePhysicalTags', () => {
   it('무시표/harvest에 없는 신규 태그가 조용히 누락되지 않는다', () => {
     // 샘플엔 신규 태그가 없어야 정상. 있으면 감지 리포트가 뜬다(index.ts).
     expect([...unmappedPhysicalTag]).toEqual([])
+  })
+})
+
+describe('isoFromYmd', () => {
+  it('샘플(8자리)과 실데이터(하이픈·점) 준공일 표기를 모두 ISO로', () => {
+    expect(isoFromYmd('19900725')).toBe('1990-07-25')
+    expect(isoFromYmd('1996-02-27')).toBe('1996-02-27')
+    expect(isoFromYmd('2019.10.06')).toBe('2019-10-06')
+    expect(isoFromYmd('')).toBeNull()
+    expect(isoFromYmd('1996-2-27')).toBeNull()
   })
 })

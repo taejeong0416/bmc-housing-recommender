@@ -40,11 +40,10 @@ export function toInt(s: string | undefined): number {
   return Number.isFinite(n) ? Math.trunc(n) : 0
 }
 
-/** `YYYYMMDD` → ISO `YYYY-MM-DD`. */
+/** `YYYYMMDD`(샘플 CSV) 또는 `YYYY-MM-DD`·`YYYY.MM.DD`(실데이터 CSV) → ISO `YYYY-MM-DD`. */
 export function isoFromYmd(s: string | undefined): string | null {
-  const t = (s ?? '').trim()
-  if (!/^\d{8}$/.test(t)) return null
-  return `${t.slice(0, 4)}-${t.slice(4, 6)}-${t.slice(6, 8)}`
+  const m = (s ?? '').trim().match(/^(\d{4})[-.]?(\d{2})[-.]?(\d{2})$/)
+  return m ? `${m[1]}-${m[2]}-${m[3]}` : null
 }
 /** `MM-DD-YYYY HH:mm:ss` → ISO `YYYY-MM-DD`. */
 export function isoFromMdy(s: string | undefined): string | null {
