@@ -1,29 +1,10 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { useNav } from '../nav'
 import { Button } from '../components/ui/Button'
 
 // 첫 화면 — 서비스가 무엇이고 무엇을 하면 되는지를 한 화면에서 알린다.
 // 청약센터 공지에서 들어온 사용자가 조건 입력 폼부터 마주하지 않도록 흐름 앞에 둔다.
 // 브랜드 마크를 크게 쓰는 화면은 여기뿐 — 이후 단계 화면은 헤더 마크만 갖는다.
-
-// desc는 줄 단위로 적는다 — 카드 폭에 맡기지 않고 의미 단위에서 끊는다.
-const STEPS = [
-  {
-    title: '조건 고르기',
-    desc: ['지역·예산·주택 조건과', '신청 자격을 골라 후보를 좁혀요.'],
-  },
-  {
-    title: '두 동네 비교하기',
-    desc: ['생활권 A와 B 중 끌리는 쪽을', '몇 번 고르면 취향을 학습해요.'],
-  },
-  {
-    title: '지도에서 확인하기',
-    desc: [
-      '취향에 맞는 순서로 지도와 목록에서',
-      '확인하고 관심 목록에 담아요.',
-    ],
-  },
-]
 
 // 실제 화면 캡처 — 탭으로 전환한다(모두 1200x700 비율).
 const PREVIEWS = [
@@ -100,43 +81,6 @@ export default function LandingScreen() {
             지도 먼저 둘러보기
           </Button>
         </div>
-      </section>
-
-      <section className="mt-14 sm:mt-20">
-        <h2 className="text-[15px] font-extrabold text-ink">
-          세 단계면 끝나요
-        </h2>
-        <ol className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-stretch sm:gap-0">
-          {STEPS.map((s, i) => (
-            <Fragment key={s.title}>
-              {i > 0 && (
-                <li
-                  aria-hidden
-                  className="flex items-center justify-center sm:px-2.5"
-                >
-                  <span className="ms rotate-90 text-[20px] text-teal/45 sm:rotate-0">
-                    arrow_forward
-                  </span>
-                </li>
-              )}
-              <li className="flex-1 rounded-[14px] border border-line bg-white p-5">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal text-[12px] font-extrabold tabular-nums text-white">
-                    {i + 1}
-                  </span>
-                  <p className="text-[15px] font-extrabold text-ink">
-                    {s.title}
-                  </p>
-                </div>
-                <p className="mt-2.5 break-keep text-[13px] leading-[1.7] text-sub">
-                  {s.desc[0]}
-                  <br />
-                  {s.desc[1]}
-                </p>
-              </li>
-            </Fragment>
-          ))}
-        </ol>
       </section>
 
       <section className="mt-14 sm:mt-20">
