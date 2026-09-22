@@ -8,8 +8,11 @@ export const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
   // PrismaService가 부팅 시 eager $connect() — 필수로 검증해 미설정을 부팅 시점에 명확히 알린다.
   DATABASE_URL: z.string().min(1),
-  GEMINI_API_KEY: z.string().optional(), // AI 검색(P5) — 미설정 시 /search/nl 503
-  GEMINI_MODEL: z.string().default('gemini-flash-lite-latest'),
+  // AI 검색(P5) — Claude가 주 모델, Gemini는 설정 시 폴백. 둘 다 없으면 /search/nl 503.
+  ANTHROPIC_API_KEY: z.string().optional(),
+  ANTHROPIC_MODEL: z.string().optional(), // 미설정 시 claude-sonnet-5
+  GEMINI_API_KEY: z.string().optional(),
+  GEMINI_MODEL: z.string().optional(), // 미설정 시 gemini-flash-latest
 })
 
 export type Env = z.infer<typeof envSchema>

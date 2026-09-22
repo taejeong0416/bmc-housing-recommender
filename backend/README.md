@@ -11,7 +11,7 @@ npm run db:seed -w backend       # data/out/canonical.json 적재 (멱등)
 npm run start:dev -w backend     # http://localhost:3000
 ```
 
-환경변수는 `backend/.env`(예시 `.env.example`) — `PORT`, `DATABASE_URL`, `GEMINI_API_KEY`(미설정 시 `/api/search/nl`은 503으로 설정을 안내).
+환경변수는 `backend/.env`(예시 `.env.example`) — `PORT`, `DATABASE_URL`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`(폴백용, 선택). 두 키가 모두 없으면 `/api/search/nl`은 503으로 설정을 안내한다.
 
 ## 모듈
 
@@ -20,7 +20,7 @@ npm run start:dev -w backend     # http://localhost:3000
 | `src/health/`      | `GET /api/health` — DB ping 포함                                          |
 | `src/housings/`    | `GET /api/housings`(필터·정렬·페이지) · `GET /api/housings/:id`            |
 | `src/meta/`        | `GET /api/meta/filters` — 공급유형·지역 옵션(DB distinct)                 |
-| `src/search/`      | `POST /api/search/nl` — 자연어 → 구조화 필터(Gemini `responseSchema`)     |
+| `src/search/`      | `POST /api/search/nl` — 자연어 → 구조화 필터(Claude structured outputs, Gemini 폴백) |
 | `src/config/`      | zod env 검증 · 로깅                                                       |
 | `src/prisma/`      | Prisma 클라이언트 모듈                                                     |
 

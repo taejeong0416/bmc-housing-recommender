@@ -29,7 +29,7 @@ npm run dev     # Vite 개발 서버 (프론트 단독)
 - **취향 학습(pairwise)** — 가중치를 직접 조절하는 대신, 가상 매물 A/B 비교를 반복해 8개 생활 취향축의 가중치를 추정한다. 첫 진입에서는 간단한 성향 질문으로 프리필한다.
 - **지도 기반 탐색** — 부산 지도(Naver Maps) 위에 단지를 개수 클러스터로 표시하고 화면에 보이는 매물을 리스트와 연동한다.
 - **설명 가능한 추천** — 추정된 취향으로 단지를 스코어링하고 `"가까운 역 서면역 직선 320m"`, `"주변 시설 12곳"`처럼 **점수 기여도가 가장 큰 축을 실제 거리·개수 근거와 함께** 제시한다.
-- **AI 자연어 검색** — `"보증금 3천만원 미만이면서 5년 이내 신축"` 같은 문장을 Gemini로 구조화 필터로 변환해 지도에 적용한다. 관심목록·취향을 반영한 개인화 제안과 멀티턴 되묻기를 지원한다.
+- **AI 자연어 검색** — `"보증금 3천만원 미만이면서 5년 이내 신축"` 같은 문장을 Claude(Sonnet 5)로 구조화 필터로 변환해 지도에 적용한다. 관심목록·취향을 반영한 개인화 제안과 멀티턴 되묻기를 지원한다.
 - **관심목록·조건 저장** — 계정 없이 브라우저 로컬에 찜과 필터 조건을 보관한다. 수집·보관하는 개인정보가 없다.
 
 ## 만든 배경
@@ -72,7 +72,7 @@ npm run dev     # Vite 개발 서버 (프론트 단독)
 |---|---|
 | 프론트 | React + Vite + TypeScript, react-router v7, TanStack Query, Zustand, Tailwind CSS v4 |
 | 지도 | Naver Maps JS API (NCP) |
-| AI | Gemini API (`gemini-flash-latest`) — 자연어 → 구조화 필터 |
+| AI | Claude API (`claude-sonnet-5`) — 자연어 → 구조화 필터. 실패 시 Gemini API(`gemini-flash-latest`) 폴백 |
 | 백엔드(개발·검증용) | NestJS, Prisma, PostgreSQL + PostGIS, Docker Compose |
 | 배포 | Cloudflare Pages 정적 배포 + Pages Function 1개 |
 | 파이프라인 | csv-parse + iconv-lite(CP949), shpjs, zod, Node 스크립트 |
@@ -122,12 +122,12 @@ npm run deploy       # 빌드 + wrangler pages deploy
 배포 전 준비:
 
 - `frontend/public/_redirects`에 `/* /index.html 200` — SPA 딥링크 처리.
-- `frontend/.env.production` — `VITE_AI_PROXY=1`, `VITE_NAVER_MAP_CLIENT_ID`. **`VITE_API_BASE_URL`은 설정하지 않는다**(설정하면 MSW가 꺼져 목록이 빈다). **`VITE_GEMINI_API_KEY`도 설정하지 않는다**(번들에 키가 박힌다).
-- 런타임 시크릿 — `npx wrangler pages secret put GEMINI_API_KEY`.
+- `frontend/.env.production` — `VITE_AI_PROXY=1`, `VITE_NAVER_MAP_CLIENT_ID`. **`VITE_API_BASE_URL`은 설정하지 않는다**(설정하면 MSW가 꺼져 목록이 빈다). AI 키는 프론트 환경변수에 두지 않는다.
+- 런타임 시크릿 — `npx wrangler pages secret put ANTHROPIC_API_KEY`. 폴백을 쓰려면 `GEMINI_API_KEY`도 넣는다. 모델을 바꿀 때만 `ANTHROPIC_MODEL`·`GEMINI_MODEL`을 설정한다.
 - **NCP 콘솔에 배포 도메인 등록** — 누락하면 지도가 뜨지 않는다.
 - Cloudflare 대시보드 Rate limiting rules로 `/api/search/nl` 보호.
 
-배포 후 확인: `/map` 새로고침 무오류 · 지도 마커 표시 · 목록 355건 · AI 검색 조건 칩 생성 · 번들에 `AIza` 문자열 부재(키 미노출).
+배포 후 확인: `/map` 새로고침 무오류 · 지도 마커 표시 · 목록 355건 · AI 검색 조건 칩 생성 · 번들에 `sk-ant`·`AIza` 문자열 부재(키 미노출).
 
 **풀스택 로컬(개발·검증)** — 백엔드·PostGIS 경로를 확인할 때만 쓴다.
 
@@ -136,7 +136,7 @@ docker compose up -d db    # PostGIS (호스트 55432 → 컨테이너 5432)
 docker compose up api      # NestJS API (http://localhost:3000)
 ```
 
-프론트에서 실백엔드를 쓰려면 `VITE_API_BASE_URL`을 설정한다. 비워 두면 MSW 목서버가 `generated/housings.json`을 서빙한다. 자연어 검색은 `GEMINI_API_KEY`가 없으면 503으로 설정을 안내한다.
+프론트에서 실백엔드를 쓰려면 `VITE_API_BASE_URL`을 설정한다. 비워 두면 MSW 목서버가 `generated/housings.json`을 서빙한다. 자연어 검색은 `backend/.env`에 `ANTHROPIC_API_KEY`와 `GEMINI_API_KEY`가 모두 없으면 503으로 설정을 안내한다.
 
 ## 문서
 

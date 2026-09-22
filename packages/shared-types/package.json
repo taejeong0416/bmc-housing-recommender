@@ -9,6 +9,7 @@
     "prepare": "tsc -p ."
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.127.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

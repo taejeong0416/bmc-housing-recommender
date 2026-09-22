@@ -30,8 +30,11 @@ services:
       NODE_ENV: production
       PORT: 3000
       DATABASE_URL: postgresql://bmc:bmc@db:5432/bmc
-      GEMINI_API_KEY: ${GEMINI_API_KEY:-} # 미설정 시 /api/search/nl은 503(설정 안내)
-      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-flash-lite-latest}
+      # AI 검색 — Claude 주 모델, Gemini는 설정 시 폴백. 둘 다 없으면 /api/search/nl은 503(설정 안내)
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-sonnet-5}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-flash-latest}
     ports:
       - '3000:3000'
     depends_on:

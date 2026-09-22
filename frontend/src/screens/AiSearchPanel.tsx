@@ -6,6 +6,7 @@ import {
   prefsFromParse,
   parsedFromPrefs,
   mergeInto,
+  type ChatTurn,
   type ParsedFilter,
   type ParsedFollowup,
 } from '../api/ai'
@@ -29,9 +30,25 @@ import type { GeneratedHousing } from '../types'
 type Tag = { id: string; weight: number }
 
 // 대화 로그 한 턴. followup은 마지막 AI 턴에만 살아 있고, 답하면 다음 턴으로 대체된다.
+// asked는 그 턴에 던진 되묻기 질문 — 다음 턴 모델이 앞 답변을 이어받도록 기록에 싣는다.
 type Msg =
   | { role: 'user'; text: string }
-  | { role: 'ai'; summary: string; unresolved?: string[] }
+  | { role: 'ai'; summary: string; unresolved?: string[]; asked?: string }
+
+// 대화 로그 → 모델에 넘길 이전 대화. AI 턴은 요약과 그때 던진 질문을 합친다.
+function toHistory(messages: Msg[]): ChatTurn[] {
+  return messages.map((m) =>
+    m.role === 'user'
+      ? { role: 'user', text: m.text }
+      : {
+          role: 'assistant',
+          text: m.asked
+            ? `${m.summary}
+${m.asked}`
+            : m.summary,
+        },
+  )
+}
 
 // 취향 태그 누적 — id 기준 합집합, 더 강한 weight 유지. parsed.tags가 취향의 단일 소스다.
 function mergeTags(base: Tag[], add: Tag[]): Tag[] {
@@ -346,20 +363,20 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
             (c) => c.label,
           )
         : undefined
-      const p = await parseQuery(t, {
-        current,
-        favSummary,
-        knownTaste: tasteSummary(prevTags),
-        uncoveredAxes,
-      })
+      const p = await parseQuery(
+        t,
+        {
+          current,
+          favSummary,
+          knownTaste: tasteSummary(prevTags),
+          uncoveredAxes,
+        },
+        toHistory(messages),
+      )
       // 조건은 현재/기존 위에 병합(P5-C-1), 취향 태그는 대화 내내 누적한다.
       const base = parsed ?? parsedFromPrefs(current)
       const tags = mergeTags(enteringTags, p.tags ?? [])
       setParsed({ ...mergeInto(base, p), tags: tags.length ? tags : undefined })
-      setMessages((m) => [
-        ...m,
-        { role: 'ai', summary: p.summary, unresolved: p.unresolved },
-      ])
 
       // 다음 되묻기 결정 — 커버리지(breadth) 먼저, 다 덮이면 강도(intensity) 한 번.
       // LLM followup이 있으면 우선하고, 없으면 미커버 카테고리·트레이드오프로 이어간다.
@@ -386,6 +403,15 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
           }
         }
       }
+      setMessages((m) => [
+        ...m,
+        {
+          role: 'ai',
+          summary: p.summary,
+          unresolved: p.unresolved,
+          asked: next?.question,
+        },
+      ])
       if (next) {
         setFollowup(next)
         setGrillCount((n) => n + 1)
@@ -438,8 +464,8 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
       {/* 외부 처리 고지 — 입력 문장만 외부 AI로 나간다. 유일한 외부 전송 지점이라 여기서 알린다. */}
       <p className="flex items-start gap-1.5 border-b border-line-soft bg-panel/60 px-4 py-2 text-[11px] leading-[1.5] text-sub">
         <span className="ms mt-px text-[13px] text-faint">info</span>
-        입력한 검색 문장만 외부 AI(Google Gemini)로 전송해 조건을 해석합니다.
-        개인을 식별하는 정보는 보내지 않습니다.
+        입력한 검색 문장만 외부 AI(Anthropic Claude, 장애 시 Google Gemini)로
+        전송해 조건을 해석합니다. 개인을 식별하는 정보는 보내지 않습니다.
       </p>
 
       {/* 대화/빈상태 */}

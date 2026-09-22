@@ -47,7 +47,7 @@
    │  TanStack Query · Zustand · react-router
    │  Naver Maps JS API
    │  generated/*.json (인제스천 산출물을 번들에 동봉)
-   └──> POST /api/search/nl ──> Pages Function ──> Gemini API
+   └──> POST /api/search/nl ──> Pages Function ──> Claude API (실패 시 Gemini API)
 ```
 
 **개발·검증** — 백엔드·PostGIS 경로를 확인할 때 쓰는 풀스택 구성.
@@ -74,7 +74,7 @@
 | 지오코딩         | VWorld 1차 + Kakao 로컬 보조 — **주택 주소에만**                                     | 좌표 저장 약관 리스크 회피                                  |
 | 백엔드           | NestJS · Prisma(공간 컬럼은 `Unsupported` + `$queryRaw`) · PostGIS                   | 공간 연산은 raw SQL(`ST_DWithin`) 중심                       |
 | 지도             | Naver Maps JS API(NCP)                                                               | 국내 POI·주소 체계                                          |
-| LLM              | Gemini API — `responseSchema` 구조화 출력                                            | 무료 티어 + 파싱 실패 모드 제거                             |
+| LLM              | Claude Sonnet 5 — structured outputs(JSON 스키마), Gemini 폴백                       | 한국어 취향 해석·되묻기 품질, 스키마 강제로 파싱 실패 제거  |
 
 ---
 
@@ -130,11 +130,12 @@ LIVE 경로: `tag/` 파이프라인 → `preference-features.json`(355후보 8�
 
 ### P5. AI 자연어 검색 ◐
 
-Gemini 구조화 출력(`responseSchema`)으로 필터 스키마(예산·지역·유형·준공·면적·방구조 + 태그 가중치 + `unresolved`)를 강제한다. 파싱 결과는 **제거 가능한 조건 칩 + "이 조건으로 N곳" 확인 UI**로 보여준 뒤 확정 시에만 지도에 적용한다.
+Claude Sonnet 5의 structured outputs로 필터 스키마(예산·지역·유형·준공·면적·방구조 + 태그 가중치 + `unresolved`)를 강제한다. 파싱 결과는 **제거 가능한 조건 칩 + "이 조건으로 N곳" 확인 UI**로 보여준 뒤 확정 시에만 지도에 적용한다.
 
 - **개인화** — 현재 필터를 프롬프트에 첨부하고 파싱 결과를 기존 조건 위에 **병합**한다(문장에 없는 축은 유지). 관심목록은 "관심 3곳 · 주로 수영구 · 신축 위주"처럼 압축 요약해 컨텍스트로 넘긴다.
-- **멀티턴 되묻기** — 취향이 막연할 때 AI가 짧은 질문 + 탭 가능한 보기(각 보기 = 8피처 가중치)를 내고, 답을 태그에 누적해 다음 턴에 같은 질문을 반복하지 않는다. 상한 태그 4개·3회.
-- **안전·비용** — 입력 검증(300자 상한), IP당 슬라이딩 윈도우 레이트리밋, 모델 출력 zod 재검증, 동일 문장 캐싱(10분 TTL). 배포 환경의 레이트리밋은 Cloudflare 규칙이 담당한다.
+- **멀티턴 되묻기** — 취향이 막연할 때 AI가 짧은 질문 + 탭 가능한 보기(각 보기 = 8피처 가중치)를 내고, 답을 태그에 누적해 다음 턴에 같은 질문을 반복하지 않는다. 이전 대화(최근 12턴)를 모델에 함께 넘겨 앞 답변을 이어받아 묻는다. 모델이 되묻기를 빠뜨리면 카테고리별 고정 질문이 이어받는다. 보기는 최대 4개, 되묻기는 대화당 최대 6회이고, 사용자가 "이제 결과 볼래요"를 누르면 멈춘다.
+- **안전·비용** — 입력 검증(300자 상한), IP당 슬라이딩 윈도우 레이트리밋, 모델 출력 zod 재검증, 동일 요청 캐싱(10분 TTL). 배포 환경의 레이트리밋은 Cloudflare 규칙이 담당한다. API 키는 서버(Pages Function 시크릿·백엔드 env)에만 두고 브라우저는 항상 프록시를 거친다.
+- **폴백** — `GEMINI_API_KEY`가 설정돼 있으면 Claude 호출이 실패할 때(사용 한도 소진·장애·거절) Gemini로 다시 요청한다. 한도는 Claude Console의 월 사용 한도로 정한다.
 
 **잔여:** 비용 모니터링.
 

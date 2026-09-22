@@ -7,12 +7,16 @@ export class SearchController {
   constructor(private readonly search: SearchService) {}
 
   @Post('nl')
-  nl(@Body() body: { text?: unknown; context?: unknown }, @Ip() ip: string) {
+  nl(
+    @Body() body: { text?: unknown; context?: unknown; history?: unknown },
+    @Ip() ip: string,
+  ) {
     // text가 문자열이 아니면(숫자·객체 등) 빈 문자열로 — 서비스의 400(빈 문장)으로 수렴, 500 방지.
     return this.search.parseNl(
       typeof body?.text === 'string' ? body.text : '',
       ip,
       typeof body?.context === 'string' ? body.context : undefined,
+      body?.history,
     )
   }
 }
