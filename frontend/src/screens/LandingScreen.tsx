@@ -12,7 +12,7 @@ const RISE_MS = 700
 const RISE_STAGGER = [0, 160, 280, 380]
 const SPLIT_DELAY = RISE_STAGGER[3] + RISE_MS + 480
 // 미리보기 자동 넘김 간격. 탭을 누르면 그 시점부터 다시 센다.
-const ROTATE_INTERVAL = 4000
+const ROTATE_INTERVAL = 2000
 
 // 실제 화면 캡처 — 탭으로 전환한다(모두 1200x700 비율).
 const PREVIEWS = [
