@@ -256,7 +256,10 @@ export function candidateTradeoff(
 ): string {
   const feature = getListingFeature(housingId)
   if (!feature) return '생활환경 세부 근거를 추가 확인해 주세요.'
+  // 추천 이유로 든 축은 약점 후보에서 뺀다 — 같은 축을 장점이자 약점으로 말하지 않게.
+  const reasonId = bestContribution(feature, model)?.id
   const mismatch = featureIds
+    .filter((id) => id !== reasonId)
     .map((id) => {
       const weight = model.weights[id]
       const value = feature.values[id]
@@ -293,6 +296,21 @@ function evidenceText(
   return `주변 ${noun} ${e.count}곳${near}`
 }
 
+// 점수 기여도(가중치×feature값)가 가장 큰 선호 축 — 추천 이유의 근거이자 감수할 점에서 뺄 축.
+function bestContribution(
+  feature: ListingPreferenceFeature,
+  model: PreferenceModel,
+) {
+  return featureIds
+    .map((id) => ({
+      id,
+      weight: model.weights[id],
+      contribution: model.weights[id] * feature.values[id],
+    }))
+    .filter((item) => item.weight > 0 && item.contribution > 0.02)
+    .sort((a, b) => b.contribution - a.contribution)[0]
+}
+
 /**
  * 추천 이유(§8.6) — 실제 점수 기여도(가중치×feature값)가 가장 큰 선호 방향을 근거와 함께 설명한다.
  * 설명문과 계산 feature가 어긋나지 않도록 랭킹과 동일한 기여도를 사용한다.
@@ -303,14 +321,7 @@ export function candidateReason(
 ): string | null {
   const feature = getListingFeature(housingId)
   if (!feature) return null
-  const best = featureIds
-    .map((id) => ({
-      id,
-      weight: model.weights[id],
-      contribution: model.weights[id] * feature.values[id],
-    }))
-    .filter((item) => item.weight > 0 && item.contribution > 0.02)
-    .sort((a, b) => b.contribution - a.contribution)[0]
+  const best = bestContribution(feature, model)
   if (!best) return null
   const label = featureDefinition[best.id].label
   return `${label} — ${evidenceText(best.id, feature.evidence)}`

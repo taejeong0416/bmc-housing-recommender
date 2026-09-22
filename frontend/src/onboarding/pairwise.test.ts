@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
+  candidateReason,
+  candidateTradeoff,
   createPreferenceModel,
   eligiblePairwiseHousings,
   featureIds,
@@ -200,5 +202,20 @@ describe('개인별 pairwise 온라인 학습', () => {
     const confidence = preferenceConfidence(createPreferenceModel(), history)
     expect(confidence.level).toBe('low')
     expect(confidence.needsMore).toBe(true)
+  })
+})
+
+describe('추천 이유와 감수할 점', () => {
+  it('추천 이유로 든 축을 감수할 점으로 다시 말하지 않는다', () => {
+    // QA 재현: 도시철도 가중치가 가장 큰 모델에서 역 125m 단지(hb-22d6099d)
+    const model = {
+      weights: vector({ rail_access: 1, park_walk: 0.4 }),
+      comparisons: 5,
+    }
+    const reason = candidateReason('hb-22d6099d', model)
+    expect(reason).toMatch(/^도시철도 접근/)
+    expect(candidateTradeoff('hb-22d6099d', model)).not.toMatch(
+      /^도시철도 접근/,
+    )
   })
 })

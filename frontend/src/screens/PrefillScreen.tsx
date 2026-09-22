@@ -27,6 +27,7 @@ import {
   type OverrideLevel,
 } from '../onboarding/refine'
 import { tallyChoiceFeatures } from '../onboarding/virtualScenarios'
+import { josa } from '../lib/josa'
 
 const LEVELS: { id: OverrideLevel; label: string }[] = [
   { id: 'avoid', label: '후순위' },
@@ -42,11 +43,19 @@ const PERSONA_LABEL: Record<string, string> = {
   daily: '생활편의 실속파',
 }
 
-function personaName(categories: { id: string; score: number }[]): string {
+function personaName(
+  categories: { id: string; score: number }[],
+  model: PreferenceModel,
+): string {
   const top = categories.find((c) => c.score > 0.02)
-  return top
-    ? (PERSONA_LABEL[top.id] ?? '나만의 생활 취향')
-    : '탐색 중인 생활 취향'
+  if (!top) return '탐색 중인 생활 취향'
+  // 조용함·공원은 두 축의 평균이라, 한쪽을 후순위로 둔 경우엔 실제로 고른 축 이름을 쓴다.
+  if (top.id === 'calm') {
+    const { quiet_residential: quiet, park_walk: park } = model.weights
+    if (quiet <= 0.02) return '공원 산책파'
+    if (park <= 0.02) return '조용한 주거파'
+  }
+  return PERSONA_LABEL[top.id] ?? '나만의 생활 취향'
 }
 
 /** 상위 선호를 한 문장으로 요약(§6.5·결합형 취향 설명). 확정 진단이 아닌 설명용 프로필. */
@@ -59,10 +68,11 @@ function summarize(model: PreferenceModel): string {
     .map((s) => s.label)
   if (!strong.length)
     return '아직 뚜렷한 방향이 없어요. 희망조건 중심으로 후보를 보여드릴게요.'
-  const head = strong.join('과 ')
+  const head =
+    strong.length > 1 ? `${josa(strong[0], '과/와')} ${strong[1]}` : strong[0]
   return weak.length
-    ? `${head}을(를) 우선하고, ${weak[0]}은(는) 상대적으로 덜 중요하게 봤어요.`
-    : `${head}을(를) 우선으로 봤어요.`
+    ? `${josa(head, '을/를')} 우선하고, ${josa(weak[0], '은/는')} 상대적으로 덜 중요하게 봤어요.`
+    : `${josa(head, '을/를')} 우선으로 봤어요.`
 }
 
 export default function PrefillScreen() {
@@ -103,7 +113,7 @@ export default function PrefillScreen() {
   const maxTally = Math.max(...choiceTally.map((t) => t.count), 1)
   const maxCat = Math.max(...categories.map((c) => Math.abs(c.score)), 0.0001)
   const prioritized = categories.filter((c) => c.score > 0.02).length
-  const persona = personaName(categories)
+  const persona = personaName(categories, diagnosisModel)
   const recommendations = useMemo(() => {
     const filtered = eligiblePairwiseHousings(
       applyPrefs(housings, filterPrefsFromState(s)),
