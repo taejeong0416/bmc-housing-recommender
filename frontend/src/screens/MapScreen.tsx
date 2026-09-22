@@ -518,10 +518,11 @@ export default function MapScreen() {
             </div>
           </div>
         </div>
-        {/* AI 대화 — 오른쪽 컬럼. 열리면 폭 0→380으로 늘며 지도·리스트를 왼쪽으로 민다(겹침 없음). */}
+        {/* AI 대화 — 오른쪽 컬럼. 열리면 폭 0→380으로 늘며 지도·리스트를 왼쪽으로 민다(겹침 없음).
+            모바일에서 닫힌 패널은 폭 0이어도 높이로 행을 늘려 지도 아래에 빈 공간을 만들어서 아예 뺀다. */}
         <div
           className={`shrink-0 overflow-hidden transition-[width] duration-300 ease-out ${
-            aiOpen ? 'w-full md:w-[380px]' : 'w-0'
+            aiOpen ? 'w-full md:w-[380px]' : 'w-0 max-md:hidden'
           }`}
           aria-hidden={!aiOpen}
         >
