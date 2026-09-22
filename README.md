@@ -72,7 +72,7 @@ npm run dev     # Vite 개발 서버 (프론트 단독)
 |---|---|
 | 프론트 | React + Vite + TypeScript, react-router v7, TanStack Query, Zustand, Tailwind CSS v4 |
 | 지도 | Naver Maps JS API (NCP) |
-| AI | Claude API (`claude-sonnet-5`) — 자연어 → 구조화 필터. 실패 시 Gemini API(`gemini-flash-latest`) 폴백 |
+| AI | Claude API (`claude-sonnet-5`) — 자연어 → 구조화 필터. 실패 시 Gemini API(`gemini-flash-lite-latest`) 폴백 |
 | 백엔드(개발·검증용) | NestJS, Prisma, PostgreSQL + PostGIS, Docker Compose |
 | 배포 | Cloudflare Pages 정적 배포 + Pages Function 1개 |
 | 파이프라인 | csv-parse + iconv-lite(CP949), shpjs, zod, Node 스크립트 |

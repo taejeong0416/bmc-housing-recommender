@@ -12,7 +12,7 @@ export const envSchema = z.object({
   ANTHROPIC_API_KEY: z.string().optional(),
   ANTHROPIC_MODEL: z.string().optional(), // 미설정 시 claude-sonnet-5
   GEMINI_API_KEY: z.string().optional(),
-  GEMINI_MODEL: z.string().optional(), // 미설정 시 gemini-flash-latest
+  GEMINI_MODEL: z.string().optional(), // 미설정 시 gemini-flash-lite-latest
 })
 
 export type Env = z.infer<typeof envSchema>

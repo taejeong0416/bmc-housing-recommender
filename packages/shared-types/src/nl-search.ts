@@ -10,7 +10,7 @@ export const NL_CONTEXT_MAX_LEN = 1000 // 개인화 컨텍스트 상한
 export const NL_HISTORY_MAX_TURNS = 12 // 모델에 넘기는 이전 대화 턴 상한
 
 export const DEFAULT_CLAUDE_MODEL = 'claude-sonnet-5'
-export const DEFAULT_GEMINI_MODEL = 'gemini-flash-latest'
+export const DEFAULT_GEMINI_MODEL = 'gemini-flash-lite-latest'
 
 /** 이전 대화 한 턴. assistant 턴은 요약과 그때 던진 질문을 담는다. */
 export interface NlTurn {
