@@ -18,13 +18,6 @@ export const byTagId: Record<string, Tag> = Object.fromEntries(
   baseTags.map((t): [string, Tag] => [t.id, t]),
 )
 
-// [level, label] for tag importance weighting
-export const wLevels: [number, string][] = [
-  [1, '참고만'],
-  [2, '보통'],
-  [3, '매우 중요'],
-]
-
 // 주택 목록·상세는 API 레이어(src/api/housings.ts)로 이동 — MSW가 generated/housings.json을 서빙.
 // 아래는 서버데이터가 아닌 정적 화면 콘텐츠.
 

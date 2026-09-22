@@ -3,7 +3,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import App from './App'
 import LandingScreen from './screens/LandingScreen'
-import PreferenceScreen from './screens/PreferenceScreen'
 import SetupScreen from './screens/SetupScreen'
 import SwipeScreen from './screens/SwipeScreen'
 import PrefillScreen from './screens/PrefillScreen'
@@ -23,7 +22,8 @@ const router = createBrowserRouter(
       element: <App />,
       children: [
         { index: true, element: <LandingScreen /> },
-        { path: 'preference', element: <PreferenceScreen /> },
+        // 이전 취향 설정 화면 주소 — 지금 온보딩의 첫 단계(조건 설정)로 넘긴다.
+        { path: 'preference', element: <Navigate to="/setup" replace /> },
         { path: 'setup', element: <SetupScreen /> },
         { path: 'swipe', element: <SwipeScreen /> },
         { path: 'prefill', element: <PrefillScreen /> },

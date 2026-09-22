@@ -3,14 +3,7 @@
 // them once real data ingestion lands.
 
 export type ScreenId =
-  | 'preference'
-  | 'home'
-  | 'map'
-  | 'setup'
-  | 'swipe'
-  | 'prefill'
-  | 'detail'
-  | 'favorites'
+  'home' | 'map' | 'setup' | 'swipe' | 'prefill' | 'detail' | 'favorites'
 
 export interface Tag {
   id: string

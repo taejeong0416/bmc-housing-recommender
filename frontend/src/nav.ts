@@ -3,7 +3,6 @@ import type { ScreenId } from './types'
 
 // 화면 id → URL. 기존 go('screen') 사용처를 라우터로 잇는 매핑(state.screen 대체).
 export const SCREEN_PATHS: Record<ScreenId, string> = {
-  preference: '/preference',
   home: '/home',
   map: '/map',
   setup: '/setup',
