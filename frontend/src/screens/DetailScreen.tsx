@@ -3,6 +3,7 @@ import { useNav } from '../nav'
 import { useFavorites } from '../hooks/useFavorites'
 import { useHousing } from '../hooks/useHousings'
 import { useRecommendations } from '../hooks/useRecommendations'
+import { ApiError } from '../api/client'
 import { toCard } from '../api/housings'
 import { HousingDetailBody } from '../components/HousingDetailBody'
 import { NoticePreview } from '../components/NoticePreview'
@@ -24,7 +25,9 @@ export default function DetailScreen() {
     data: fetched,
     isLoading,
     isError,
+    error,
   } = useHousing(recDto ? undefined : id)
+  const notFound = error instanceof ApiError && error.status === 404
   const dto = recDto ?? fetched
   const { favorites, toggle } = useFavorites()
   const h = dto ? toCard(dto) : undefined
@@ -53,7 +56,7 @@ export default function DetailScreen() {
         </button>
         {isLoading ? (
           <LoadingState />
-        ) : isError ? (
+        ) : isError && !notFound ? (
           <ErrorState />
         ) : (
           <EmptyState
