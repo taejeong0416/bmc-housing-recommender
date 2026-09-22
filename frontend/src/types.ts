@@ -84,7 +84,7 @@ export interface StoreState {
   learningPromptSeen: boolean // 취향 학습 맥락 물음을 한 번이라도 띄웠는지
   learningPromptOpen: boolean // 취향 학습 동의 모달 표시 상태(비영속)
   advancedOpen: boolean
-  advanced: Record<string, string> // 고급 설정 선택값(라벨→값) — 필터 비관여, 세션 보관
+  advanced: Record<string, string> // 신청 자격 선택값(라벨→값) — 필터 비관여, 브라우저에 영속
 }
 
 export type StatePatch =

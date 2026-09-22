@@ -61,7 +61,7 @@ export default function SetupScreen() {
     patch({ depositMax: +e.currentTarget.value })
   const onRent = (e: ChangeEvent<HTMLInputElement>) =>
     patch({ rentMax: +e.currentTarget.value })
-  // 신청자격 값은 추천엔진(P3) 전까지 필터 비관여 — 세션 동안 스토어에 보관.
+  // 신청자격 값은 필터 비관여 — 매입임대 336곳에 공급계층 데이터가 없어 걸러낼 근거가 없다.
   const setAdvanced = (label: string, value: string) =>
     patch((st) => ({ advanced: { ...st.advanced, [label]: value } }))
   // 신청자격은 비교 시작의 선행 필수조건 — 세 항목 모두 선택돼야 통과.
@@ -197,7 +197,7 @@ export default function SetupScreen() {
           <Head
             icon="verified_user"
             title="신청 자격"
-            sub="신청할 수 있는 공고만 추천에 담아요"
+            sub="청약 전에 확인할 내 자격을 골라요"
             badge={
               <span className="rounded-full bg-teal px-2 py-0.5 text-[10.5px] font-bold text-white">
                 필수
@@ -221,7 +221,8 @@ export default function SetupScreen() {
             ))}
           </div>
           <p className="mt-3.5 text-[11.5px] leading-relaxed text-sub">
-            자격 정보는 신청 가능한 공고를 가려내는 데만 쓰여요.
+            공고별 자격 데이터가 부족해 추천 순위에는 아직 반영하지 않아요. 실제
+            신청 자격은 BMC 청약센터에서 확인해 주세요.
           </p>
         </section>
 
@@ -387,6 +388,11 @@ export default function SetupScreen() {
                 </>
               )}
             </p>
+            {!housingsLoading && canCompare && !eligibilityComplete && (
+              <p className="mt-0.5 text-[11.5px] leading-relaxed text-sub">
+                신청 자격 세 항목을 모두 고르면 비교를 시작할 수 있어요.
+              </p>
+            )}
             {!housingsLoading && !canCompare && (
               <p className="mt-0.5 text-[11.5px] leading-relaxed text-sub">
                 {biggestConstraint

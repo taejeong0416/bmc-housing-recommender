@@ -44,7 +44,7 @@ const noopStorage = {
   removeItem: () => {},
 }
 
-// 영속 대상은 관심목록·취향/조건만. 일시적 UI 상태(advancedOpen·advanced)는 제외.
+// 영속 대상은 관심목록·취향/조건(신청 자격 범주값 포함)만. 일시적 UI 상태(advancedOpen)는 제외.
 const persistKeys = [
   'weights',
   'onboardingLog',
@@ -64,6 +64,7 @@ const persistKeys = [
   'buildingTypes',
   'elevatorRequired',
   'parkingRequired',
+  'advanced',
   'favorites',
   'favoriteLearningEnabled',
   'medicalPreferred',
