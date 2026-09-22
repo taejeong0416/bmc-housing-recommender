@@ -20,7 +20,11 @@ export default function NoticeModal() {
         <p className="mt-2.5 text-[13px] leading-[1.65] text-sub">
           로그인이 없고, 선택한 조건·취향·관심 목록은{' '}
           <b className="text-ink">사용자 브라우저에만</b> 저장되며{' '}
-          <b className="text-ink">서버로 전송되지 않습니다.</b>
+          <b className="text-ink">서버에 보관하지 않습니다.</b>
+        </p>
+        <p className="mt-2 text-[13px] leading-[1.65] text-sub">
+          AI 검색을 쓸 때만 입력한 문장과 조건·관심 목록 요약을 외부 AI로 보내
+          조건을 해석합니다.
         </p>
         <p className="mt-2 text-[13px] leading-[1.65] text-sub">
           실제 청약 신청·자격 조회는 <b className="text-ink">BMC 청약센터</b>

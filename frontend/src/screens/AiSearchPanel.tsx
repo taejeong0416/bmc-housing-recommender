@@ -491,11 +491,13 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
         </button>
       </div>
 
-      {/* 외부 처리 고지 — 입력 문장만 외부 AI로 나간다. 유일한 외부 전송 지점이라 여기서 알린다. */}
+      {/* 외부 처리 고지 — 유일한 외부 전송 지점이라 여기서 알린다. 문장 외에 이전 대화와
+          개인화 컨텍스트(api/ai.ts buildContextText: 현재 조건·관심목록 경향·파악된 취향)도 함께 나간다. */}
       <p className="flex items-start gap-1.5 border-b border-line-soft bg-panel/60 px-4 py-2 text-[11px] leading-[1.5] text-sub">
         <span className="ms mt-px text-[13px] text-faint">info</span>
-        입력한 검색 문장만 외부 AI(Anthropic Claude, 장애 시 Google Gemini)로
-        전송해 조건을 해석합니다. 개인을 식별하는 정보는 보내지 않습니다.
+        입력한 문장과 이전 대화, 현재 조건·관심 목록 요약(예: 주로 보는 구)을
+        외부 AI(Anthropic Claude, 장애 시 Google Gemini)로 보내 조건을
+        해석합니다. 개인을 식별하는 정보는 보내지 않습니다.
       </p>
 
       {/* 대화/빈상태 */}
