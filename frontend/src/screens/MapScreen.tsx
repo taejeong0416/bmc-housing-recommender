@@ -145,7 +145,7 @@ export default function MapScreen() {
   // 지도 화면 범위 + 마커 선택 — 리스트는 '화면 안 매물' 또는 '선택한 마커의 매물'만 보여준다.
   const [bounds, setBounds] = useState<MapBounds | null>(null)
   const [selectedIds, setSelectedIds] = useState<string[] | null>(null)
-  const { setMapEl, zoomIn, zoomOut, panTo } = useNaverMap(
+  const { setMapEl, zoomIn, zoomOut, panTo, fitTo } = useNaverMap(
     markers,
     setSelectedIds, // 마커 클릭 → 해당 매물 id들(빈 지도 클릭 → null 해제)
     // 팬·줌 → 화면 범위 갱신. 선택은 유지 — 지도를 움직여도 선택한 마커 매물을 계속 표시.
@@ -160,11 +160,25 @@ export default function MapScreen() {
   const kwRadiusKm = kwLandmarks.length
     ? Math.max(...kwLandmarks.map((l) => l.radiusM)) / 1000
     : 0
+  // 검색 결과 집합 — 재정렬(찜·취향 변화)로는 바뀌지 않게 id 집합으로 비교한다.
+  const kwResultKey = appliedKw.trim()
+    ? housings
+        .map((h) => h.id)
+        .sort()
+        .join(',')
+    : ''
+  // 검색하면 지도 화면 범위와 무관하게 결과 전체가 보이도록 지도를 맞춘다.
+  // 결과가 없고 거점만 맞으면 그 거점으로 이동한다.
   useEffect(() => {
-    if (topLm) panTo(topLm.lat, topLm.lng)
-    // topLmId 변화(=검색 거점 변경) 시에만 이동 — 매 렌더 팬 방지.
+    if (!appliedKw.trim()) return
+    const points = housings.flatMap((h) =>
+      h.lat != null && h.lng != null ? [{ lat: h.lat, lng: h.lng }] : [],
+    )
+    if (points.length) fitTo(points)
+    else if (topLm) panTo(topLm.lat, topLm.lng)
+    // 검색어·결과 집합이 바뀔 때만 이동 — 매 렌더 이동 방지.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topLmId, panTo])
+  }, [appliedKw, kwResultKey, topLmId, fitTo, panTo])
   // 선택이 있으면 그 매물만, 없으면 현재 화면 범위 안의 매물만.
   const visible = useMemo(() => {
     if (selectedIds) {
@@ -426,8 +440,20 @@ export default function MapScreen() {
               )}
               {!isError && !isLoading && housingList.length === 0 && (
                 <EmptyState
-                  label="조건에 맞는 주택이 없습니다."
-                  sub="취향·조건을 넓혀보세요."
+                  {...(appliedKw.trim() && housings.length === 0
+                    ? {
+                        label: `'${appliedKw.trim()}' 검색 결과가 없어요.`,
+                        sub: '주택명·주소·구 이름으로 다시 검색해 보세요.',
+                      }
+                    : housings.length > 0
+                      ? {
+                          label: '지도 화면 안에 주택이 없어요.',
+                          sub: '지도를 옮기거나 축소해 보세요.',
+                        }
+                      : {
+                          label: '조건에 맞는 주택이 없습니다.',
+                          sub: '취향·조건을 넓혀보세요.',
+                        })}
                 />
               )}
               {housingList.map((h, i) => (

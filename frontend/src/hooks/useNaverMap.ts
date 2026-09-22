@@ -422,5 +422,26 @@ export function useNaverMap(
       map.current.panTo(new window.naver.maps.LatLng(lat, lng))
   }, [])
 
-  return { setMapEl, zoomIn, zoomOut, panTo, locate }
+  // 검색 결과 전체가 한 화면에 들어오도록 지도를 맞춘다. 한 곳이면 그 단지를 가까이 보여준다.
+  const fitTo = useCallback((points: { lat: number; lng: number }[]) => {
+    const m = map.current
+    const nv = window.naver
+    if (!m || !nv || !points.length) return
+    if (points.length === 1) {
+      m.setCenter(new nv.maps.LatLng(points[0].lat, points[0].lng))
+      m.setZoom(Math.max(m.getZoom(), 15), true)
+      return
+    }
+    const lats = points.map((p) => p.lat)
+    const lngs = points.map((p) => p.lng)
+    m.fitBounds(
+      new nv.maps.LatLngBounds(
+        new nv.maps.LatLng(Math.min(...lats), Math.min(...lngs)),
+        new nv.maps.LatLng(Math.max(...lats), Math.max(...lngs)),
+      ),
+      { top: 48, right: 48, bottom: 48, left: 48 },
+    )
+  }, [])
+
+  return { setMapEl, zoomIn, zoomOut, panTo, fitTo, locate }
 }
