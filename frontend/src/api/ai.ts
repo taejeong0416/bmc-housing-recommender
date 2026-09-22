@@ -16,6 +16,7 @@ export interface ParseContext {
   favSummary: string | null // 관심목록 경향 요약
   knownTaste?: string | null // 대화에서 이미 끌어낸 취향 요약(재질문 방지)
   uncoveredAxes?: string[] // 아직 안 물어본 취향 카테고리 라벨(그릴링이 빈 축을 겨냥)
+  final?: boolean // 마지막 턴 — 되묻지 않고 대화 전체로 취향 결론을 내게 한다
 }
 
 /** 이전 대화 한 턴 — 모델이 앞 답변을 이어받아 되묻도록 프록시에 함께 보낸다. */
@@ -70,6 +71,8 @@ function buildContextText(c: ParseContext): string | null {
   if (c.knownTaste) lines.push(`[파악된 취향] ${c.knownTaste}`)
   if (c.uncoveredAxes?.length)
     lines.push(`[아직 안 물어본 취향 축] ${c.uncoveredAxes.join(', ')}`)
+  if (c.final)
+    lines.push('[마무리] 되묻지 말고 지금까지 대화로 취향 결론을 내라.')
   return lines.length ? lines.join('\n') : null
 }
 

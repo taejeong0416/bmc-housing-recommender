@@ -149,9 +149,9 @@ function buildChips(p: ParsedFilter, set: (next: ParsedFilter) => void) {
   return c
 }
 
-// 그릴링 상한(턴) — 4개 취향 카테고리를 다 커버하고 강도까지 갈리면 자연히 끝나고,
-// 그 전이라도 이 횟수를 넘기면 마찰을 막기 위해 더 되묻지 않는다.
-const MAX_GRILL = 6
+// 그릴링 상한(대화당 되묻기 횟수) — 4개 취향 카테고리 + 강도 질문 1회에 맞춘 값.
+// 상한에 닿은 뒤의 답변 턴(또는 "결과 볼래요")은 되묻지 않고 대화 전체로 결론을 낸다.
+const MAX_GRILL = 5
 
 // 취향을 모른다는 신호(모델이 되묻기를 빠뜨릴 때 결정적 시작 질문을 띄우는 트리거).
 const UNCERTAIN = /모르|글쎄|아무거나|상관없|추천|골라|정하기|막연|어렵/
@@ -289,7 +289,7 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
   const [parsed, setParsed] = useState<ParsedFilter | null>(null)
   const [followup, setFollowup] = useState<ParsedFollowup | null>(null)
   const [grillCount, setGrillCount] = useState(0)
-  const [grillStop, setGrillStop] = useState(false) // "결과 볼래요"로 그릴링 중단
+  const [grillStop, setGrillStop] = useState(false) // 결론 턴을 마쳐 그릴링 종료
   const [askedCats, setAskedCats] = useState<Set<string>>(() => new Set()) // 결정적으로 물어본 카테고리
   const [askedTradeoff, setAskedTradeoff] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -343,9 +343,16 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
   }, [parsed, patch])
 
   // 한 대화 턴 — 자유 문장 또는 followup 보기 탭(presetTags). 취향은 누적, 조건은 병합.
-  const runTurn = async (text: string, presetTags: Tag[] = []) => {
+  // wrapUp: "결과 볼래요"로 그릴링을 끝내며 결론을 요청하는 턴.
+  const runTurn = async (
+    text: string,
+    presetTags: Tag[] = [],
+    wrapUp = false,
+  ) => {
     const t = text.trim()
     if (!t || loading) return
+    // 결론 턴 — 되묻기를 상한까지 했거나 사용자가 끝내기를 원할 때 한 번만.
+    const final = !grillStop && (wrapUp || grillCount >= MAX_GRILL)
     const prevTags = parsed?.tags ?? []
     setMessages((m) => [...m, { role: 'user', text: t }])
     setQ('')
@@ -370,6 +377,7 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
           favSummary,
           knownTaste: tasteSummary(prevTags),
           uncoveredAxes,
+          final,
         },
         toHistory(messages),
       )
@@ -384,7 +392,9 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
       let next: ParsedFollowup | null = null
       let markCat: string | null = null
       let markTradeoff = false
-      if (!grillStop && grillCount < MAX_GRILL) {
+      if (final) {
+        setGrillStop(true)
+      } else if (!grillStop && grillCount < MAX_GRILL) {
         if (p.followup) {
           next = p.followup
         } else if (grillCount === 0) {
@@ -540,10 +550,7 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
                   ))}
                 </div>
                 <button
-                  onClick={() => {
-                    setFollowup(null)
-                    setGrillStop(true)
-                  }}
+                  onClick={() => runTurn('이제 결과 볼래요', [], true)}
                   className="self-start text-[11.5px] font-semibold text-sub transition-colors hover:text-teal"
                 >
                   이제 결과 볼래요 →
