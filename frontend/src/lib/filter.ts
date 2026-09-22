@@ -34,6 +34,12 @@ export const OPEN_DEPOSIT = 5000 // 만원(슬라이더 최대)
 export const OPEN_RENT = 60 // 만원(슬라이더 최대 = 실데이터 월세 최대치에 여유, 이 지점이 '상한 없음')
 export const ALL_TYPE = '전체'
 
+// 상한 표시 — 슬라이더 최대치는 필터를 끄는 값이라 금액 대신 '상한 없음'으로 보여준다.
+export const depositCapLabel = (v: number): string =>
+  v === OPEN_DEPOSIT ? '상한 없음' : `${v.toLocaleString()}만원`
+export const rentCapLabel = (v: number): string =>
+  v === OPEN_RENT ? '상한 없음' : `${v}만원`
+
 const YEARS: Record<string, number | null> = {
   '5년 이내': 5,
   '10년 이내': 10,

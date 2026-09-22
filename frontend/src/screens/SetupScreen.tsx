@@ -9,6 +9,8 @@ import {
   OPEN_DEPOSIT,
   OPEN_RENT,
   applyPrefs,
+  depositCapLabel,
+  rentCapLabel,
   type FilterPrefs,
 } from '../lib/filter'
 import { eligiblePairwiseHousings } from '../onboarding/pairwise'
@@ -251,23 +253,23 @@ export default function SetupScreen() {
 
             <BudgetSlider
               label="보증금 상한"
-              value={`${s.depositMax.toLocaleString()}만원`}
+              value={depositCapLabel(s.depositMax)}
               min={0}
               max={5000}
               step={100}
               raw={s.depositMax}
               onChange={onDeposit}
-              maxLabel="5,000만원"
+              maxLabel="상한 없음"
             />
             <BudgetSlider
               label="월 임대료 상한"
-              value={`${s.rentMax}만원`}
+              value={rentCapLabel(s.rentMax)}
               min={0}
               max={60}
               step={1}
               raw={s.rentMax}
               onChange={onRent}
-              maxLabel="60만원"
+              maxLabel="상한 없음"
             />
           </section>
 

@@ -13,6 +13,7 @@ import { toast } from '../components/ui/toastStore'
 import { useFavorites } from '../hooks/useFavorites'
 import { findLandmarks, withinLandmark } from '../lib/landmarks'
 import { topPicks } from '../lib/topPicks'
+import { depositCapLabel, rentCapLabel } from '../lib/filter'
 import AiSearchPanel from './AiSearchPanel'
 import type { GeneratedHousing, HomeMarker } from '../types'
 
@@ -193,7 +194,7 @@ export default function MapScreen() {
   const prefMeta = [
     {
       icon: 'account_balance_wallet',
-      label: `보증금 ${s.depositMax.toLocaleString()} · 월 ${s.rentMax}만원`,
+      label: `보증금 ${depositCapLabel(s.depositMax)} · 월세 ${rentCapLabel(s.rentMax)}`,
     },
     { icon: 'place', label: regionLabel },
     { icon: 'home_work', label: houseLabel },
