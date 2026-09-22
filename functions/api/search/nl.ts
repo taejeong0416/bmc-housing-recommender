@@ -63,7 +63,7 @@ export const onRequestPost = async (ctx: {
   } catch (e) {
     if (e instanceof NlNotConfiguredError)
       return json({ error: e.message }, 503)
-    // 실패해도 앱이 죽지 않도록 안전한 shape으로 폴백 — 프론트 normalize/augment가 마무리한다.
-    return json({ summary: '조건을 이해했어요.' })
+    // 모든 모델이 실패 — 프론트가 대화창에 "잠시 후 다시" 안내를 띄운다.
+    return json({ error: 'AI 응답에 실패했습니다.' }, 503)
   }
 }

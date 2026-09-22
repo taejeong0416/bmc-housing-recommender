@@ -39,3 +39,6 @@ tag/data/contracts/notice_rules.json
 # 인수인계·백업 압축본, 채팅 스크린샷 — 저장소에 올리지 않음(작업 후 삭제 가능)
 /*.zip
 KakaoTalk_*.png
+
+# 문서 산출물(다이어그램·QA 시트 등) 작업 폴더
+/output/

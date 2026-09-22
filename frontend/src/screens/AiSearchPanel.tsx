@@ -24,30 +24,45 @@ import {
   PREFERENCE_CATEGORIES,
   type PreferenceFeatureId,
 } from '../onboarding/pairwise'
-import { toast } from '../components/ui/toastStore'
+import { ApiError } from '../api/client'
 import type { GeneratedHousing } from '../types'
 
 type Tag = { id: string; weight: number }
 
 // 대화 로그 한 턴. followup은 마지막 AI 턴에만 살아 있고, 답하면 다음 턴으로 대체된다.
 // asked는 그 턴에 던진 되묻기 질문 — 다음 턴 모델이 앞 답변을 이어받도록 기록에 싣는다.
+// failed는 AI 호출 실패 안내 턴 — 화면에만 보이고 모델 기록에서는 빠진다.
 type Msg =
   | { role: 'user'; text: string }
-  | { role: 'ai'; summary: string; unresolved?: string[]; asked?: string }
+  | {
+      role: 'ai'
+      summary: string
+      unresolved?: string[]
+      asked?: string
+      failed?: boolean
+    }
 
-// 대화 로그 → 모델에 넘길 이전 대화. AI 턴은 요약과 그때 던진 질문을 합친다.
+// 대화 로그 → 모델에 넘길 이전 대화. AI 턴은 요약과 그때 던진 질문을 합치고,
+// 실패한 턴은 그 직전 사용자 발화와 함께 뺀다.
 function toHistory(messages: Msg[]): ChatTurn[] {
-  return messages.map((m) =>
-    m.role === 'user'
-      ? { role: 'user', text: m.text }
-      : {
-          role: 'assistant',
-          text: m.asked
-            ? `${m.summary}
-${m.asked}`
-            : m.summary,
-        },
-  )
+  const turns: ChatTurn[] = []
+  for (const m of messages) {
+    if (m.role === 'user') turns.push({ role: 'user', text: m.text })
+    else if (m.failed) turns.pop()
+    else
+      turns.push({
+        role: 'assistant',
+        text: m.asked ? `${m.summary}\n${m.asked}` : m.summary,
+      })
+  }
+  return turns
+}
+
+// AI 호출 실패 안내 — 입력 길이 초과만 따로 알리고, 나머지(과부하·장애)는 잠시 후 재시도로.
+function failMessage(e: unknown): string {
+  if (e instanceof ApiError && e.status === 400)
+    return '질문이 너무 길어요. 300자 안으로 줄여서 다시 물어봐 주세요.'
+  return 'AI가 지금 요청을 많이 처리하느라 바빠요. 잠시 후 다시 물어봐 주세요.'
 }
 
 // 취향 태그 누적 — id 기준 합집합, 더 강한 weight 유지. parsed.tags가 취향의 단일 소스다.
@@ -354,6 +369,7 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
     // 결론 턴 — 되묻기를 상한까지 했거나 사용자가 끝내기를 원할 때 한 번만.
     const final = !grillStop && (wrapUp || grillCount >= MAX_GRILL)
     const prevTags = parsed?.tags ?? []
+    const prevFollowup = followup
     setMessages((m) => [...m, { role: 'user', text: t }])
     setQ('')
     setFollowup(null)
@@ -432,8 +448,12 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
         if (markTradeoff) setAskedTradeoff(true)
       }
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'AI 응답에 실패했어요')
-      setMessages((m) => m.slice(0, -1)) // 실패한 사용자 발화 롤백
+      // 실패를 대화창에 안내하고, 답하던 되묻기 보기를 다시 띄워 그대로 재시도할 수 있게 한다.
+      setMessages((m) => [
+        ...m,
+        { role: 'ai', summary: failMessage(e), failed: true },
+      ])
+      setFollowup(prevFollowup)
     } finally {
       setLoading(false)
     }
@@ -497,7 +517,9 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
                     </span>
                   </span>
                   <div className="min-w-0 pt-0.5">
-                    <p className="text-[12.5px] font-semibold leading-relaxed text-body">
+                    <p
+                      className={`text-[12.5px] font-semibold leading-relaxed ${m.failed ? 'text-sub' : 'text-body'}`}
+                    >
                       {m.summary}
                     </p>
                     {m.unresolved && m.unresolved.length > 0 && (
