@@ -10,6 +10,7 @@ import {
   type FilterPrefs,
 } from '../lib/filter'
 import { apiPost } from './client'
+import { busanDistricts } from '../data'
 
 export interface ParseContext {
   current: FilterPrefs // 현재 설정한 조건(열린 축은 무시)
@@ -76,7 +77,36 @@ function buildContextText(c: ParseContext): string | null {
   return lines.length ? lines.join('\n') : null
 }
 
-// 키워드 안전망 — lite 모델이 놓치기 쉬운 명시적 방 구조·신축을 원문에서 보강. (테스트용 export)
+// 금액 표현 → 만원. "2천만원"=2000, "1억 5천"=15000, "5,000만원"=5000, "30만"=30.
+function manwonOf(raw: string): number | undefined {
+  const t = raw.replace(/[,\s원]/g, '')
+  let total = 0
+  const eok = t.match(/(\d+(?:\.\d+)?)억/)
+  if (eok) total += Number(eok[1]) * 10000
+  const cheon = t.match(/(\d+)천/)
+  if (cheon) total += Number(cheon[1]) * 1000
+  const rest = t.replace(/\d+(?:\.\d+)?억/, '').replace(/\d+천/, '')
+  const man = rest.match(/^(\d+)/)
+  if (man) total += Number(man[1])
+  return total > 0 ? total : undefined
+}
+const DEPOSIT_RE =
+  /보증금\s*([0-9][0-9,.]*\s*억?\s*[0-9]*\s*천?\s*[0-9]*\s*만?)/
+const RENT_RE =
+  /(?:월세|월\s*임대료|임대료|월)\s*([0-9][0-9,.]*\s*천?\s*[0-9]*\s*만?)/
+
+// 구/군 이름과 '구·군'을 뺀 지명(해운대→해운대구). 앞에 다른 글자가 붙은 경우(강서구 속 '서구')는 제외하고,
+// 한 글자 지명(남·동·서·중·북)은 오탐이 많아 줄임말을 두지 않으며, '수영장'은 수영구로 읽지 않는다.
+const REGION_WORDS: [RegExp, string][] = busanDistricts.flatMap((d) => {
+  const short = d.slice(0, -1)
+  const words: [RegExp, string][] = [[new RegExp(`(?<![가-힣])${d}`), d]]
+  if (short.length >= 2)
+    words.push([new RegExp(short === '수영' ? '수영(?!장)' : short), d])
+  return words
+})
+
+// 키워드 안전망 — 모델이 놓치기 쉬운 명시적 방 구조·신축·지역·보증금·월세를 원문에서 보강.
+// 모델이 채운 값이 있으면 그 값을 우선한다. (테스트용 export)
 const ROOM_WORDS: [string, string][] = [
   ['원룸', '원룸'],
   ['1.5룸', '1.5룸'],
@@ -89,10 +119,18 @@ export function augment(text: string, p: ParsedFilter): ParsedFilter {
     if (text.includes(word)) houseTypes.add(val)
   const buildYear =
     p.buildYear ?? (/신축|새\s?집/.test(text) ? '5년 이내' : undefined)
+  const regions = [
+    ...new Set(REGION_WORDS.filter(([re]) => re.test(text)).map(([, d]) => d)),
+  ]
+  const deposit = text.match(DEPOSIT_RE)
+  const rent = text.match(RENT_RE)
   return {
     ...p,
     houseTypes: houseTypes.size ? [...houseTypes] : undefined,
     buildYear,
+    regions: p.regions ?? (regions.length ? regions : undefined),
+    depositMax: p.depositMax ?? (deposit ? manwonOf(deposit[1]) : undefined),
+    rentMax: p.rentMax ?? (rent ? manwonOf(rent[1]) : undefined),
   }
 }
 

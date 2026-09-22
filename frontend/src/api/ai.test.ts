@@ -131,6 +131,44 @@ describe('augment (키워드 안전망)', () => {
     ).toBe('10년 이내')
   })
 
+  it('지역·보증금·월세를 원문에서 보강(QA 재현 문장)', () => {
+    const a = augment('해운대구 월세 30만원 이하', { summary: 's' })
+    expect(a.regions).toEqual(['해운대구'])
+    expect(a.rentMax).toBe(30)
+    const b = augment('해운대 근처 월세 30만원 이하 투룸, 지하철역 가까운 곳', {
+      summary: 's',
+    })
+    expect(b.regions).toEqual(['해운대구'])
+    expect(b.rentMax).toBe(30)
+    expect(b.houseTypes).toEqual(['투룸'])
+  })
+
+  it('금액 표기(천·억·쉼표)를 만원으로 환산', () => {
+    const d = (t: string) => augment(t, { summary: 's' }).depositMax
+    expect(d('보증금 2천만원 이하')).toBe(2000)
+    expect(d('보증금 1억 5천')).toBe(15000)
+    expect(d('보증금 5,000만원까지')).toBe(5000)
+    expect(augment('월 50만원 이하', { summary: 's' }).rentMax).toBe(50)
+  })
+
+  it('모델 값이 있으면 원문 보강보다 우선', () => {
+    const r = augment('수영구 보증금 3천', {
+      summary: 's',
+      regions: ['남구'],
+      depositMax: 1000,
+    })
+    expect(r.regions).toEqual(['남구'])
+    expect(r.depositMax).toBe(1000)
+  })
+
+  it('강서구 속 서구, 수영장은 지역으로 읽지 않음', () => {
+    expect(augment('강서구 원룸', { summary: 's' }).regions).toEqual(['강서구'])
+    expect(
+      augment('수영장 가까운 곳', { summary: 's' }).regions,
+    ).toBeUndefined()
+    expect(augment('조용한 동네', { summary: 's' }).regions).toBeUndefined()
+  })
+
   it('방 구조 언급 없으면 houseTypes 미설정', () => {
     expect(
       augment('조용한 동네 카페 근처', { summary: 's' }).houseTypes,
