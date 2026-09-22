@@ -19,8 +19,6 @@ export default function Footer() {
         <p className="text-[12px] leading-[1.7] text-sub">
           부산광역시 부산도시공사(BMC) · 부산광역시 부산진구 새싹로 1 · 대표전화
           051-810-1234
-          <br />
-          사업자등록번호 000-00-00000 · 통신판매업신고 제2026-부산진-0000호
         </p>
         <p className="mt-2 text-[11.5px] text-faint">
           © 2026 Busan Metropolitan Corporation. All rights reserved.
