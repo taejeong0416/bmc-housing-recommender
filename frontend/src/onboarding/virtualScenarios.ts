@@ -13,19 +13,6 @@ import {
 
 export type VirtualPairKind = 'coverage' | 'detail' | 'adaptive'
 
-// 카드 대표 이미지 테마(기획안 §4.2) — 취향 8축을 대표하는 생활장면. 프로필의 지배 축에
-// 맞춰 하나씩 얹으며, 한 쌍(A·B)은 서로 다른 테마를 써서 이미지로도 구분되게 한다(§4.4).
-// 파일은 public/onboarding/. cafe·culture 사진은 준비 대상(없으면 텍스트 헤더로 대체).
-export type SceneTheme =
-  | 'dining'
-  | 'cafe'
-  | 'culture'
-  | 'fitness'
-  | 'park'
-  | 'transit'
-  | 'calm'
-  | 'mart'
-
 export interface VirtualTag {
   icon: string
   label: string
@@ -36,7 +23,7 @@ export interface VirtualProfile {
   title: string
   scene: string
   icon: string
-  theme?: SceneTheme
+  imageFile: string
   tags: VirtualTag[]
   tradeoffs: VirtualTag[]
   vector: PreferenceVector
@@ -52,7 +39,7 @@ export interface VirtualPair {
   right: VirtualProfile
 }
 
-type ProfileCopy = Omit<VirtualProfile, 'id' | 'vector'>
+type ProfileCopy = Omit<VirtualProfile, 'id' | 'imageFile' | 'vector'>
 
 interface ScenarioTemplate {
   id: string
@@ -101,7 +88,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '카페·문화를 가까이 누리는 도심 생활',
       scene: '집을 나서면 카페와 음식점, 문화공간이 이어지는 동네예요.',
       icon: 'interests',
-      theme: 'dining',
       tags: [
         { icon: 'local_cafe', label: '카페 선택지' },
         { icon: 'restaurant', label: '외식 선택지' },
@@ -115,7 +101,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '차분한 골목에서 충전하는 생활',
       scene: '자극이 적고 조용해 집에서 편히 쉬기 좋은 동네예요.',
       icon: 'spa',
-      theme: 'calm',
       tags: [
         { icon: 'volume_off', label: '조용한 주거환경' },
         { icon: 'self_improvement', label: '집 중심 휴식' },
@@ -155,7 +140,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '역과 장보기가 가까워 일상이 간결한 생활',
       scene: '역과 마트가 가까워 이동과 생필품 해결이 편한 동네예요.',
       icon: 'directions_transit',
-      theme: 'transit',
       tags: [
         { icon: 'train', label: '역세권·철도 접근' },
         { icon: 'shopping_cart', label: '장보기 편의' },
@@ -168,7 +152,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '운동과 산책을 일상으로 만드는 생활',
       scene: '운동시설과 공원이 가까워 몸을 움직이기 좋은 동네예요.',
       icon: 'directions_run',
-      theme: 'park',
       tags: [
         { icon: 'fitness_center', label: '운동시설 접근' },
         { icon: 'park', label: '공원·산책 접근' },
@@ -209,7 +192,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '이동과 생필품 해결이 간편한 생활',
       scene: '역과 마트가 가까워 하루 동선이 짧은 동네예요.',
       icon: 'directions_transit',
-      theme: 'transit',
       tags: [
         { icon: 'train', label: '역세권·철도 접근' },
         { icon: 'shopping_cart', label: '장보기 편의' },
@@ -222,7 +204,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '카페·외식·문화가 가까운 생활',
       scene: '카페와 음식점, 문화공간을 가까이 즐기기 좋은 동네예요.',
       icon: 'interests',
-      theme: 'dining',
       tags: [
         { icon: 'local_cafe', label: '카페 선택지' },
         { icon: 'restaurant', label: '외식 선택지' },
@@ -253,7 +234,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '운동과 공원 산책이 가까운 생활',
       scene: '운동시설과 공원이 가까워 활동적으로 지내기 좋은 동네예요.',
       icon: 'directions_run',
-      theme: 'fitness',
       tags: [
         { icon: 'fitness_center', label: '운동시설 접근' },
         { icon: 'park', label: '공원·산책 접근' },
@@ -266,7 +246,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '조용한 주거에서 쉬어가는 생활',
       scene: '생활밀도가 낮아 집에서 편히 쉬기 좋은 동네예요.',
       icon: 'spa',
-      theme: 'calm',
       tags: [
         { icon: 'volume_off', label: '조용한 주거환경' },
         { icon: 'self_improvement', label: '집 중심 휴식' },
@@ -300,9 +279,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '역과 마트가 가까워 생활이 편리한 동네',
       scene: '역과 마트가 가까워 오가기 편한 생활권이에요.',
       icon: 'directions_transit',
-      // 역·마트 근접 생활권 — 장보기 편의를 강조하므로 마트 장면 사진을 얹어
-      // 다른 역세권(transit) 프로필과 대표 사진이 겹치지 않게 한다.
-      theme: 'mart',
       tags: [
         { icon: 'train', label: '역세권·철도 접근' },
         { icon: 'shopping_cart', label: '장보기 편의' },
@@ -315,7 +291,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '한적하고 조용한 주거 중심 동네',
       scene: '생활밀도가 낮아 차분하게 지내기 좋은 동네예요.',
       icon: 'volume_off',
-      theme: 'calm',
       tags: [
         { icon: 'volume_off', label: '조용한 주거환경' },
         { icon: 'weekend', label: '낮은 생활밀도' },
@@ -359,7 +334,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '카페·외식·문화를 즐기는 생활',
       scene: '카페와 음식점, 문화공간이 가까워 여가가 풍부한 동네예요.',
       icon: 'interests',
-      theme: 'dining',
       tags: [
         { icon: 'local_cafe', label: '카페 선택지' },
         { icon: 'restaurant', label: '외식 선택지' },
@@ -371,7 +345,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '운동과 공원 산책이 일상인 생활',
       scene: '운동시설과 공원이 가까워 야외활동을 이어가기 좋은 동네예요.',
       icon: 'directions_run',
-      theme: 'park',
       tags: [
         { icon: 'fitness_center', label: '운동시설 접근' },
         { icon: 'park', label: '공원·산책 접근' },
@@ -394,7 +367,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '역이 가까워 이동이 빠른 생활',
       scene: '도시철도역이 가까워 어디로든 나서기 편한 동네예요.',
       icon: 'train',
-      theme: 'transit',
       tags: [
         { icon: 'train', label: '역세권·철도 접근' },
         { icon: 'schedule', label: '짧은 통근' },
@@ -405,7 +377,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '마트가 가까워 장보기가 편한 생활',
       scene: '마트가 가까워 장보기와 생필품 구매가 가벼운 동네예요.',
       icon: 'shopping_cart',
-      theme: 'mart',
       tags: [
         { icon: 'shopping_cart', label: '장보기 편의' },
         { icon: 'shopping_basket', label: '가벼운 장보기 동선' },
@@ -434,7 +405,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '카페와 맛집이 가까운 생활',
       scene: '카페와 음식점이 많아 먹고 마시기 좋은 동네예요.',
       icon: 'restaurant',
-      theme: 'dining',
       tags: [
         { icon: 'local_cafe', label: '카페 선택지' },
         { icon: 'restaurant', label: '외식 선택지' },
@@ -447,7 +417,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '문화·여가를 가까이 누리는 생활',
       scene: '문화시설과 여가공간이 가까워 취향을 채우기 좋은 동네예요.',
       icon: 'palette',
-      theme: 'culture',
       tags: [
         { icon: 'palette', label: '문화·여가 접근' },
         { icon: 'auto_awesome', label: '취향 발견 산책' },
@@ -469,7 +438,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '카페가 많아 머물기 좋은 생활',
       scene: '카페가 많아 앉아서 시간을 보내기 좋은 동네예요.',
       icon: 'local_cafe',
-      theme: 'cafe',
       tags: [
         { icon: 'local_cafe', label: '카페 선택지' },
         { icon: 'self_improvement', label: '머무는 여가' },
@@ -482,7 +450,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '외식 선택지가 다양한 생활',
       scene: '음식점이 많아 다양하게 사먹기 좋은 동네예요.',
       icon: 'restaurant',
-      theme: 'dining',
       tags: [
         { icon: 'restaurant', label: '외식 선택지' },
         { icon: 'ramen_dining', label: '다양한 먹거리' },
@@ -502,7 +469,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '운동시설이 가까워 꾸준히 움직이는 생활',
       scene: '헬스·체육시설이 가까워 운동을 이어가기 좋은 동네예요.',
       icon: 'fitness_center',
-      theme: 'fitness',
       tags: [
         { icon: 'fitness_center', label: '운동시설 접근' },
         { icon: 'schedule', label: '짧은 운동 동선' },
@@ -513,7 +479,6 @@ const SCENARIOS: ScenarioTemplate[] = [
       title: '공원 산책이 일상인 생활',
       scene: '공원이 가까워 산책과 바깥 시간을 누리기 좋은 동네예요.',
       icon: 'park',
-      theme: 'park',
       tags: [
         { icon: 'park', label: '공원·산책 접근' },
         { icon: 'directions_walk', label: '걷기 좋은 동네' },
@@ -602,11 +567,13 @@ const makePair = (
   const left = {
     ...template.left,
     id: `${kind}-${template.id}-left`,
+    imageFile: `${template.id}-left.png`,
     vector: vectorFor(template.leftLevels, distribution),
   }
   const right = {
     ...template.right,
     id: `${kind}-${template.id}-right`,
+    imageFile: `${template.id}-right.png`,
     vector: vectorFor(template.rightLevels, distribution),
   }
   return {

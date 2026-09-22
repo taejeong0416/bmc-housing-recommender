@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import housingsJson from '../generated/housings.json'
 import type { GeneratedHousing } from '../types'
@@ -82,6 +83,38 @@ describe('실제 데이터 범위에 맞춘 가상 생활권 비교', () => {
     const eighth = createVirtualPair(7, candidates, model, seen)
     expect(seventh.kind).toBe('adaptive')
     expect(eighth.kind).toBe('adaptive')
+  })
+
+  it('모든 질문의 A/B 카드는 서로 다른 실제 이미지 파일에 연결된다', () => {
+    const model = createPreferenceModel()
+    const seen: string[] = []
+    const imageFiles = new Set<string>()
+    const scenarioIds = new Set<string>()
+
+    for (let round = 0; round < 15; round++) {
+      const pair = createVirtualPair(round, candidates, model, seen)
+      const scenarioId = pair.id.replace(/^(coverage|detail|adaptive)-/, '')
+      scenarioIds.add(scenarioId)
+      for (const [side, profile] of [
+        ['left', pair.left],
+        ['right', pair.right],
+      ] as const) {
+        expect(profile.imageFile).toBe(`${scenarioId}-${side}.png`)
+        expect(
+          existsSync(
+            new URL(
+              `../../public/onboarding/questions/${profile.imageFile}`,
+              import.meta.url,
+            ),
+          ),
+        ).toBe(true)
+        imageFiles.add(profile.imageFile)
+        seen.push(profile.id)
+      }
+    }
+
+    expect(scenarioIds.size).toBe(10)
+    expect(imageFiles.size).toBe(20)
   })
 
   it('선택 카드에는 매물의 정량 조건을 노출하지 않는다', () => {
