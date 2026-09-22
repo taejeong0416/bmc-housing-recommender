@@ -16,10 +16,10 @@ export default function DetailScreen() {
   const { id } = useParams()
   const { go } = useNav()
   const goMap = go('map')
-  // 지도에서 넘어온 추천 결과에 엔진 점수(취향·예산 매칭)가 담겨 있으면 그대로 소비.
-  // 직접 URL 진입 등 추천 목록에 없으면 상세 fetch로 폴백(placeholder 점수).
-  const { items } = useRecommendations()
-  const recDto = items.find((it) => it.id === id)
+  // 추천 이음새의 전체 점수표(조건 필터 전)에서 꺼내 추천 홈·관심목록과 같은 점수를 보인다.
+  // 목록 로딩 전이거나 목록에 없는 ID면 상세 fetch로 폴백한다.
+  const { all } = useRecommendations()
+  const recDto = all.find((it) => it.id === id)
   const {
     data: fetched,
     isLoading,

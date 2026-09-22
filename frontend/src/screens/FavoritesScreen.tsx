@@ -1,7 +1,7 @@
 import type { MouseEvent } from 'react'
 import { useNav } from '../nav'
 import { useStore } from '../store'
-import { useHousings } from '../hooks/useHousings'
+import { useRecommendations } from '../hooks/useRecommendations'
 import { houseImage, toCard } from '../api/housings'
 import { useFavorites } from '../hooks/useFavorites'
 import {
@@ -13,13 +13,18 @@ import {
 export default function FavoritesScreen() {
   const { go, goDetail } = useNav()
   const goMap = go('map')
-  const { data } = useHousings()
+  // 추천 홈·상세와 같은 점수를 보이도록 추천 이음새의 전체 점수표에서 꺼낸다.
+  const { all } = useRecommendations()
   const { favorites, toggle } = useFavorites()
   const patch = useStore((st) => st.patch)
   const learningEnabled = useStore((st) => st.state.favoriteLearningEnabled)
-  const items = (data ?? [])
+  const items = all
     .filter((dto) => favorites[dto.id])
-    .map((dto) => ({ ...toCard(dto), image: houseImage(dto).src }))
+    .map((dto) => ({
+      ...toCard(dto),
+      image: houseImage(dto).src,
+      learned: dto.scoreSource === 'engine',
+    }))
 
   // 찜 기반 정교화 상태(§12.7) — 반영 강도 β와 학습 가능한 찜 수.
   const activeCount = activeFavoriteCount(favoriteIds(favorites))
@@ -118,7 +123,8 @@ export default function FavoritesScreen() {
                   className="h-full w-full object-cover"
                 />
                 <span className="absolute left-2.5 top-2.5 rounded-md bg-teal px-1.5 py-0.5 text-[11px] font-extrabold tabular-nums text-white shadow-sm">
-                  {h.score}%
+                  {h.score}
+                  {h.learned ? '점' : '%'}
                 </span>
                 <button
                   onClick={(e: MouseEvent) => {

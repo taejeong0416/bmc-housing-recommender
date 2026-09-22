@@ -45,6 +45,9 @@ function applyMedicalPreference(items: GeneratedHousing[]): GeneratedHousing[] {
 // 소비 화면(Map·Detail)은 이 훅만 보고, 랭킹 구현은 훅 뒤로 격리된다.
 export interface RecommendationsResult {
   items: GeneratedHousing[]
+  // 조건 필터 전 전체 단지에 같은 점수를 매긴 결과 — 관심목록·직접 URL 상세처럼 필터 밖 단지도
+  // 추천 목록과 같은 점수로 보여주기 위한 조회용(순위는 items와 같은 규칙).
+  all: GeneratedHousing[]
   personalized: boolean // 취향(온보딩·직접보정·찜)이 실제 랭킹에 반영됐는가 — 라벨 일관성용
   isLoading: boolean
   isError: boolean
@@ -71,11 +74,13 @@ export function useRecommendations(): RecommendationsResult {
   )
   const personalized = model.comparisons > 0 || state.medicalPreferred
   const housingsQ = useHousings()
-  const filtered = applyPrefs(housingsQ.data ?? [], filterPrefsFromState(state))
-  const ranked = rankByLearnedPreference(filtered, model)
-  const items = state.medicalPreferred ? applyMedicalPreference(ranked) : ranked
+  // 점수는 단지별 절대값이라 전체를 먼저 매기고 조건으로 거른다 — 거른 뒤 매긴 순위와 같다.
+  const ranked = rankByLearnedPreference(housingsQ.data ?? [], model)
+  const all = state.medicalPreferred ? applyMedicalPreference(ranked) : ranked
+  const items = applyPrefs(all, filterPrefsFromState(state))
   return {
     items,
+    all,
     personalized,
     isLoading: housingsQ.isLoading,
     isError: housingsQ.isError,
