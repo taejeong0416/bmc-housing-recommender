@@ -2,7 +2,8 @@
 // 정적 배포에서 유일하게 서버가 필요한 지점. 이유는 연산이 아니라 API 키 은닉이다.
 // 프롬프트·스키마·모델 호출은 @bmc/shared-types/dist/nl-search 단일 원천(백엔드와 공유)이고,
 // 결과 shape의 단일 원천은 @bmc/shared-types의 ParsedFilter 타입.
-// 레이트리밋은 Cloudflare 대시보드 Rate limiting rules가 담당한다.
+// 별도 레이트리밋은 두지 않고, 비용 상한은 Claude Console 월 사용 한도가 담당한다(pages.dev에는
+// Cloudflare Rate limiting 규칙을 걸 수 없다).
 import {
   NL_CONTEXT_MAX_LEN,
   NL_MAX_LEN,

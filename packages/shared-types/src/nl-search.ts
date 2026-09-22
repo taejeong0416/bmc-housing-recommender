@@ -166,6 +166,8 @@ export async function callNlModel(
       }
     } catch (e) {
       lastError = e
+      // 폴백은 화면에서 티가 나지 않으므로 로그로만 드러난다(wrangler pages deployment tail).
+      console.warn('[nl-search] Claude 호출 실패:', errorText(e))
     }
   }
   if (cfg.geminiApiKey) {
@@ -176,10 +178,14 @@ export async function callNlModel(
       }
     } catch (e) {
       lastError = e
+      console.warn('[nl-search] Gemini 호출 실패:', errorText(e))
     }
   }
   throw lastError
 }
+
+const errorText = (e: unknown) =>
+  (e instanceof Error ? e.message : String(e)).slice(0, 300)
 
 async function callClaude(
   text: string,

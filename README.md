@@ -125,7 +125,7 @@ npm run deploy       # 빌드 + wrangler pages deploy
 - `frontend/.env.production` — `VITE_AI_PROXY=1`, `VITE_NAVER_MAP_CLIENT_ID`. **`VITE_API_BASE_URL`은 설정하지 않는다**(설정하면 MSW가 꺼져 목록이 빈다). AI 키는 프론트 환경변수에 두지 않는다.
 - 런타임 시크릿 — `npx wrangler pages secret put ANTHROPIC_API_KEY`. 폴백을 쓰려면 `GEMINI_API_KEY`도 넣는다. 모델을 바꿀 때만 `ANTHROPIC_MODEL`·`GEMINI_MODEL`을 설정한다.
 - **NCP 콘솔에 배포 도메인 등록** — 누락하면 지도가 뜨지 않는다.
-- Cloudflare 대시보드 Rate limiting rules로 `/api/search/nl` 보호.
+- Claude Console(Settings → Limits)에서 월 사용 한도를 설정한다. `pages.dev` 도메인에는 Cloudflare Rate limiting 규칙을 걸 수 없어서 AI 비용 상한은 이 한도가 담당하고, 한도를 넘으면 Gemini 폴백으로 동작한다. 폴백 여부는 `npx wrangler pages deployment tail --project-name=bmc-housing` 로그의 `[nl-search]` 줄로 확인한다.
 
 배포 후 확인: `/map` 새로고침 무오류 · 지도 마커 표시 · 목록 355건 · AI 검색 조건 칩 생성 · 번들에 `sk-ant`·`AIza` 문자열 부재(키 미노출).
 
