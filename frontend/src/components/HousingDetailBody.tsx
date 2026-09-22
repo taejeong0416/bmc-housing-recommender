@@ -205,15 +205,15 @@ export function HousingDetailBody({
 
   return (
     <>
-      {/* 대표 이미지 — 세대수 기준 대표 유형(아파트/오피스텔/빌라) */}
+      {/* 예시 이미지 — 단지 실사진이 없어 세대수 규모별 예시 사진을 쓴다. 실사진으로 오해하지 않게 표기. */}
       <div className="relative h-[260px] overflow-hidden lg:h-[320px]">
         <img
           src={houseImage(dto).src}
-          alt={`${h.name} ${houseImage(dto).label}`}
+          alt={`${h.name} 예시 이미지`}
           className="h-full w-full object-cover"
         />
         <span className="absolute bottom-3 left-4 rounded-full bg-ink/70 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur-sm">
-          {houseImage(dto).label}
+          예시 이미지
         </span>
       </div>
 

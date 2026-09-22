@@ -39,16 +39,14 @@ export function toCard(h: HousingDto): Housing {
 // 같은 유형이라도 매물 id로 3장 중 하나를 고정 배정해 카드가 다 똑같아 보이지 않게 한다.
 const HOUSE_IMG_BASE = import.meta.env.BASE_URL + 'houses/'
 const HOUSE_VARIANTS = 3
-export function houseImage(dto: HousingDto): { label: string; src: string } {
+export function houseImage(dto: HousingDto): { src: string } {
   const u = dto.totalUnits ?? 0
   const key = u >= 100 ? 'apartment' : u >= 20 ? 'officetel' : 'villa'
-  const label =
-    key === 'apartment' ? '아파트' : key === 'officetel' ? '오피스텔' : '빌라'
   let hash = 0
   for (let i = 0; i < dto.id.length; i++)
     hash = (hash * 31 + dto.id.charCodeAt(i)) | 0
   const variant = (Math.abs(hash) % HOUSE_VARIANTS) + 1
-  return { label, src: `${HOUSE_IMG_BASE}${key}-${variant}.png` }
+  return { src: `${HOUSE_IMG_BASE}${key}-${variant}.png` }
 }
 
 export function toMarker(h: HousingDto): HomeMarker | null {

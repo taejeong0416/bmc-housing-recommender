@@ -105,7 +105,7 @@ export default function DetailScreen() {
 
         {/* 모바일 — 청약 CTA는 하단 고정이라 그 위에 공고 미리보기를 둔다(데스크톱은 우측 요약에). */}
         <div className="px-5 pb-4 lg:hidden">
-          <NoticePreview tag={h.tag} />
+          <NoticePreview />
         </div>
 
         {/* 모바일 하단 고정 CTA */}
@@ -173,7 +173,7 @@ export default function DetailScreen() {
             >
               청약센터 바로가기
             </Button>
-            <NoticePreview tag={h.tag} className="mt-3" />
+            <NoticePreview className="mt-3" />
             <p className="mt-3 flex items-start gap-1.5 text-[11.5px] leading-relaxed text-sub">
               <span className="ms mt-px text-[14px] text-teal">
                 verified_user
