@@ -98,14 +98,6 @@ export const detailTabDefs: [string, string][] = [
   ['transit', '교통'],
 ]
 
-export const footerLinks: string[] = [
-  '이용약관',
-  '개인정보처리방침',
-  '이메일무단수집거부',
-  '고객센터',
-  '오시는 길',
-]
-
 export const aiExamples: string[] = [
   '수영구 원룸, 보증금 2천만원 이하',
   '해운대 투룸, 신축이면 좋아요',

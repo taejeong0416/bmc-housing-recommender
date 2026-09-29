@@ -1,6 +1,5 @@
 import { Outlet } from 'react-router-dom'
 import SiteHeader from './components/SiteHeader'
-import Footer from './components/Footer'
 import LearningConsentModal from './components/LearningConsentModal'
 import NoticeModal from './components/NoticeModal'
 import { Toaster } from './components/ui/Toast'
@@ -13,7 +12,6 @@ export default function App() {
       <main className="flex flex-1 justify-center px-5 pb-[60px] pt-6">
         <Outlet />
       </main>
-      <Footer />
       <Toaster />
       <NoticeModal />
       <LearningConsentModal />

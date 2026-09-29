@@ -41,6 +41,3 @@ export const useToastStore = create<ToastStore>((set) => ({
 
 export const toast = (msg: string, opts?: ToastOpts) =>
   useToastStore.getState().push(msg, opts)
-// 준비 중 안내 단축 헬퍼.
-export const soon = (label: string) => () =>
-  toast(`${label} 기능은 준비 중이에요`)
