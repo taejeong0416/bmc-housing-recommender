@@ -179,6 +179,23 @@ export default function MapScreen() {
     // 검색어·결과 집합이 바뀔 때만 이동 — 매 렌더 이동 방지.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appliedKw, kwResultKey, topLmId, fitTo, panTo])
+  // 지역 조건이 바뀌면(AI 검색 등) 결과 전체가 보이도록 지도를 맞춘다. 보증금·월세 등
+  // 다른 조건 변화로는 움직이지 않는다. 첫 진입은 initialCenter가 담당해 건너뛴다.
+  const regionKey = s.regions.join(',')
+  const fittedRegionKey = useRef(regionKey)
+  useEffect(() => {
+    if (regionKey === fittedRegionKey.current) return
+    if (!regionKey) {
+      fittedRegionKey.current = ''
+      return
+    }
+    const points = housings.flatMap((h) =>
+      h.lat != null && h.lng != null ? [{ lat: h.lat, lng: h.lng }] : [],
+    )
+    if (!points.length) return // 결과가 아직 계산되지 않았으면 다음 렌더에 맞춘다
+    fittedRegionKey.current = regionKey
+    fitTo(points)
+  }, [regionKey, housings, fitTo])
   // 선택이 있으면 그 매물만, 없으면 현재 화면 범위 안의 매물만.
   const visible = useMemo(() => {
     if (selectedIds) {
