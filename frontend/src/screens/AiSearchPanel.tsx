@@ -606,8 +606,9 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
               무엇을 찾으시나요?
             </p>
             <p className="text-[12px] leading-relaxed text-sub">
-              원하는 조건을 말해주세요. 취향이 막연하면
-              <br />몇 가지 여쭤보며 함께 좁혀드릴게요.
+              원하는 조건을 말해주세요.
+              <br />
+              취향이 모호하면 AI가 질문을 드려 함께 찾아드려요.
             </p>
             {favSuggestion && (
               <button
