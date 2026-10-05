@@ -302,8 +302,9 @@ export default function SetupScreen() {
               ))}
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3">
-              {setupSelects.map((sel) => (
-                <div key={sel.label}>
+              {/* 셀렉트 3개 — 공급 유형을 한 줄로 펴서 빈 칸을 남기지 않는다. */}
+              {setupSelects.map((sel, i) => (
+                <div key={sel.label} className={i === 0 ? 'col-span-2' : ''}>
                   <p className="mb-1.5 text-[12.5px] text-sub">{sel.label}</p>
                   <Select
                     options={sel.options}
@@ -429,18 +430,19 @@ export default function SetupScreen() {
             <span className="ms text-[15px]">info</span>설정은 상단 '취향·조건'
             에서 언제든 바꿀 수 있어요
           </span>
-          <div className="flex flex-1 gap-2.5 sm:flex-none">
+          {/* 좁은 화면은 세로로 쌓는다 — 나란히 두면 주 버튼 문구가 두 줄로 꺾인다. */}
+          <div className="flex flex-1 flex-col gap-2 sm:flex-none sm:flex-row sm:gap-2.5">
             <Button
               onClick={goSwipe}
               disabled={!canCompare || housingsLoading || !eligibilityComplete}
-              className="flex-1 rounded-[11px] px-6 py-[11px] text-[13.5px] sm:flex-none"
+              className="whitespace-nowrap rounded-[11px] px-6 py-[11px] text-[13.5px]"
             >
               가상 생활권 비교 시작
             </Button>
             <Button
               variant="outline"
               onClick={goMap}
-              className="flex-1 rounded-[11px] px-4 py-[11px] text-[13px] sm:flex-none"
+              className="rounded-[11px] px-4 py-[11px] text-[13px]"
             >
               {s.comparisonRounds > 0 ? '기존 취향으로 보기' : '지도 바로 보기'}
             </Button>

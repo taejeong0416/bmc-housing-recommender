@@ -11,8 +11,8 @@ import { Button } from '../components/ui/Button'
 const RISE_MS = 700
 const RISE_STAGGER = [0, 160, 280, 380]
 const SPLIT_DELAY = RISE_STAGGER[3] + RISE_MS + 480
-// 미리보기 자동 넘김 간격. 탭을 누르면 그 시점부터 다시 센다.
-const ROTATE_INTERVAL = 2000
+// 미리보기 자동 넘김 간격 — 캡처 속 문구를 읽을 시간. 탭을 누르면 그 시점부터 다시 센다.
+const ROTATE_INTERVAL = 4000
 
 // 실제 화면 캡처 — 탭으로 전환한다(모두 1200x700 비율).
 const PREVIEWS = [
@@ -58,7 +58,8 @@ export default function LandingScreen() {
   }, [split, paused, index])
 
   return (
-    <div className="mx-auto grid w-full max-w-[1120px] gap-12 pt-4 sm:pt-12 lg:grid-cols-[42fr_58fr] lg:items-center lg:gap-10">
+    // lg 이상은 헤더 아래 남은 높이 가운데에 둔다 — 위로 붙으면 아래 절반이 비어 보인다.
+    <div className="mx-auto grid w-full max-w-[1120px] gap-12 pt-4 sm:pt-12 lg:min-h-[calc(100dvh-140px)] lg:grid-cols-[42fr_58fr] lg:content-center lg:items-center lg:gap-10 lg:pt-0">
       {/* 42:58 칸에서 히어로를 69%(=29/42)만큼 밀어 두면 가운데에 온다. */}
       <section
         className={`text-center transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:text-left ${
@@ -75,7 +76,7 @@ export default function LandingScreen() {
           Be:live
         </p>
         <h1
-          className="animate-rise mx-auto mt-5 max-w-[620px] break-keep text-[24px] font-extrabold leading-[1.35] tracking-[-0.5px] text-ink sm:text-[30px] lg:mx-0"
+          className="animate-rise mx-auto mt-5 max-w-[620px] break-keep text-balance text-[24px] font-extrabold leading-[1.35] tracking-[-0.5px] text-ink sm:text-[30px] lg:mx-0"
           style={{
             animationDuration: `${RISE_MS}ms`,
             animationDelay: `${RISE_STAGGER[1]}ms`,
@@ -90,7 +91,7 @@ export default function LandingScreen() {
             animationDelay: `${RISE_STAGGER[2]}ms`,
           }}
         >
-          예산과 조건을 고르고 두 동네를 몇 번 비교하면,
+          예산과 조건을 고르고 두 동네를 몇 번 비교하면,{' '}
           <br className="hidden sm:inline" />
           생활 취향에 맞는 단지를 지도 위에 순서대로 보여드려요.
         </p>
