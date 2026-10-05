@@ -9,7 +9,7 @@ export default function App() {
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
-      <main className="flex flex-1 justify-center px-5 pb-[60px] pt-6">
+      <main className="flex flex-1 items-start justify-center px-5 pb-[60px] pt-6">
         <Outlet />
       </main>
       <Toaster />
