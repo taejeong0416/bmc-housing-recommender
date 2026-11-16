@@ -144,7 +144,7 @@ export default function PrefillScreen() {
             3 / 3 단계
           </span>
         </div>
-        <div className="mt-3.5 flex gap-1.5">
+        <div className="mt-4 flex gap-1.5">
           <span className="h-[5px] flex-1 rounded-full bg-teal" />
           <span className="h-[5px] flex-1 rounded-full bg-teal" />
           <span className="h-[5px] flex-1 rounded-full bg-teal" />
@@ -228,7 +228,7 @@ export default function PrefillScreen() {
               </span>
             </div>
 
-            <div className="mt-3.5 flex flex-col gap-4">
+            <div className="mt-4 flex flex-col gap-4">
               {categories.map((category) => {
                 const positive = category.score > 0.02
                 const negative = category.score < -0.02
@@ -310,7 +310,7 @@ export default function PrefillScreen() {
                   >
                     <span className="ms text-[14px]">{signal.icon}</span>
                     {signal.label}
-                    {signal.weight < 0 && ' · 후순위'}
+                    {signal.weight < 0 && ' (후순위)'}
                   </span>
                 ))}
               </div>
@@ -322,7 +322,7 @@ export default function PrefillScreen() {
               <Button
                 variant="outline"
                 onClick={compareMore}
-                className="rounded-[11px] py-[10px] text-[12.5px]"
+                className="rounded-[11px] py-2.5 text-[12.5px]"
               >
                 취향 테스트 더 하기
               </Button>
@@ -330,7 +330,7 @@ export default function PrefillScreen() {
               <Button
                 variant="outline"
                 onClick={go('swipe')}
-                className="rounded-[11px] py-[10px] text-[12.5px]"
+                className="rounded-[11px] py-2.5 text-[12.5px]"
               >
                 취향 테스트 다시하기
               </Button>
@@ -338,7 +338,7 @@ export default function PrefillScreen() {
             <Button
               variant="outline"
               onClick={go('setup')}
-              className="rounded-[11px] py-[10px] text-[12.5px]"
+              className="rounded-[11px] py-2.5 text-[12.5px]"
             >
               희망조건 수정
             </Button>
@@ -353,7 +353,7 @@ export default function PrefillScreen() {
               overridden ? '' : 'invisible pointer-events-none'
             }`}
           >
-            직접 설정 초기화 · 추론값으로 되돌리기
+            직접 설정을 지우고 추론값으로 되돌리기
           </button>
         </section>
 
@@ -416,7 +416,7 @@ export default function PrefillScreen() {
                         <b className="text-ink">
                           {rangeLabel(housing.deposit)}
                         </b>
-                        {' · '}월{' '}
+                        <span className="ml-2">월</span>{' '}
                         <b className="text-ink">{rangeLabel(housing.rent)}</b>
                       </span>
                       <span className="mt-2 block text-[11px] leading-relaxed text-teal">
@@ -425,7 +425,7 @@ export default function PrefillScreen() {
                           {reason ?? housing.highlight ?? '선택 취향 반영'}
                         </span>
                       </span>
-                      <span className="mt-1 block text-[10.5px] leading-relaxed text-sub">
+                      <span className="mt-1 block text-[11px] leading-relaxed text-sub">
                         <b className="text-body">감수할 점</b>{' '}
                         {candidateTradeoff(housing.id, model)}
                       </span>
@@ -437,9 +437,9 @@ export default function PrefillScreen() {
 
           <Button
             onClick={go('home')}
-            className="mt-4 w-full rounded-[11px] py-[11px] text-[13.5px]"
+            className="mt-4 w-full rounded-[11px] py-3 text-[13.5px]"
           >
-            대체로 맞아요 · 추천 홈으로
+            이 취향으로 추천 보기
           </Button>
         </section>
       </div>

@@ -31,7 +31,7 @@ export const maeipUnits: Adapter = (rows) => {
       complexes.set(id, {
         id,
         type: '매입임대',
-        name: `매입임대 · ${short}`,
+        name: `매입임대 ${short}`,
         address: norm,
         district: districtOf(addr),
         dong: dong || legalDongOf(addr),

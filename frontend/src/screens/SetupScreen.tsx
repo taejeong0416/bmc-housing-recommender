@@ -181,7 +181,7 @@ export default function SetupScreen() {
               1 / 3 단계
             </span>
           </div>
-          <div className="mt-3.5 flex gap-1.5">
+          <div className="mt-4 flex gap-1.5">
             <span className="h-[5px] flex-1 rounded-full bg-teal" />
             <span className="h-[5px] flex-1 rounded-full bg-line" />
             <span className="h-[5px] flex-1 rounded-full bg-line" />
@@ -204,12 +204,12 @@ export default function SetupScreen() {
               </span>
             }
           />
-          <div className="grid grid-cols-1 gap-[14px] md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {advancedSelects.map((a) => (
               <div key={a.label}>
                 <p className="mb-1.5 text-[12.5px] text-sub">
                   {a.label}
-                  <span className="ml-0.5 font-bold text-heart">*</span>
+                  <span className="ml-0.5 font-bold text-teal">*</span>
                 </p>
                 <Select
                   options={a.options}
@@ -220,9 +220,8 @@ export default function SetupScreen() {
               </div>
             ))}
           </div>
-          <p className="mt-3.5 text-[11.5px] leading-relaxed text-sub">
-            공고별 자격 데이터가 부족해 추천 순위에는 아직 반영하지 않아요. 실제
-            신청 자격은 BMC 청약센터에서 확인해 주세요.
+          <p className="mt-4 text-[11.5px] leading-relaxed text-sub">
+            실제 신청 자격은 BMC 청약센터에서 확인해 주세요.
           </p>
         </section>
 
@@ -231,10 +230,8 @@ export default function SetupScreen() {
           {/* 지역·예산 */}
           <section>
             <Head icon="place" title="지역·예산" sub="어디서 얼마까지 볼까요" />
-            <p className="text-[12.5px] text-sub">
-              지역 <span className="text-faint">· 중복 선택</span>
-            </p>
-            <div className="mt-2 flex flex-wrap gap-[7px]">
+            <FieldLabel label="지역" hint="여러 곳을 고를 수 있어요" />
+            <div className="flex flex-wrap gap-2">
               <Chip
                 active={s.regions.length === 0}
                 onClick={clearGroup('regions')}
@@ -281,10 +278,8 @@ export default function SetupScreen() {
               title="주택·필수시설"
               sub="양보하기 어려운 조건만 골라요"
             />
-            <p className="mb-2 text-[12.5px] text-sub">
-              방 구조 <span className="text-faint">· 중복 선택</span>
-            </p>
-            <div className="flex flex-wrap gap-[7px]">
+            <FieldLabel label="방 구조" hint="여러 개를 고를 수 있어요" />
+            <div className="flex flex-wrap gap-2">
               <Chip
                 active={s.houseTypes.length === 0}
                 onClick={clearGroup('houseTypes')}
@@ -314,10 +309,9 @@ export default function SetupScreen() {
                 </div>
               ))}
             </div>
-            <p className="mb-2 mt-4 text-[12.5px] text-sub">
-              필수시설{' '}
-              <span className="text-faint">· 선택한 조건은 반드시 적용</span>
-            </p>
+            <div className="mt-4">
+              <FieldLabel label="필수시설" hint="고른 조건은 반드시 적용해요" />
+            </div>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               <MustHaveToggle
                 icon="elevator"
@@ -431,24 +425,34 @@ export default function SetupScreen() {
             에서 언제든 바꿀 수 있어요
           </span>
           {/* 좁은 화면은 세로로 쌓는다 — 나란히 두면 주 버튼 문구가 두 줄로 꺾인다. */}
-          <div className="flex flex-1 flex-col gap-2 sm:flex-none sm:flex-row sm:gap-2.5">
+          <div className="flex flex-1 flex-col gap-2 sm:flex-none sm:flex-row sm:gap-3">
             <Button
               onClick={goSwipe}
               disabled={!canCompare || housingsLoading || !eligibilityComplete}
-              className="whitespace-nowrap rounded-[11px] px-6 py-[11px] text-[13.5px]"
+              className="whitespace-nowrap rounded-[11px] px-6 py-3 text-[13.5px]"
             >
               가상 생활권 비교 시작
             </Button>
             <Button
               variant="outline"
               onClick={goMap}
-              className="rounded-[11px] px-4 py-[11px] text-[13px]"
+              className="rounded-[11px] px-4 py-3 text-[13px]"
             >
               {s.comparisonRounds > 0 ? '기존 취향으로 보기' : '지도 바로 보기'}
             </Button>
           </div>
         </div>
       </Card>
+    </div>
+  )
+}
+
+// 필드 라벨 — 왼쪽 이름, 오른쪽 선택 방법 안내
+function FieldLabel({ label, hint }: { label: string; hint: string }) {
+  return (
+    <div className="mb-2 flex items-baseline justify-between gap-3">
+      <p className="text-[12.5px] text-sub">{label}</p>
+      <p className="text-[11.5px] text-faint">{hint}</p>
     </div>
   )
 }

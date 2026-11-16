@@ -89,7 +89,7 @@ const nearestLabel = (e: {
     ? '주변에 없음'
     : `${e.count.toLocaleString()}곳${
         e.nearestMeters != null
-          ? ` · 가까운 곳 직선 ${meters(e.nearestMeters)}`
+          ? `, 가장 가까운 곳 직선 ${meters(e.nearestMeters)}`
           : ''
       }`
 
@@ -105,7 +105,7 @@ function realRows(dto: GeneratedHousing, tab: string): [string, string][] {
         [
           '가까운 도시철도역',
           rail.nearestName
-            ? `${rail.nearestName}${rail.nearestMeters != null ? ` · 직선 ${meters(rail.nearestMeters)}` : ''}`
+            ? `${rail.nearestName}${rail.nearestMeters != null ? `까지 직선 ${meters(rail.nearestMeters)}` : ''}`
             : '주변에 없음',
         ],
         ['주변 역', rail.count > 0 ? `${rail.count}곳` : '주변에 없음'],
@@ -136,7 +136,7 @@ function realRows(dto: GeneratedHousing, tab: string): [string, string][] {
     for (const p of dto.pricingRows.slice(0, 6))
       rows.push([
         p.qualifier || '표준',
-        `${manwon(p.deposit)} · 월 ${manwon(p.rent)}`,
+        `보증금 ${manwon(p.deposit)}, 월 ${manwon(p.rent)}`,
       ])
     if (dto.pricingRows.length > 6)
       rows.push(['그 외 조건', `${dto.pricingRows.length - 6}건`])
@@ -202,6 +202,8 @@ export function HousingDetailBody({
   const uniBadge = universityBadge(dto.id)
   // 위치 지도는 페이지 상세에서만 — 임베드(스와이프 카드)엔 지도를 띄우지 않는다.
   const marker = variant === 'page' ? toMarker(dto) : null
+  // 상세 페이지에선 단지명이 페이지 제목이고, 홈 카드 안에선 카드 제목이다.
+  const Title = variant === 'page' ? 'h1' : 'h2'
 
   return (
     <>
@@ -221,7 +223,9 @@ export function HousingDetailBody({
         <div className="flex items-start justify-between gap-3">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-[19px] font-extrabold text-ink">{h.name}</h2>
+              <Title className="text-[19px] font-extrabold text-ink">
+                {h.name}
+              </Title>
               {h.tag !== '매입임대' && (
                 <span className="rounded-[5px] bg-teal-soft px-1.5 py-0.5 text-[11px] font-bold text-teal">
                   {h.tag}

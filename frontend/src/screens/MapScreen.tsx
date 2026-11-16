@@ -225,7 +225,7 @@ export default function MapScreen() {
   const prefMeta = [
     {
       icon: 'account_balance_wallet',
-      label: `보증금 ${depositCapLabel(s.depositMax)} · 월세 ${rentCapLabel(s.rentMax)}`,
+      label: `보증금 ${depositCapLabel(s.depositMax)}, 월세 ${rentCapLabel(s.rentMax)}`,
     },
     { icon: 'place', label: regionLabel },
     { icon: 'home_work', label: houseLabel },
@@ -266,15 +266,16 @@ export default function MapScreen() {
         aiOpen ? 'max-w-[1600px]' : 'max-w-[1180px]'
       }`}
     >
+      <h1 className="sr-only">지도에서 매물 찾기</h1>
       {/* 상단 바 — 키워드 검색 + AI 대화 버튼 */}
-      <div className="flex flex-wrap items-center gap-3 border-b border-line-soft px-5 py-3.5">
+      <div className="flex flex-wrap items-center gap-3 border-b border-line-soft px-5 py-3">
         <label className="flex min-w-[220px] flex-1 items-center gap-2 rounded-[11px] border border-line bg-panel px-3.5 py-2.5 transition-colors focus-within:border-teal focus-within:bg-white">
-          <span className="ms text-[19px] text-faint">search</span>
+          <span className="ms text-[19px] text-sub">search</span>
           <input
             value={kw}
             onChange={(e) => setKw(e.target.value)}
             placeholder="지역·주택명·주소로 검색"
-            className="w-full border-none bg-transparent text-[14px] text-ink outline-none placeholder:text-faint"
+            className="w-full border-none bg-transparent text-[14px] text-ink outline-none placeholder:text-sub"
           />
           {kw && (
             <button
@@ -292,7 +293,7 @@ export default function MapScreen() {
         <Button
           onClick={() => setAiOpen((o) => !o)}
           aria-pressed={aiOpen}
-          className="flex items-center gap-1.5 rounded-[22px] px-[18px] py-2.5 text-[14px]"
+          className="flex items-center gap-1.5 rounded-[22px] px-5 py-2.5 text-[14px]"
         >
           <span className="ms text-[18px]">auto_awesome</span>AI 검색
         </Button>
@@ -302,8 +303,9 @@ export default function MapScreen() {
       {kwLandmarks.length > 0 && (
         <div className="flex items-center gap-1.5 border-b border-teal/15 bg-teal-ghost px-5 py-2 text-[12px] text-body">
           <span className="ms text-[16px] text-teal">place</span>
-          <b className="text-teal">‘{topLm.name}’</b> 인근 매물이에요 · 반경{' '}
-          {kwRadiusKm % 1 ? kwRadiusKm.toFixed(1) : kwRadiusKm}km
+          <b className="text-teal">‘{topLm.name}’</b> 반경{' '}
+          {kwRadiusKm % 1 ? kwRadiusKm.toFixed(1) : kwRadiusKm}km 안의
+          매물이에요
         </div>
       )}
 
@@ -375,13 +377,13 @@ export default function MapScreen() {
         </ScrollStrip>
         <button
           onClick={goPreference}
-          className="flex items-center gap-1 whitespace-nowrap rounded-[9px] border border-line bg-white px-3 py-[7px] text-[12.5px] font-bold text-body transition-colors hover:border-teal/45 hover:text-teal"
+          className="flex items-center gap-1 whitespace-nowrap rounded-[9px] border border-line bg-white px-3 py-2 text-[12.5px] font-bold text-body transition-colors hover:border-teal/45 hover:text-teal"
         >
           <span className="ms text-[15px]">compare_arrows</span>취향 다시 학습
         </button>
         <button
           onClick={goSetup}
-          className="flex items-center gap-1 whitespace-nowrap rounded-[9px] border border-line bg-white px-3 py-[7px] text-[12.5px] font-bold text-body transition-colors hover:border-teal/45 hover:text-teal"
+          className="flex items-center gap-1 whitespace-nowrap rounded-[9px] border border-line bg-white px-3 py-2 text-[12.5px] font-bold text-body transition-colors hover:border-teal/45 hover:text-teal"
         >
           <span className="ms text-[15px]">tune</span>조건
         </button>
@@ -417,7 +419,7 @@ export default function MapScreen() {
           </div>
 
           <div className="flex w-full flex-col border-t border-line-soft md:w-[420px] md:border-l md:border-t-0">
-            <div className="flex items-center justify-between gap-2 border-b border-line-soft px-[18px] py-3">
+            <div className="flex items-center justify-between gap-2 border-b border-line-soft px-4 py-3">
               <div className="flex items-center gap-2">
                 <span className="text-[15px] font-extrabold text-ink">
                   {selectedIds ? '선택 지점' : '이 지역'}{' '}
@@ -477,7 +479,7 @@ export default function MapScreen() {
                 <div
                   key={h.id}
                   onClick={h.goDetail}
-                  className="group flex cursor-pointer gap-3 border-b border-line-soft px-[18px] py-3.5 transition-colors hover:bg-teal-ghost/60"
+                  className="group flex cursor-pointer gap-3 border-b border-line-soft px-4 py-3.5 transition-colors hover:bg-teal-ghost/60"
                 >
                   <div className="relative h-24 w-[74px] shrink-0 overflow-hidden rounded-[10px] bg-panel">
                     <img

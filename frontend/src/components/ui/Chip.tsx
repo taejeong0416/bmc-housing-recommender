@@ -7,7 +7,7 @@ export function Chip({ active, className = '', ...rest }: Props) {
   return (
     <button
       aria-pressed={active}
-      className={`rounded-[9px] border px-[13px] py-2 text-[12.5px] transition-[background-color,border-color,color] duration-150 ${
+      className={`rounded-[9px] border px-3 py-2 text-[12.5px] transition-[background-color,border-color,color] duration-150 ${
         active
           ? 'border-teal bg-teal font-bold text-white'
           : 'border-line bg-white font-semibold text-body hover:border-teal/45 hover:text-teal'

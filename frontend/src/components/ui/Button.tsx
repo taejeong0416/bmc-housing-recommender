@@ -6,7 +6,7 @@ const base =
 
 const variants = {
   primary:
-    'bg-teal text-white shadow-sm hover:bg-teal-dark hover:shadow-card disabled:bg-[#c3cdc9] disabled:shadow-none',
+    'bg-teal text-white shadow-sm hover:bg-teal-dark hover:shadow-card disabled:bg-line disabled:text-faint disabled:shadow-none',
   outline:
     'border border-teal/70 text-teal hover:bg-teal-soft hover:border-teal disabled:opacity-50',
   gold: 'bg-gold text-gold-ink shadow-sm hover:bg-gold-dark hover:shadow-card',

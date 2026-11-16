@@ -21,10 +21,10 @@ export default function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-white/85 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1280px] items-center gap-1 px-5 py-2.5">
+      <div className="mx-auto flex max-w-[1280px] items-center gap-1 px-5 py-2">
         <button
           onClick={go('home')}
-          className="flex items-baseline gap-2 pr-2"
+          className="flex h-11 items-baseline gap-2 pr-2 pt-2.5"
           aria-label="홈"
         >
           <span className="text-[20px] font-extrabold tracking-[-0.5px] text-teal">
@@ -46,7 +46,7 @@ export default function SiteHeader() {
                   onClick={go(n.id)}
                   aria-current={active ? 'page' : undefined}
                   aria-label={n.label}
-                  className={`relative flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-[13.5px] font-semibold transition-colors ${
+                  className={`relative flex h-11 min-w-11 items-center justify-center gap-1.5 rounded-lg px-2.5 text-[13.5px] font-semibold transition-colors ${
                     active
                       ? 'bg-teal-ghost text-teal'
                       : 'text-body hover:bg-teal-ghost hover:text-teal'

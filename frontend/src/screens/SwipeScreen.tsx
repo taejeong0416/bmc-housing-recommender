@@ -166,7 +166,10 @@ export default function SwipeScreen() {
     <div className="w-full max-w-[920px] animate-rise">
       <div className="mb-4 flex items-center justify-between">
         <span className="text-[13px] font-bold text-body">
-          2 / 3 · 생활취향 알아보기
+          생활취향 알아보기{' '}
+          <span className="ml-1 font-semibold tabular-nums text-sub">
+            질문 {round + 1}/{targetRounds}
+          </span>
         </span>
         <div className="flex items-center gap-2">
           {answeredSteps.length > 0 && (
@@ -181,7 +184,7 @@ export default function SwipeScreen() {
             </button>
           )}
           <span className="rounded-full bg-teal-ghost px-2.5 py-1 text-[11.5px] font-bold tabular-nums text-teal">
-            {round + 1} / {targetRounds}
+            2 / 3 단계
           </span>
         </div>
       </div>
@@ -217,14 +220,14 @@ export default function SwipeScreen() {
         <Button
           variant="outline"
           onClick={() => answer('tie')}
-          className="w-full rounded-[12px] py-[11px] text-[13px] text-sub"
+          className="w-full rounded-[12px] py-3 text-[13px] text-sub"
         >
           둘 다 비슷해요
         </Button>
         <Button
           variant="outline"
           onClick={() => answer('reject')}
-          className="w-full rounded-[12px] py-[11px] text-[13px] text-sub"
+          className="w-full rounded-[12px] py-3 text-[13px] text-sub"
         >
           둘 다 내 생활과 달라요
         </Button>
@@ -259,7 +262,7 @@ function VirtualListingChoice({
     <button
       onClick={onClick}
       aria-label={`가상 매물 ${label} · ${profile.title} 선택`}
-      className="group flex flex-col overflow-hidden rounded-[18px] border-2 border-line bg-white text-left shadow-card transition-all hover:-translate-y-0.5 hover:border-teal hover:shadow-pop active:translate-y-0"
+      className="group flex flex-col overflow-hidden rounded-[18px] border-2 border-line bg-white text-left shadow-card transition-[transform,border-color,box-shadow] hover:-translate-y-0.5 hover:border-teal hover:shadow-pop active:translate-y-0"
     >
       {/* 실제 매물이 아닌 질문별 생활환경 예시 사진. 3:2 원본 비율로 노출한다. */}
       <div className="flex justify-center px-4 pt-4">
@@ -276,11 +279,11 @@ function VirtualListingChoice({
       </div>
 
       {/* 배지 헤더 — A/B 배지와 '가상 매물' 표시(사진 유무와 무관하게 항상) */}
-      <div className="flex items-center gap-2.5 border-b border-line-soft bg-panel px-4 py-3">
+      <div className="flex items-center gap-3 border-b border-line-soft bg-panel px-4 py-3">
         <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-teal text-[13px] font-extrabold text-white">
           {label}
         </span>
-        <span className="text-[10.5px] font-bold uppercase tracking-[0.04em] text-faint">
+        <span className="text-[11.5px] font-bold text-sub">
           취향 학습용 가상 매물 {label}
         </span>
       </div>
@@ -295,9 +298,7 @@ function VirtualListingChoice({
         </p>
 
         {/* 장점·감수할 점 — 동일한 라벨+불릿 형식으로 통일(섹션 제목만 다름) */}
-        <p className="mt-3 text-[10.5px] font-bold uppercase tracking-[0.04em] text-faint">
-          장점
-        </p>
+        <p className="mt-3 text-[11.5px] font-bold text-sub">장점</p>
         <ul className="mt-1.5 flex flex-col gap-1.5">
           {profile.tags.map((tag) => (
             <li
@@ -312,9 +313,7 @@ function VirtualListingChoice({
           ))}
         </ul>
 
-        <p className="mt-3.5 text-[10.5px] font-bold uppercase tracking-[0.04em] text-faint">
-          감수할 점
-        </p>
+        <p className="mt-4 text-[11.5px] font-bold text-sub">감수할 점</p>
         {/* 감수할 점은 1~2개로 갯수가 달라 카드 높이가 어긋난다 — 2개가 들어가도 아래
             여백이 넉넉하도록 높이를 고정해 A/B 카드 레이아웃을 동일하게 맞춘다. */}
         <ul className="mt-1.5 flex min-h-[4.5rem] flex-col gap-1.5">

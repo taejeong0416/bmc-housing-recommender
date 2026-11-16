@@ -144,7 +144,8 @@ export default function HomeScreen() {
                     </div>
                     <p className="truncate text-[11.5px] text-sub">{c.loc}</p>
                     <p className="mt-0.5 truncate text-[11px] tabular-nums text-sub">
-                      보 {c.deposit} · 월 {c.rent}
+                      보 {c.deposit}
+                      <span className="ml-2">월 {c.rent}</span>
                     </p>
                     {c.highlight && (
                       <p className="mt-1 flex items-center gap-1 truncate text-[10.5px] font-semibold text-teal">
@@ -164,9 +165,8 @@ export default function HomeScreen() {
           <div className="min-w-0">
             {/* 상단 — 현재 순위 */}
             <div className="mb-3 flex items-center justify-center">
-              <span className="flex items-center gap-1 text-[13px] font-bold text-sub">
-                <span className="ms text-[16px] text-gold">star</span>
-                추천 <b className="tabular-nums text-teal">{cur + 1}</b>위
+              <span className="text-[13px] font-bold text-sub">
+                추천 <b className="tabular-nums text-teal">{cur + 1}</b>위{' '}
                 <span className="text-faint">/ {picks.length}</span>
               </span>
             </div>
@@ -174,12 +174,12 @@ export default function HomeScreen() {
             {/* 상세 카드 캐러셀 — 5장을 가로로 붙인 트랙을 translateX로 실제 슬라이드.
                 각 슬라이드는 고정 높이 안에서 내부 세로 스크롤. 화살표·관심 버튼은 트랙 밖
                 (카드 고정)이라 어디까지 내려도, 또 슬라이드 중에도 늘 제자리에 보인다. */}
-            <div className="group relative h-[74vh] max-h-[820px] min-h-[440px] overflow-hidden rounded-2xl bg-white shadow-card">
+            <div className="relative h-[74vh] max-h-[820px] min-h-[440px] overflow-hidden rounded-2xl bg-white shadow-card">
               {cur > 0 && (
                 <button
                   onClick={prev}
                   aria-label="이전 추천"
-                  className="absolute left-3 top-1/2 z-20 flex h-24 w-9 -translate-y-1/2 items-center justify-center rounded-xl bg-ink/45 text-white opacity-0 shadow-md backdrop-blur-sm transition-opacity hover:bg-ink/65 group-hover:opacity-100"
+                  className="absolute left-3 top-[130px] z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-ink shadow-sm backdrop-blur-sm transition-colors hover:bg-white lg:top-[160px]"
                 >
                   <span className="ms text-[24px]">chevron_left</span>
                 </button>
@@ -188,7 +188,7 @@ export default function HomeScreen() {
                 <button
                   onClick={next}
                   aria-label="다음 추천"
-                  className="absolute right-3 top-1/2 z-20 flex h-24 w-9 -translate-y-1/2 items-center justify-center rounded-xl bg-ink/45 text-white opacity-0 shadow-md backdrop-blur-sm transition-opacity hover:bg-ink/65 group-hover:opacity-100"
+                  className="absolute right-3 top-[130px] z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-ink shadow-sm backdrop-blur-sm transition-colors hover:bg-white lg:top-[160px]"
                 >
                   <span className="ms text-[24px]">chevron_right</span>
                 </button>
@@ -196,7 +196,7 @@ export default function HomeScreen() {
               <button
                 onClick={() => toggle(dto.id, dto.name)}
                 aria-label={fav ? '관심 해제' : '관심 등록'}
-                className="absolute right-3 top-3 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur-sm transition-transform active:scale-90"
+                className="absolute right-3 top-3 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur-sm transition-transform active:scale-90"
               >
                 <span
                   className={`ms text-[20px] ${
@@ -242,7 +242,7 @@ export default function HomeScreen() {
                   onClick={() => setIndex(i)}
                   aria-label={`추천 ${i + 1}위 보기`}
                   aria-current={i === cur}
-                  className={`h-2 rounded-full transition-all ${
+                  className={`h-2 rounded-full transition-[width,background-color] ${
                     i === cur ? 'w-5 bg-teal' : 'w-2 bg-line hover:bg-teal/40'
                   }`}
                 />
