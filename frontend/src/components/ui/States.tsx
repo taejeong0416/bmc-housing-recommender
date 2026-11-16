@@ -1,25 +1,16 @@
 // 로딩/빈/에러 3-상태 표준 표시(P1-C-3). 목록·상세가 공유.
 
-function Panel({
-  icon,
-  title,
-  sub,
-}: {
-  icon: string
-  title: string
-  sub?: string
-}) {
+function Panel({ title, sub }: { title: string; sub?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-2 px-5 py-10 text-center">
-      <span className="ms text-[34px] text-[#b7bfbb]">{icon}</span>
-      <p className="text-[14px] font-bold text-[#5b6560]">{title}</p>
+    <div className="flex flex-col items-center justify-center gap-1 px-5 py-10 text-center">
+      <p className="text-[14px] font-bold text-body">{title}</p>
       {sub && <p className="text-[12.5px] text-sub">{sub}</p>}
     </div>
   )
 }
 
 export function LoadingState({ label = '불러오는 중…' }: { label?: string }) {
-  return <Panel icon="hourglass_empty" title={label} />
+  return <Panel title={label} />
 }
 
 export function EmptyState({
@@ -29,7 +20,7 @@ export function EmptyState({
   label?: string
   sub?: string
 }) {
-  return <Panel icon="inbox" title={label} sub={sub} />
+  return <Panel title={label} sub={sub} />
 }
 
 export function ErrorState({
@@ -39,5 +30,5 @@ export function ErrorState({
   label?: string
   sub?: string
 }) {
-  return <Panel icon="error_outline" title={label} sub={sub} />
+  return <Panel title={label} sub={sub} />
 }

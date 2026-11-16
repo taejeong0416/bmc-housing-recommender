@@ -1,13 +1,10 @@
 @import 'tailwindcss';
 
-/* 디자인 토큰 — 신뢰형 공공서비스. teal 앵커 + gold(청약/최상위 CTA) + teal로 미세 틴트한 뉴트럴. */
+/* 디자인 토큰 — 신뢰형 공공서비스. teal은 글자색과 진한 면으로만, gold는 청약 CTA 전용, 나머지는 뉴트럴. */
 @theme {
   /* 브랜드 teal */
   --color-teal: #047480;
   --color-teal-dark: #035b64; /* hover/active */
-  --color-teal-soft: #e4f5f2; /* 칩·hover 표면 */
-  --color-teal-ghost: #f1faf8; /* 아주 옅은 강조 배경 */
-  --color-soft: #e4f5f2; /* 기존 사용처 호환 */
 
   /* 행동/청약 강조 gold */
   --color-gold: #f6c026;
@@ -28,6 +25,8 @@
   --color-panel: #f5f8f7; /* 카드 안쪽 옅은 패널 */
 
   --font-sans: 'Pretendard', -apple-system, sans-serif;
+  --font-display:
+    'Wanted Sans Variable', 'Pretendard', sans-serif; /* 제목·큰 숫자 */
 
   /* 그림자 — 흰 배경 웹 패널. 떠 있는 카드가 아니라 얇은 테두리 + 아주 옅은 리프트. */
   --shadow-sm: 0 0 0 1px rgba(18, 52, 47, 0.05);
@@ -103,8 +102,14 @@
     overflow-wrap: break-word;
   }
   ::selection {
-    background: var(--color-teal-soft);
-    color: var(--color-teal-dark);
+    background: var(--color-line);
+    color: var(--color-ink);
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
   }
   button {
     font-family: inherit;

@@ -73,24 +73,10 @@ export default function HomeScreen() {
 
   return (
     <div className="mx-auto w-full min-w-0 max-w-[1120px] animate-rise">
-      <div className="mb-4">
-        <h1 className="flex items-center gap-2 text-[20px] font-extrabold text-ink">
-          <span className="ms text-[24px] text-teal">recommend</span>추천 홈
-        </h1>
-        <p className="mt-1 text-[13.5px] text-sub">
-          {personalized
-            ? '학습한 취향에 가장 잘 맞는 상위'
-            : '조건에 맞는 추천점수 상위'}{' '}
-          <b className="text-teal">{TOP_PICK_COUNT}곳</b>을 넘겨보세요.
-        </p>
-      </div>
-
-      {personalized && (
-        <div className="mb-4 flex items-center gap-2 rounded-[12px] border border-teal/15 bg-teal-ghost px-4 py-2.5 text-[12.5px] text-body">
-          <span className="ms text-[17px] text-teal">psychology</span>
-          <b className="text-teal">취향 반영 추천</b>
-        </div>
-      )}
+      <h1 className="mb-5 text-[24px] font-bold text-ink">
+        {personalized ? '내 취향에 맞는' : '조건에 맞는'} 추천{' '}
+        <span className="tabular-nums">{TOP_PICK_COUNT}곳</span>
+      </h1>
 
       {isError && <ErrorState />}
       {!isError && isLoading && (
@@ -118,7 +104,7 @@ export default function HomeScreen() {
                   aria-current={i === cur}
                   className={`flex w-full gap-3 rounded-xl border p-2.5 text-left transition-colors ${
                     i === cur
-                      ? 'border-teal bg-teal-ghost'
+                      ? 'border-teal bg-white'
                       : 'border-line-soft bg-white hover:border-teal/40'
                   }`}
                 >
@@ -129,16 +115,16 @@ export default function HomeScreen() {
                       loading="lazy"
                       className="h-full w-full object-cover"
                     />
-                    <span className="absolute left-1 top-1 rounded bg-gold px-1 py-px text-[10px] font-extrabold tabular-nums text-gold-ink">
-                      {c.rank}위
-                    </span>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-1.5">
-                      <span className="truncate text-[13.5px] font-extrabold text-ink">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <span className="truncate text-[13.5px] font-bold text-ink">
+                        <span className="mr-1.5 tabular-nums text-sub">
+                          {c.rank}
+                        </span>
                         {c.name}
                       </span>
-                      <span className="shrink-0 rounded bg-teal-soft px-1.5 py-0.5 text-[11px] font-bold tabular-nums text-teal">
+                      <span className="shrink-0 text-[13px] font-bold tabular-nums text-teal">
                         {c.score}점
                       </span>
                     </div>
@@ -148,11 +134,8 @@ export default function HomeScreen() {
                       <span className="ml-2">월 {c.rent}</span>
                     </p>
                     {c.highlight && (
-                      <p className="mt-1 flex items-center gap-1 truncate text-[10.5px] font-semibold text-teal">
-                        <span className="ms shrink-0 text-[13px] leading-none">
-                          psychology
-                        </span>
-                        <span className="truncate">{c.highlight}</span>
+                      <p className="mt-1 truncate text-[11.5px] font-semibold text-teal">
+                        {c.highlight}
                       </p>
                     )}
                   </div>
@@ -223,10 +206,9 @@ export default function HomeScreen() {
                     <div className="px-5 pb-5">
                       <button
                         onClick={goDetail(p.id)}
-                        className="flex w-full items-center justify-center gap-1.5 rounded-[12px] bg-teal px-5 py-3 text-[14.5px] font-bold text-white shadow-sm transition-colors hover:bg-teal-dark"
+                        className="flex w-full items-center justify-center rounded-[12px] bg-teal px-5 py-3 text-[14.5px] font-bold text-white transition-colors hover:bg-teal-dark"
                       >
                         상세 페이지 열기
-                        <span className="ms text-[19px]">arrow_forward</span>
                       </button>
                     </div>
                   </div>
@@ -243,7 +225,7 @@ export default function HomeScreen() {
                   aria-label={`추천 ${i + 1}위 보기`}
                   aria-current={i === cur}
                   className={`h-2 rounded-full transition-[width,background-color] ${
-                    i === cur ? 'w-5 bg-teal' : 'w-2 bg-line hover:bg-teal/40'
+                    i === cur ? 'w-5 bg-teal' : 'w-2 bg-line hover:bg-faint'
                   }`}
                 />
               ))}
@@ -251,9 +233,9 @@ export default function HomeScreen() {
 
             <button
               onClick={goMap}
-              className="mx-auto mt-5 flex items-center gap-1.5 rounded-[12px] border border-line bg-white px-5 py-3 text-[14px] font-bold text-body shadow-sm transition-colors hover:border-teal/40 hover:text-teal"
+              className="mx-auto mt-5 flex items-center rounded-[12px] border border-line bg-white px-5 py-3 text-[14px] font-bold text-body transition-colors hover:border-teal/40 hover:text-teal"
             >
-              <span className="ms text-[19px]">map</span>지도에서 전체 매물 보기
+              지도에서 전체 매물 보기
             </button>
           </div>
         </div>

@@ -17,6 +17,7 @@ import { eligiblePairwiseHousings } from '../onboarding/pairwise'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { Chip } from '../components/ui/Chip'
+import { MultiSelect } from '../components/ui/MultiSelect'
 import { Select } from '../components/ui/Select'
 import { Toggle } from '../components/ui/Toggle'
 import { toast } from '../components/ui/toastStore'
@@ -31,7 +32,7 @@ export default function SetupScreen() {
   const { data: meta } = useFilterMeta()
   const { data: housings = [], isLoading: housingsLoading } = useHousings()
   const { go } = useNav()
-  // 지역 — 부산 구/군은 고정 집합이라 전부 칩으로 띄우고 탭 토글.
+  // 지역 — 부산 구/군 고정 집합을 다중 선택 드롭다운으로 고른다.
   // 고정 집합에 백엔드가 돌려준 예외 구(집합 밖)만 합집합해 누락을 막는다.
   const districtOptions = [
     ...new Set([...busanDistricts, ...(meta?.districts ?? [])]),
@@ -169,86 +170,61 @@ export default function SetupScreen() {
   }
 
   return (
-    <div className="w-full max-w-[860px] animate-rise">
-      <Card className="px-7 py-6">
-        {/* 진행 헤더 — 필수조건(1) → 가상 생활권 비교(2) → 취향 요약(3) */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between">
-            <span className="text-[13px] font-bold text-body">
-              비교 전 필수조건
-            </span>
-            <span className="rounded-full bg-teal-ghost px-2.5 py-1 text-[11.5px] font-bold text-teal">
-              1 / 3 단계
-            </span>
-          </div>
-          <div className="mt-4 flex gap-1.5">
-            <span className="h-[5px] flex-1 rounded-full bg-teal" />
-            <span className="h-[5px] flex-1 rounded-full bg-line" />
-            <span className="h-[5px] flex-1 rounded-full bg-line" />
-          </div>
+    <div className="w-full max-w-[720px] animate-rise">
+      {/* 진행 헤더 — 필수조건(1) → 가상 생활권 비교(2) → 취향 요약(3) */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between">
+          <span className="text-[13px] font-bold text-body">
+            비교 전 필수조건
+          </span>
+          <span className="text-[13px] font-bold tabular-nums text-sub">
+            1/3 단계
+          </span>
         </div>
+        <div className="mt-3 flex gap-1.5">
+          <span className="h-1 flex-1 rounded-full bg-teal" />
+          <span className="h-1 flex-1 rounded-full bg-line" />
+          <span className="h-1 flex-1 rounded-full bg-line" />
+        </div>
+      </div>
 
-        <h1 className="text-[21px] font-extrabold leading-[1.32] tracking-[-0.4px] text-ink">
-          신청 자격과 주택 조건을 정해주세요
-        </h1>
+      <h1 className="text-balance text-[26px] font-bold leading-tight text-ink">
+        신청 자격과 주택 조건을 정해주세요
+      </h1>
 
+      <Card className="mt-6 divide-y divide-line-soft px-5 sm:px-8">
         {/* 신청 자격 — 신청 가능한 공고를 가려내는 필수 선행조건 */}
-        <section className="mt-6">
-          <Head
-            icon="verified_user"
-            title="신청 자격"
-            sub="청약 전에 확인할 내 자격을 골라요"
-            badge={
-              <span className="rounded-full bg-teal px-2 py-0.5 text-[10.5px] font-bold text-white">
-                필수
-              </span>
-            }
-          />
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <Section
+          title="신청 자격"
+          badge={<span className="text-[13px] font-bold text-teal">필수</span>}
+        >
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {advancedSelects.map((a) => (
-              <div key={a.label}>
-                <p className="mb-1.5 text-[12.5px] text-sub">
-                  {a.label}
-                  <span className="ml-0.5 font-bold text-teal">*</span>
-                </p>
+              <Field key={a.label} label={a.label} required>
                 <Select
                   options={a.options}
                   value={s.advanced[a.label] ?? ''}
                   placeholder={ELIGIBILITY_PLACEHOLDER}
                   onChange={(v) => setAdvanced(a.label, v)}
                 />
-              </div>
+              </Field>
             ))}
           </div>
-          <p className="mt-4 text-[11.5px] leading-relaxed text-sub">
+          <p className="mt-3 text-[12.5px] text-sub">
             실제 신청 자격은 BMC 청약센터에서 확인해 주세요.
           </p>
-        </section>
+        </Section>
 
-        {/* 필수인 신청 자격과 선택형 조건 사이는 한 단계 더 띄워 두 묶음을 구분한다. */}
-        <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2">
-          {/* 지역·예산 */}
-          <section>
-            <Head icon="place" title="지역·예산" sub="어디서 얼마까지 볼까요" />
-            <FieldLabel label="지역" hint="여러 곳을 고를 수 있어요" />
-            <div className="flex flex-wrap gap-2">
-              <Chip
-                active={s.regions.length === 0}
-                onClick={clearGroup('regions')}
-              >
-                전체
-              </Chip>
-              {districtOptions.map((d) => (
-                <Chip
-                  key={d}
-                  active={s.regions.includes(d)}
-                  onClick={mkToggle('regions', d)}
-                >
-                  {d}
-                </Chip>
-              ))}
-            </div>
-
+        <Section title="지역과 예산">
+          <Field label="지역">
+            <MultiSelect
+              options={districtOptions}
+              value={s.regions}
+              onChange={(regions) => patch({ regions })}
+              allLabel="부산 전체"
+            />
+          </Field>
+          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
             <BudgetSlider
               label="보증금 상한"
               value={depositCapLabel(s.depositMax)}
@@ -257,7 +233,6 @@ export default function SetupScreen() {
               step={100}
               raw={s.depositMax}
               onChange={onDeposit}
-              maxLabel="상한 없음"
             />
             <BudgetSlider
               label="월 임대료 상한"
@@ -267,18 +242,12 @@ export default function SetupScreen() {
               step={1}
               raw={s.rentMax}
               onChange={onRent}
-              maxLabel="상한 없음"
             />
-          </section>
+          </div>
+        </Section>
 
-          {/* 주택 조건 */}
-          <section className="md:border-l md:border-line-soft md:pl-8">
-            <Head
-              icon="home_work"
-              title="주택·필수시설"
-              sub="양보하기 어려운 조건만 골라요"
-            />
-            <FieldLabel label="방 구조" hint="여러 개를 고를 수 있어요" />
+        <Section title="주택 조건">
+          <Field label="방 구조">
             <div className="flex flex-wrap gap-2">
               <Chip
                 active={s.houseTypes.length === 0}
@@ -296,174 +265,178 @@ export default function SetupScreen() {
                 </Chip>
               ))}
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-3">
-              {/* 셀렉트 3개 — 공급 유형을 한 줄로 펴서 빈 칸을 남기지 않는다. */}
-              {setupSelects.map((sel, i) => (
-                <div key={sel.label} className={i === 0 ? 'col-span-2' : ''}>
-                  <p className="mb-1.5 text-[12.5px] text-sub">{sel.label}</p>
-                  <Select
-                    options={sel.options}
-                    value={sel.value}
-                    onChange={sel.onChange}
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="mt-4">
-              <FieldLabel label="필수시설" hint="고른 조건은 반드시 적용해요" />
-            </div>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-              <MustHaveToggle
-                icon="elevator"
-                label="엘리베이터 필수"
-                active={s.elevatorRequired}
-                onClick={() =>
-                  patch((st) => ({
-                    elevatorRequired: !st.elevatorRequired,
-                  }))
-                }
-              />
-              <MustHaveToggle
-                icon="local_parking"
-                label="주차 1대 이상 필수"
-                active={s.parkingRequired}
-                onClick={() =>
-                  patch((st) => ({ parkingRequired: !st.parkingRequired }))
-                }
-              />
-            </div>
-          </section>
-        </div>
+          </Field>
+          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {setupSelects.map((sel) => (
+              <Field key={sel.label} label={sel.label}>
+                <Select
+                  options={sel.options}
+                  value={sel.value}
+                  onChange={sel.onChange}
+                />
+              </Field>
+            ))}
+          </div>
+          <div className="mt-5">
+            <Field label="꼭 있어야 하는 시설">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <MustHaveToggle
+                  label="엘리베이터"
+                  active={s.elevatorRequired}
+                  onClick={() =>
+                    patch((st) => ({
+                      elevatorRequired: !st.elevatorRequired,
+                    }))
+                  }
+                />
+                <MustHaveToggle
+                  label="주차 1대 이상"
+                  active={s.parkingRequired}
+                  onClick={() =>
+                    patch((st) => ({ parkingRequired: !st.parkingRequired }))
+                  }
+                />
+              </div>
+            </Field>
+          </div>
+        </Section>
 
         {/* 추천 설정 — 하드필터가 아니라 랭킹 반영 스위치. 언제든 여기서 끄고 켠다. */}
-        <section className="mt-7">
-          <Head
-            icon="tune"
-            title="추천 설정"
-            sub="조건을 거르지 않고 순서만 바꿔요"
-          />
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <Section title="추천 설정" sub="조건은 그대로 두고 추천 순서만 바꿔요">
+          <div className="divide-y divide-line-soft">
             <SettingToggle
               label="취향 학습"
-              sub="찜·둘러본 집으로 추천을 정교하게 맞춰요"
+              sub="찜한 집을 보고 추천을 맞춰요"
               on={s.favoriteLearningEnabled}
               onClick={toggleLearning}
             />
             <SettingToggle
               label="의료 접근 중요"
-              sub="병원·약국이 가까운 집을 더 높여요"
+              sub="병원·약국이 가까운 집을 먼저 보여줘요"
               on={s.medicalPreferred}
               onClick={toggleMedical}
             />
           </div>
-        </section>
+        </Section>
+      </Card>
 
-        <div
-          className={`mt-7 flex flex-wrap items-center gap-3 rounded-[13px] border px-4 py-3.5 ${
-            canCompare
-              ? 'border-teal/20 bg-teal-ghost'
-              : 'border-gold/30 bg-gold/10'
-          }`}
-        >
-          <div className="min-w-[220px] flex-1">
-            <p className="text-[14px] font-bold text-ink">
-              {housingsLoading ? (
-                '매물을 세는 중이에요…'
-              ) : (
-                <>
-                  지금 조건에 맞는 매물{' '}
-                  <span
-                    className={`text-[18px] font-extrabold tabular-nums ${
-                      canCompare ? 'text-teal' : 'text-gold-dark'
-                    }`}
-                  >
-                    {passCandidates.length}
-                  </span>
-                  곳
-                </>
-              )}
+      {/* 하단 고정 바 — 맞는 매물 수와 다음 단계. 긴 폼을 내려가도 늘 보인다. */}
+      <div className="sticky bottom-4 z-10 mt-4 flex flex-col gap-3 rounded-[16px] border border-line bg-white px-4 py-3 shadow-pop sm:flex-row sm:gap-4 sm:py-4 sm:items-center sm:px-6">
+        <div className="min-w-0 flex-1">
+          <p className="text-[15px] font-bold text-ink">
+            {housingsLoading ? (
+              '매물을 세는 중이에요…'
+            ) : (
+              <>
+                조건에 맞는 매물{' '}
+                <span
+                  className={`font-display text-[22px] tabular-nums ${
+                    canCompare ? 'text-teal' : 'text-ink'
+                  }`}
+                >
+                  {passCandidates.length}곳
+                </span>
+              </>
+            )}
+          </p>
+          {!housingsLoading && canCompare && !eligibilityComplete && (
+            <p className="mt-0.5 text-[12.5px] text-sub">
+              신청 자격 세 항목을 고르면 비교를 시작할 수 있어요.
             </p>
-            {!housingsLoading && canCompare && !eligibilityComplete && (
-              <p className="mt-0.5 text-[11.5px] leading-relaxed text-sub">
-                신청 자격 세 항목을 모두 고르면 비교를 시작할 수 있어요.
-              </p>
-            )}
-            {!housingsLoading && !canCompare && (
-              <p className="mt-0.5 text-[11.5px] leading-relaxed text-sub">
-                {biggestConstraint
-                  ? `비교하려면 최소 ${MIN_COMPARISON_CANDIDATES}곳이 필요해요. '${biggestConstraint.label}'을 풀면 약 ${biggestConstraint.gain}곳 늘어요.`
-                  : `비교하려면 최소 ${MIN_COMPARISON_CANDIDATES}곳이 필요해요. 지역·예산·필수시설을 조금 넓혀주세요.`}
-              </p>
-            )}
-          </div>
+          )}
           {!housingsLoading && !canCompare && (
-            <div className="flex shrink-0 gap-2">
+            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+              <p className="text-[12.5px] text-sub">
+                비교하려면 {MIN_COMPARISON_CANDIDATES}곳 이상 필요해요.
+              </p>
               {biggestConstraint && (
                 <button
                   onClick={() =>
                     patch(biggestConstraint.open as Partial<StoreState>)
                   }
-                  className="rounded-[9px] border border-gold/40 bg-gold/15 px-3 py-2 text-[12px] font-bold text-gold-dark"
+                  className="text-[12.5px] font-bold text-teal hover:text-teal-dark"
                 >
-                  '{biggestConstraint.label}' 풀기
+                  {biggestConstraint.label} 풀기(+{biggestConstraint.gain}곳)
                 </button>
               )}
               <button
                 onClick={resetComparisonFilters}
-                className="rounded-[9px] border border-gold/30 bg-white px-3 py-2 text-[12px] font-bold text-gold-dark"
+                className="text-[12.5px] font-bold text-sub hover:text-teal"
               >
                 전체 초기화
               </button>
             </div>
           )}
         </div>
-
-        {/* 액션 바 */}
-        <div className="mt-8 flex items-center justify-between gap-3 border-t border-line-soft pt-5">
-          <span className="hidden items-center gap-1.5 text-[12px] text-faint sm:flex">
-            <span className="ms text-[15px]">info</span>설정은 상단 '취향·조건'
-            에서 언제든 바꿀 수 있어요
-          </span>
-          {/* 좁은 화면은 세로로 쌓는다 — 나란히 두면 주 버튼 문구가 두 줄로 꺾인다. */}
-          <div className="flex flex-1 flex-col gap-2 sm:flex-none sm:flex-row sm:gap-3">
-            <Button
-              onClick={goSwipe}
-              disabled={!canCompare || housingsLoading || !eligibilityComplete}
-              className="whitespace-nowrap rounded-[11px] px-6 py-3 text-[13.5px]"
-            >
-              가상 생활권 비교 시작
-            </Button>
-            <Button
-              variant="outline"
-              onClick={goMap}
-              className="rounded-[11px] px-4 py-3 text-[13px]"
-            >
-              {s.comparisonRounds > 0 ? '기존 취향으로 보기' : '지도 바로 보기'}
-            </Button>
-          </div>
+        <div className="grid grid-cols-[2fr_3fr] gap-2 sm:flex">
+          <Button
+            variant="outline"
+            onClick={goMap}
+            className="rounded-[11px] px-3 py-3 text-[13.5px] sm:px-4"
+          >
+            {s.comparisonRounds > 0 ? '기존 취향으로 보기' : '지도 바로 보기'}
+          </Button>
+          <Button
+            onClick={goSwipe}
+            disabled={!canCompare || housingsLoading || !eligibilityComplete}
+            className="whitespace-nowrap rounded-[11px] px-3 py-3 text-[13.5px] sm:px-6 sm:text-[14px]"
+          >
+            가상 생활권 비교 시작
+          </Button>
         </div>
-      </Card>
+      </div>
     </div>
   )
 }
 
-// 필드 라벨 — 왼쪽 이름, 오른쪽 선택 방법 안내
-function FieldLabel({ label, hint }: { label: string; hint: string }) {
+function Section({
+  title,
+  sub,
+  badge,
+  children,
+}: {
+  title: string
+  sub?: string
+  badge?: ReactNode
+  children: ReactNode
+}) {
   return (
-    <div className="mb-2 flex items-baseline justify-between gap-3">
-      <p className="text-[12.5px] text-sub">{label}</p>
-      <p className="text-[11.5px] text-faint">{hint}</p>
+    <section className="py-7">
+      <h2 className="flex items-baseline gap-2 text-[18px] font-bold leading-tight text-ink">
+        {title}
+        {badge}
+      </h2>
+      {sub && <p className="mt-1 text-[13px] text-sub">{sub}</p>}
+      <div className="mt-4">{children}</div>
+    </section>
+  )
+}
+
+function Field({
+  label,
+  required = false,
+  children,
+}: {
+  label: string
+  required?: boolean
+  children: ReactNode
+}) {
+  return (
+    <div>
+      <p className="mb-2 text-[13px] font-semibold text-body">
+        {label}
+        {required && <span className="ml-0.5 text-teal">*</span>}
+      </p>
+      {children}
     </div>
   )
 }
 
 function MustHaveToggle({
-  icon,
   label,
   active,
   onClick,
 }: {
-  icon: string
   label: string
   active: boolean
   onClick: () => void
@@ -472,17 +445,19 @@ function MustHaveToggle({
     <button
       onClick={onClick}
       aria-pressed={active}
-      className={`flex items-center gap-2 rounded-[11px] border px-3 py-2.5 text-left text-[12.5px] font-bold transition-colors ${
+      className={`flex items-center gap-2.5 rounded-[9px] border px-3 py-2.5 text-left text-[14px] transition-colors ${
         active
-          ? 'border-teal bg-teal-ghost text-teal'
-          : 'border-line bg-white text-body hover:border-teal/40'
+          ? 'border-teal font-bold text-teal'
+          : 'border-line bg-white text-body hover:border-teal/45'
       }`}
     >
-      <span className="ms text-[18px]">{icon}</span>
-      <span className="flex-1">{label}</span>
-      <span className="ms text-[18px]">
-        {active ? 'check_circle' : 'radio_button_unchecked'}
+      <span
+        className={`ms text-[20px] ${active ? 'text-teal' : 'text-faint'}`}
+        aria-hidden
+      >
+        {active ? 'check_box' : 'check_box_outline_blank'}
       </span>
+      <span className="flex-1">{label}</span>
     </button>
   )
 }
@@ -499,41 +474,14 @@ function SettingToggle({
   onClick: () => void
 }) {
   return (
-    <div className="flex items-center gap-2.5 rounded-[11px] border border-line bg-white px-3 py-2.5">
+    <div className="flex items-center gap-4 py-3 first:pt-0 last:pb-0">
       <span className="min-w-0 flex-1">
-        <span className="block text-[12.5px] font-bold text-ink">{label}</span>
-        <span className="mt-0.5 block text-[11.5px] leading-snug text-sub">
+        <span className="block text-[14px] font-bold text-ink">{label}</span>
+        <span className="mt-0.5 block text-[12.5px] leading-snug text-sub">
           {sub}
         </span>
       </span>
       <Toggle on={on} onClick={onClick} ariaLabel={`${label} 켜기/끄기`} />
-    </div>
-  )
-}
-
-function Head({
-  icon,
-  title,
-  sub,
-  badge,
-}: {
-  icon: string
-  title: string
-  sub: string
-  badge?: ReactNode
-}) {
-  return (
-    <div className="mb-4 flex items-center gap-2.5">
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-teal-ghost">
-        <span className="ms text-[19px] text-teal">{icon}</span>
-      </span>
-      <div>
-        <h3 className="flex items-center gap-1.5 text-[15px] font-extrabold leading-tight text-ink">
-          {title}
-          {badge}
-        </h3>
-        <p className="text-[11.5px] text-faint">{sub}</p>
-      </div>
     </div>
   )
 }
@@ -546,7 +494,6 @@ function BudgetSlider({
   step,
   raw,
   onChange,
-  maxLabel,
 }: {
   label: string
   value: string
@@ -555,13 +502,12 @@ function BudgetSlider({
   step: number
   raw: number
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
-  maxLabel: string
 }) {
   return (
-    <div className="mt-5">
+    <div>
       <div className="flex items-center justify-between">
-        <span className="text-[12.5px] text-sub">{label}</span>
-        <span className="rounded-md bg-teal-ghost px-2 py-0.5 text-[12.5px] font-bold tabular-nums text-teal">
+        <span className="text-[13px] font-semibold text-body">{label}</span>
+        <span className="text-[13px] font-bold tabular-nums text-teal">
           {value}
         </span>
       </div>
@@ -574,10 +520,6 @@ function BudgetSlider({
         onChange={onChange}
         className="mt-2.5 w-full accent-teal"
       />
-      <div className="mt-1 flex justify-between text-[11px] tabular-nums text-faint">
-        <span>0</span>
-        <span>{maxLabel}</span>
-      </div>
     </div>
   )
 }

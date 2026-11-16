@@ -67,7 +67,7 @@ export default function LandingScreen() {
         }`}
       >
         <p
-          className="animate-rise text-[46px] font-extrabold leading-[1.1] tracking-[-1.5px] text-teal sm:text-[64px]"
+          className="animate-rise font-display text-[46px] font-extrabold leading-[1.1] tracking-[-1.5px] text-teal sm:text-[64px]"
           style={{
             animationDuration: `${RISE_MS}ms`,
             animationDelay: `${RISE_STAGGER[0]}ms`,
@@ -96,7 +96,7 @@ export default function LandingScreen() {
           생활 취향에 맞는 단지를 지도 위에 순서대로 보여드려요.
         </p>
         <div
-          className="animate-rise mt-7 flex flex-col items-center justify-center gap-2.5 sm:flex-row lg:justify-start"
+          className="animate-rise mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row lg:justify-start"
           style={{
             animationDuration: `${RISE_MS}ms`,
             animationDelay: `${RISE_STAGGER[3]}ms`,
@@ -104,15 +104,14 @@ export default function LandingScreen() {
         >
           <Button
             onClick={goSetup}
-            className="w-full max-w-[280px] gap-1.5 rounded-[12px] px-6 py-3.5 text-[15px] sm:w-auto"
+            className="w-full max-w-[280px] rounded-[12px] px-6 py-3 text-[15px] sm:w-auto"
           >
             내 조건으로 시작하기
-            <span className="ms text-[19px]">arrow_forward</span>
           </Button>
           <Button
             variant="outline"
             onClick={go('map')}
-            className="w-full max-w-[280px] rounded-[12px] px-6 py-3.5 text-[15px] sm:w-auto"
+            className="w-full max-w-[280px] rounded-[12px] px-6 py-3 text-[15px] sm:w-auto"
           >
             지도 먼저 둘러보기
           </Button>

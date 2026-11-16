@@ -83,7 +83,7 @@ export default function DetailScreen() {
             <button
               onClick={toggleFav}
               aria-label={fav ? '관심 해제' : '관심 등록'}
-              className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-[13px] font-semibold text-body transition-colors hover:bg-teal-ghost"
+              className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-[13px] font-semibold text-body transition-colors hover:bg-panel"
             >
               <span
                 className={`ms text-[18px] ${fav ? 'text-heart' : 'text-body'}`}
@@ -94,9 +94,9 @@ export default function DetailScreen() {
             </button>
             <button
               onClick={share}
-              className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-[13px] font-semibold text-body transition-colors hover:bg-teal-ghost"
+              className="flex items-center rounded-lg px-2.5 py-1.5 text-[13px] font-semibold text-body transition-colors hover:bg-panel"
             >
-              <span className="ms text-[17px]">ios_share</span>공유
+              공유
             </button>
           </div>
         </div>
@@ -137,7 +137,7 @@ export default function DetailScreen() {
             <p className="text-[11.5px] font-semibold text-sub">
               {learnedScore ? '생활취향 적합도' : '매칭 점수'}
             </p>
-            <p className="text-[34px] font-extrabold leading-none tabular-nums text-teal">
+            <p className="mt-1 font-display text-[36px] font-bold leading-none tabular-nums text-teal">
               {h.score}
               {!learnedScore && <span className="text-[18px]">%</span>}
             </p>
@@ -174,10 +174,7 @@ export default function DetailScreen() {
               청약센터 바로가기
             </Button>
             <NoticePreview className="mt-3" />
-            <p className="mt-3 flex items-start gap-1.5 text-[11.5px] leading-relaxed text-sub">
-              <span className="ms mt-px text-[14px] text-teal">
-                verified_user
-              </span>
+            <p className="mt-3 text-[12px] leading-relaxed text-sub">
               청약 신청·자격 조회에는 본인인증이 필요합니다.
             </p>
           </Card>

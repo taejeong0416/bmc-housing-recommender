@@ -26,7 +26,7 @@ export default function LearningConsentModal() {
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center bg-ink/40 p-4 sm:items-center">
       <div className="w-full max-w-[380px] animate-rise rounded-2xl bg-white p-5 shadow-card">
-        <h2 className="text-[16px] font-extrabold text-ink">
+        <h2 className="text-[16px] font-bold text-ink">
           찜으로 추천을 더 맞춰드릴까요?
         </h2>
         <p className="mt-2 text-[13px] leading-[1.6] text-sub">

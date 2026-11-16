@@ -19,7 +19,7 @@ export default function NoticeModal() {
   return (
     <div className="fixed inset-0 z-[110] flex items-end justify-center bg-ink/40 p-4 sm:items-center">
       <div className="w-full max-w-[420px] animate-rise rounded-2xl bg-white p-5 shadow-card">
-        <h2 className="text-[16px] font-extrabold text-ink">
+        <h2 className="text-[16px] font-bold text-ink">
           개인정보를 수집·보관하지 않습니다
         </h2>
         <p className="mt-2.5 text-[13px] leading-[1.65] text-sub">

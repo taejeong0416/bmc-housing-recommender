@@ -145,21 +145,6 @@ function realRows(dto: GeneratedHousing, tab: string): [string, string][] {
   return []
 }
 
-// 대표장소 유형별 아이콘 — 사진 대신 아이콘으로 장소 성격만 전달한다.
-function placeIcon(minor: string): string {
-  if (minor.includes('백화점')) return 'shopping_bag'
-  if (minor.includes('시장')) return 'storefront'
-  if (minor.includes('몰')) return 'local_mall'
-  if (minor.includes('마트')) return 'shopping_cart'
-  if (minor.includes('해수욕장')) return 'beach_access'
-  if (minor.includes('공원')) return 'park'
-  if (minor.includes('문화')) return 'museum'
-  if (minor.includes('컨벤션')) return 'festival'
-  if (minor.includes('체육')) return 'fitness_center'
-  if (minor.includes('자연')) return 'landscape'
-  return 'place'
-}
-
 // 단지 상세 본문 — 대표이미지부터 기본/비용 탭까지. 상세 페이지(DetailScreen)와
 // 홈 추천 스와이프 카드가 공유한다. 페이지 고유 크롬(뒤로/공유/청약 CTA·우측 요약)은
 // 각 화면이 자기 몫으로 두르고, 여기선 dto만으로 렌더되는 순수 본문만 담는다.
@@ -222,18 +207,13 @@ export function HousingDetailBody({
       <div className="p-5">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <Title className="text-[19px] font-extrabold text-ink">
-                {h.name}
-              </Title>
+            <Title className="text-[21px] font-bold leading-tight text-ink">
+              {h.name}
+            </Title>
+            <p className="mt-1.5 text-[13px] text-sub">
               {h.tag !== '매입임대' && (
-                <span className="rounded-[5px] bg-teal-soft px-1.5 py-0.5 text-[11px] font-bold text-teal">
-                  {h.tag}
-                </span>
+                <span className="mr-2 font-bold text-body">{h.tag}</span>
               )}
-            </div>
-            <p className="mt-1 flex items-center gap-1 text-[13px] text-sub">
-              <span className="ms text-[15px] text-faint">place</span>
               {h.loc}
             </p>
           </div>
@@ -245,7 +225,7 @@ export function HousingDetailBody({
             <p className="text-[11px] font-semibold text-sub">
               {learnedScore ? '생활취향 적합도' : '매칭 점수'}
             </p>
-            <p className="text-[28px] font-extrabold leading-none tabular-nums text-teal">
+            <p className="font-display text-[28px] font-bold leading-none tabular-nums text-teal">
               {h.score}
               {!learnedScore && <span className="text-[16px]">%</span>}
             </p>
@@ -273,22 +253,14 @@ export function HousingDetailBody({
         {/* 위치 — 단지 좌표 중심 지도(Naver). 좌표가 있는 페이지 상세에서만. */}
         {marker && (
           <div className="mt-4">
-            <div className="mb-2 flex items-center gap-1.5">
-              <span className="ms text-[16px] text-teal">map</span>
-              <p className="text-[12px] font-bold text-sub">위치</p>
-            </div>
+            <p className="mb-2 text-[13px] font-bold text-ink">위치</p>
             <LocationMap marker={marker} />
-            <p className="mt-2 flex items-start gap-1 text-[12px] text-sub">
-              <span className="ms mt-px text-[15px] text-faint">place</span>
-              {dto.address}
-            </p>
           </div>
         )}
 
         {/* 대학가 생활권 — tag/ 대학상권 설명태그(설명 전용, 추천점수 무관). 직선거리·추정임을 명시. */}
         {uniBadge && (
-          <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-teal/30 bg-teal-soft px-4 py-3">
-            <span className="ms mt-px text-[18px] text-teal">school</span>
+          <div className="mt-4 rounded-xl border border-line px-4 py-3">
             <div className="min-w-0">
               <p className="text-[13px] font-bold text-ink">
                 대학가 생활권 추정
@@ -297,8 +269,8 @@ export function HousingDetailBody({
                 {uniBadge.campusName ?? '대학 캠퍼스'}
                 {uniBadge.meters != null
                   ? ` 약 ${uniBadge.meters}m(직선거리)`
-                  : ''}{' '}
-                · 카페·외식 등 학생생활형 상권이 함께 형성돼 있어요
+                  : ''}
+                , 카페·외식 등 학생생활형 상권이 함께 형성돼 있어요
               </p>
             </div>
           </div>
@@ -306,19 +278,11 @@ export function HousingDetailBody({
 
         {/* 주변 대표장소 — 큐레이션 라이프스타일 거점(백화점·시장·해수욕장·공원 등). 표시 전용, 추천점수 무관. */}
         {highlights.length > 0 && (
-          <div className="mt-4 rounded-xl border border-line-soft px-4 py-3.5">
-            <div className="flex items-center gap-1.5">
-              <span className="ms text-[16px] text-teal">explore</span>
-              <p className="text-[12px] font-bold text-sub">주변 대표장소</p>
-            </div>
-            <ul className="mt-2.5 space-y-2">
+          <div className="mt-4 rounded-xl border border-line-soft px-4 py-4">
+            <p className="text-[13px] font-bold text-ink">주변 대표장소</p>
+            <ul className="mt-2 space-y-2">
               {highlights.map((l) => (
                 <li key={l.id} className="flex items-center gap-3">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-soft">
-                    <span className="ms text-[17px] text-teal">
-                      {placeIcon(l.categoryMinor)}
-                    </span>
-                  </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[13.5px] font-bold text-ink">
                       {l.name}
@@ -364,7 +328,7 @@ export function HousingDetailBody({
 
         {/* 3-4. 추천 이유·감수할 점 (§6.8-3,4 / §8.6-7) */}
         {learnedScore && (
-          <div className="mt-3 rounded-xl border border-teal/15 bg-teal-ghost px-4 py-3">
+          <div className="mt-3 rounded-xl border border-line bg-panel px-4 py-3">
             <p className="text-[13px] font-bold text-teal">
               {h.highlight || '내 취향 맞춤 추천'}
             </p>

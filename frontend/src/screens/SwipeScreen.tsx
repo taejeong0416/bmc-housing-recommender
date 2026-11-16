@@ -149,7 +149,7 @@ export default function SwipeScreen() {
   if (candidates.length < MIN_RECOMMENDATION_CANDIDATES)
     return (
       <div className="w-full max-w-[560px] rounded-2xl bg-white p-8 text-center shadow-card">
-        <h1 className="text-xl font-extrabold text-ink">
+        <h1 className="text-xl font-bold text-ink">
           추천할 실제 후보가 부족해요
         </h1>
         <p className="mt-2 text-sm text-sub">
@@ -176,15 +176,14 @@ export default function SwipeScreen() {
             <button
               type="button"
               onClick={goPrevious}
-              className="flex items-center gap-1 rounded-full border border-line bg-white px-2.5 py-1 text-[11.5px] font-bold text-sub transition-colors hover:border-teal/40 hover:text-teal"
+              className="rounded-lg px-2 py-1 text-[12.5px] font-bold text-sub transition-colors hover:text-teal"
               aria-label="이전 질문으로 돌아가기"
             >
-              <span className="ms text-[15px]">arrow_back</span>
               이전 질문
             </button>
           )}
-          <span className="rounded-full bg-teal-ghost px-2.5 py-1 text-[11.5px] font-bold tabular-nums text-teal">
-            2 / 3 단계
+          <span className="text-[12.5px] font-bold tabular-nums text-sub">
+            2/3 단계
           </span>
         </div>
       </div>
@@ -199,7 +198,7 @@ export default function SwipeScreen() {
         ))}
       </div>
 
-      <h1 className="text-[22px] font-extrabold leading-[1.34] tracking-[-0.4px] text-ink">
+      <h1 className="text-[22px] font-bold leading-[1.34] tracking-[-0.4px] text-ink">
         {pair.prompt}
       </h1>
 
@@ -237,10 +236,9 @@ export default function SwipeScreen() {
       <button
         type="button"
         onClick={go('map')}
-        className="mx-auto mt-4 flex items-center gap-1 text-[12.5px] font-bold text-sub transition-colors hover:text-teal"
+        className="mx-auto mt-4 block px-3 py-2 text-[12.5px] font-bold text-sub transition-colors hover:text-teal"
       >
         취향 비교 건너뛰기
-        <span className="ms text-[16px]">arrow_forward</span>
       </button>
     </div>
   )
@@ -262,7 +260,7 @@ function VirtualListingChoice({
     <button
       onClick={onClick}
       aria-label={`가상 매물 ${label} · ${profile.title} 선택`}
-      className="group flex flex-col overflow-hidden rounded-[18px] border-2 border-line bg-white text-left shadow-card transition-[transform,border-color,box-shadow] hover:-translate-y-0.5 hover:border-teal hover:shadow-pop active:translate-y-0"
+      className="group flex flex-col overflow-hidden rounded-[16px] border-2 border-line bg-white text-left transition-[border-color,transform] hover:border-teal active:scale-[.99]"
     >
       {/* 실제 매물이 아닌 질문별 생활환경 예시 사진. 3:2 원본 비율로 노출한다. */}
       <div className="flex justify-center px-4 pt-4">
@@ -278,62 +276,49 @@ function VirtualListingChoice({
         />
       </div>
 
-      {/* 배지 헤더 — A/B 배지와 '가상 매물' 표시(사진 유무와 무관하게 항상) */}
-      <div className="flex items-center gap-3 border-b border-line-soft bg-panel px-4 py-3">
-        <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-teal text-[13px] font-extrabold text-white">
-          {label}
-        </span>
-        <span className="text-[11.5px] font-bold text-sub">
-          취향 학습용 가상 매물 {label}
-        </span>
-      </div>
-
       <div className="flex flex-1 flex-col p-4">
-        {/* 문장형 타이틀 + 한 줄 설명 */}
-        <h2 className="text-[16.5px] font-extrabold leading-snug tracking-[-0.3px] text-ink">
+        {/* '가상 매물' 표시 — 실제 매물로 오해하지 않게 사진 유무와 무관하게 항상 */}
+        <p className="mb-1 text-[12px] font-bold text-sub">가상 매물 {label}</p>
+        <h2 className="text-[17px] font-bold leading-snug text-ink">
           {profile.title}
         </h2>
-        <p className="mt-1.5 text-[12.5px] leading-relaxed text-sub">
-          {profile.scene}
-        </p>
 
-        {/* 장점·감수할 점 — 동일한 라벨+불릿 형식으로 통일(섹션 제목만 다름) */}
-        <p className="mt-3 text-[11.5px] font-bold text-sub">장점</p>
-        <ul className="mt-1.5 flex flex-col gap-1.5">
+        {/* 장점은 체크, 감수할 점은 빼기 표시로 구분한다 */}
+        <ul className="mt-3 flex flex-col gap-1.5">
           {profile.tags.map((tag) => (
             <li
               key={tag.label}
-              className="flex items-start gap-2 text-[13px] font-semibold leading-snug text-body"
+              className="flex items-center gap-2 text-[14px] font-semibold text-ink"
             >
-              <span className="ms flex-none text-[16px] leading-snug text-teal">
-                {tag.icon}
+              <span className="ms text-[18px] text-teal" aria-hidden>
+                check
               </span>
               {tag.label}
             </li>
           ))}
         </ul>
-
-        <p className="mt-4 text-[11.5px] font-bold text-sub">감수할 점</p>
-        {/* 감수할 점은 1~2개로 갯수가 달라 카드 높이가 어긋난다 — 2개가 들어가도 아래
-            여백이 넉넉하도록 높이를 고정해 A/B 카드 레이아웃을 동일하게 맞춘다. */}
-        <ul className="mt-1.5 flex min-h-[4.5rem] flex-col gap-1.5">
+        {/* 감수할 점은 1~2개로 갯수가 달라 카드 높이가 어긋난다 — 2개가 들어가도
+            A/B 카드 높이가 같도록 최소 높이를 둔다. */}
+        <ul className="mt-1.5 flex min-h-[3.75rem] flex-col gap-1.5">
           {profile.tradeoffs.map((point) => (
             <li
               key={point.label}
-              className="flex items-start gap-2 text-[13px] font-semibold leading-snug text-body"
+              className="flex items-center gap-2 text-[14px] text-sub"
             >
-              <span className="ms flex-none text-[16px] leading-snug text-teal">
-                {point.icon}
+              <span className="ms text-[18px] text-faint" aria-hidden>
+                remove
               </span>
-              {point.label}
+              <span>
+                <span className="sr-only">감수할 점: </span>
+                {point.label}
+              </span>
             </li>
           ))}
         </ul>
 
         {/* 선택 */}
-        <span className="mt-auto flex w-full items-center justify-center gap-1 rounded-[10px] bg-teal py-2.5 pt-2.5 text-[13px] font-extrabold text-white transition-colors group-hover:bg-teal-dark">
+        <span className="mt-4 flex w-full items-center justify-center rounded-[10px] bg-teal py-3 text-[13.5px] font-bold text-white transition-colors group-hover:bg-teal-dark">
           이 매물이 더 끌려요
-          <span className="ms text-[16px]">arrow_forward</span>
         </span>
       </div>
     </button>

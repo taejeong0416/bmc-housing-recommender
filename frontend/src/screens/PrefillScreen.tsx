@@ -10,7 +10,6 @@ import { houseImage, rangeLabel } from '../api/housings'
 import { applyPrefs, filterPrefsFromState } from '../lib/filter'
 import {
   candidateReason,
-  candidateTradeoff,
   createPreferenceModel,
   eligiblePairwiseHousings,
   preferenceCategorySignals,
@@ -112,7 +111,6 @@ export default function PrefillScreen() {
   const choiceTally = tallyChoiceFeatures(s.preferenceHistory)
   const maxTally = Math.max(...choiceTally.map((t) => t.count), 1)
   const maxCat = Math.max(...categories.map((c) => Math.abs(c.score)), 0.0001)
-  const prioritized = categories.filter((c) => c.score > 0.02).length
   const persona = personaName(categories, diagnosisModel)
   const recommendations = useMemo(() => {
     const filtered = eligiblePairwiseHousings(
@@ -140,8 +138,8 @@ export default function PrefillScreen() {
           <span className="text-[13px] font-bold text-body">
             초기 취향 결과
           </span>
-          <span className="rounded-full bg-teal-ghost px-2.5 py-1 text-[11.5px] font-bold text-teal">
-            3 / 3 단계
+          <span className="text-[12.5px] font-bold tabular-nums text-sub">
+            3/3 단계
           </span>
         </div>
         <div className="mt-4 flex gap-1.5">
@@ -153,13 +151,13 @@ export default function PrefillScreen() {
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr_3fr]">
         <section className="rounded-[18px] bg-white p-6 shadow-card">
-          <h1 className="text-[21px] font-extrabold leading-[1.3] tracking-[-0.4px] text-ink">
+          <h1 className="text-[21px] font-bold leading-[1.3] tracking-[-0.4px] text-ink">
             선택에서 발견한 생활취향이에요
           </h1>
 
           {/* 취향 유형 카드 — 대표 유형 + 요약 + 신호 분석 펼치기 */}
-          <div className="mt-4 rounded-[16px] bg-gradient-to-br from-teal-soft to-teal-ghost p-5">
-            <h2 className="text-[22px] font-extrabold tracking-[-0.5px] text-ink">
+          <div className="mt-4 rounded-[16px] bg-panel p-5">
+            <h2 className="text-[22px] font-bold tracking-[-0.5px] text-ink">
               {persona}
             </h2>
             <p className="mt-2 text-[12.5px] leading-relaxed text-body">
@@ -180,7 +178,7 @@ export default function PrefillScreen() {
                 </button>
 
                 {showBreakdown && (
-                  <div className="mt-3 flex flex-col gap-2.5 border-t border-teal/15 pt-3">
+                  <div className="mt-3 flex flex-col gap-2.5 border-t border-line pt-3">
                     <p className="text-[11.5px] leading-relaxed text-body">
                       취향 비교에서 고른 선택을 모아봤어요. 자주 고른 취향일수록
                       추천에 크게 반영돼요.
@@ -192,15 +190,12 @@ export default function PrefillScreen() {
                           key={item.id}
                           className="flex items-center gap-2.5"
                         >
-                          <span className="flex w-[92px] shrink-0 items-center gap-1 text-[11.5px] text-body">
-                            <span className="ms text-[14px] text-teal">
-                              {item.icon}
-                            </span>
-                            <span className="truncate">{item.label}</span>
+                          <span className="w-[92px] shrink-0 truncate text-[12px] text-body">
+                            {item.label}
                           </span>
                           <span className="h-2 flex-1 overflow-hidden rounded-full bg-white/70">
                             <span
-                              className="block h-full rounded-full bg-gradient-to-r from-teal-soft to-teal"
+                              className="block h-full rounded-full bg-teal"
                               style={{ width: `${width}%` }}
                             />
                           </span>
@@ -217,16 +212,9 @@ export default function PrefillScreen() {
           </div>
 
           <div className="mt-6">
-            <div className="flex items-baseline justify-between">
-              <p className="text-[14px] font-extrabold text-ink">
-                카테고리별 중요도
-              </p>
-              <span className="text-[11px] text-faint">
-                {prioritized > 0
-                  ? `${categories.length}개 중 ${prioritized}개를 우선 반영했어요`
-                  : '아직 뚜렷한 우선순위가 없어요'}
-              </span>
-            </div>
+            <h3 className="text-[16px] font-bold text-ink">
+              카테고리별 중요도
+            </h3>
 
             <div className="mt-4 flex flex-col gap-4">
               {categories.map((category) => {
@@ -243,21 +231,12 @@ export default function PrefillScreen() {
                 return (
                   <div key={category.id}>
                     <div className="flex items-center gap-2.5">
-                      <span className="flex w-[104px] shrink-0 items-center gap-1.5">
-                        <span
-                          className={`ms text-[17px] ${
-                            positive ? 'text-teal' : 'text-faint'
-                          }`}
-                        >
-                          {category.icon}
-                        </span>
-                        <b className="truncate text-[12.5px] text-ink">
-                          {category.label}
-                        </b>
-                      </span>
+                      <b className="w-[96px] shrink-0 truncate text-[13px] text-ink">
+                        {category.label}
+                      </b>
                       <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-panel">
                         <span
-                          className="block h-full rounded-full bg-gradient-to-r from-teal-soft to-teal"
+                          className="block h-full rounded-full bg-teal"
                           style={{ width: `${width}%` }}
                         />
                       </span>
@@ -295,25 +274,18 @@ export default function PrefillScreen() {
 
           {featureSignals.length > 0 && (
             <div className="mt-4">
-              <p className="text-[11px] font-bold text-faint">
+              <p className="text-[12px] font-bold text-sub">
                 선택에서 발견한 세부 취향 신호
               </p>
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {featureSignals.map((signal) => (
-                  <span
-                    key={signal.id}
-                    className={`flex items-center gap-1 rounded-full px-2.5 py-1.5 text-[11px] font-bold ${
-                      signal.weight > 0
-                        ? 'bg-teal-ghost text-teal'
-                        : 'bg-panel text-sub'
-                    }`}
-                  >
-                    <span className="ms text-[14px]">{signal.icon}</span>
-                    {signal.label}
-                    {signal.weight < 0 && ' (후순위)'}
-                  </span>
-                ))}
-              </div>
+              <p className="mt-1 text-[13px] leading-relaxed text-body">
+                {featureSignals
+                  .map((signal) =>
+                    signal.weight < 0
+                      ? `${signal.label}(후순위)`
+                      : signal.label,
+                  )
+                  .join(', ')}
+              </p>
             </div>
           )}
 
@@ -360,16 +332,13 @@ export default function PrefillScreen() {
         <section className="rounded-[18px] bg-white p-6 shadow-card">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-[12px] font-bold text-teal">
-                가장 먼저 볼 후보
-              </p>
-              <h2 className="mt-1 text-[20px] font-extrabold text-ink">
+              <h2 className="text-[20px] font-bold text-ink">
                 내 취향과 가까운 실제 후보 3곳
               </h2>
             </div>
           </div>
 
-          <div className="mt-4 flex flex-col gap-2.5">
+          <div className="mt-4 flex flex-col gap-3">
             {isLoading && (
               <div className="rounded-[13px] bg-panel p-5 text-center text-[13px] text-sub">
                 데이터 보유 후보를 계산하고 있어요.
@@ -383,7 +352,7 @@ export default function PrefillScreen() {
                   <button
                     key={housing.id}
                     onClick={goDetail(housing.id)}
-                    className="group flex gap-3 rounded-[14px] border border-line-soft p-3 text-left transition-colors hover:border-teal/40 hover:bg-teal-ghost/40"
+                    className="group flex gap-3 rounded-[14px] border border-line-soft p-3 text-left transition-colors hover:border-teal/40 hover:bg-panel"
                   >
                     <div className="relative h-[124px] w-[92px] shrink-0 overflow-hidden rounded-[10px] bg-panel">
                       <img
@@ -391,17 +360,17 @@ export default function PrefillScreen() {
                         alt={housing.name}
                         className="h-full w-full object-cover"
                       />
-                      <span className="absolute left-1.5 top-1.5 rounded-md bg-teal px-1.5 py-0.5 text-[10.5px] font-extrabold text-white">
-                        {recommendations.length > 1 ? `${index + 1}위` : '추천'}
-                      </span>
                     </div>
                     <span className="min-w-0 flex-1">
-                      <span className="flex items-center gap-1.5">
+                      <span className="block text-[12px] font-bold tabular-nums text-sub">
+                        {recommendations.length > 1 ? `${index + 1}위` : '추천'}
+                      </span>
+                      <span className="flex items-baseline gap-1.5">
                         <b className="truncate text-[14.5px] text-ink">
                           {housing.name}
                         </b>
                         {housing.type !== '매입임대' && (
-                          <span className="shrink-0 rounded-[5px] bg-teal-soft px-1.5 py-0.5 text-[10px] font-bold text-teal">
+                          <span className="shrink-0 text-[12px] text-sub">
                             {housing.type}
                           </span>
                         )}
@@ -411,23 +380,25 @@ export default function PrefillScreen() {
                           .filter(Boolean)
                           .join(' ')}
                       </span>
-                      <span className="mt-1.5 block text-[11.5px] text-sub">
-                        보증금{' '}
-                        <b className="text-ink">
-                          {rangeLabel(housing.deposit)}
-                        </b>
-                        <span className="ml-2">월</span>{' '}
-                        <b className="text-ink">{rangeLabel(housing.rent)}</b>
+                      <span className="mt-1.5 flex flex-wrap gap-x-2 text-[12px] text-sub">
+                        <span className="whitespace-nowrap">
+                          보증금{' '}
+                          <b className="tabular-nums text-ink">
+                            {rangeLabel(housing.deposit)}
+                          </b>
+                        </span>
+                        <span className="whitespace-nowrap">
+                          월{' '}
+                          <b className="tabular-nums text-ink">
+                            {rangeLabel(housing.rent)}
+                          </b>
+                        </span>
                       </span>
-                      <span className="mt-2 block text-[11px] leading-relaxed text-teal">
+                      <span className="mt-2 block text-[12px] leading-relaxed text-teal">
                         <b>추천 이유</b>{' '}
                         <span className="text-body">
                           {reason ?? housing.highlight ?? '선택 취향 반영'}
                         </span>
-                      </span>
-                      <span className="mt-1 block text-[11px] leading-relaxed text-sub">
-                        <b className="text-body">감수할 점</b>{' '}
-                        {candidateTradeoff(housing.id, model)}
                       </span>
                     </span>
                   </button>

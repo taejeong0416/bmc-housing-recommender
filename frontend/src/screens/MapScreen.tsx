@@ -215,26 +215,21 @@ export default function MapScreen() {
   }, [housings, selectedIds, bounds])
   const prefTags = s.selectedTags.map((id) => {
     const t = byTagId[id]
-    return { icon: t?.icon, label: t?.label, lvl: s.tagWeights[id] || 2 }
+    return { label: t?.label, lvl: s.tagWeights[id] || 2 }
   })
   const regionLabel = s.regions.length
     ? s.regions[0] +
       (s.regions.length > 1 ? ` 외 ${s.regions.length - 1}곳` : '')
-    : '전체'
-  const houseLabel = s.houseTypes.join(', ') || '전체'
+    : '지역 전체'
+  const houseLabel = s.houseTypes.join(', ') || '방 구조 전체'
   const prefMeta = [
     {
-      icon: 'account_balance_wallet',
       label: `보증금 ${depositCapLabel(s.depositMax)}, 월세 ${rentCapLabel(s.rentMax)}`,
     },
-    { icon: 'place', label: regionLabel },
-    { icon: 'home_work', label: houseLabel },
-    ...(s.elevatorRequired
-      ? [{ icon: 'elevator', label: '엘리베이터 필수' }]
-      : []),
-    ...(s.parkingRequired
-      ? [{ icon: 'local_parking', label: '주차 필수' }]
-      : []),
+    { label: regionLabel },
+    { label: houseLabel },
+    ...(s.elevatorRequired ? [{ label: '엘리베이터 필수' }] : []),
+    ...(s.parkingRequired ? [{ label: '주차 필수' }] : []),
   ]
   const housingList = visible.map((dto) => {
     const h = toCard(dto)
@@ -293,16 +288,15 @@ export default function MapScreen() {
         <Button
           onClick={() => setAiOpen((o) => !o)}
           aria-pressed={aiOpen}
-          className="flex items-center gap-1.5 rounded-[22px] px-5 py-2.5 text-[14px]"
+          className="rounded-[11px] px-5 py-2.5 text-[14px]"
         >
-          <span className="ms text-[18px]">auto_awesome</span>AI 검색
+          AI 검색
         </Button>
       </div>
 
       {/* 지역/거점 검색 안내 — 키워드가 거점과 맞으면 그 반경 매물을 보여준다. */}
       {kwLandmarks.length > 0 && (
-        <div className="flex items-center gap-1.5 border-b border-teal/15 bg-teal-ghost px-5 py-2 text-[12px] text-body">
-          <span className="ms text-[16px] text-teal">place</span>
+        <div className="border-b border-line bg-panel px-5 py-2 text-[12.5px] text-body">
           <b className="text-teal">‘{topLm.name}’</b> 반경{' '}
           {kwRadiusKm % 1 ? kwRadiusKm.toFixed(1) : kwRadiusKm}km 안의
           매물이에요
@@ -333,25 +327,24 @@ export default function MapScreen() {
         {(fType || fDeposit || fYear || fScore) && (
           <button
             onClick={resetFilters}
-            className="ml-auto flex items-center gap-1 rounded-lg px-2 py-2 text-[13px] font-semibold text-sub transition-colors hover:text-teal"
+            className="ml-auto rounded-lg px-2 py-2 text-[13px] font-semibold text-sub transition-colors hover:text-teal"
           >
-            <span className="ms text-[16px]">refresh</span>재설정
+            필터 초기화
           </button>
         )}
       </div>
 
       {/* 내 맞춤 조건 */}
-      <div className="flex flex-wrap items-center gap-3 border-b border-line-soft bg-panel px-5 py-3">
-        <span className="flex items-center gap-1 whitespace-nowrap rounded-lg bg-teal px-3 py-1.5 text-[12px] font-bold text-white">
-          <span className="ms text-[14px]">person</span>내 맞춤 조건
+      <div className="flex flex-wrap items-center gap-3 border-b border-line-soft px-5 py-3">
+        <span className="whitespace-nowrap text-[13px] font-bold text-ink">
+          내 맞춤 조건
         </span>
         <ScrollStrip className="min-w-[200px] flex-1">
           {prefTags.map((t, idx) => (
             <span
               key={idx}
-              className="flex flex-shrink-0 items-center gap-1.5 rounded-[20px] border border-line bg-white px-3 py-1.5 text-[12px] font-bold text-body"
+              className="flex flex-shrink-0 items-center gap-1.5 rounded-lg border border-line bg-white px-2.5 py-1.5 text-[12.5px] font-bold text-ink"
             >
-              <span className="ms text-[15px] text-teal">{t.icon}</span>
               {t.label}
               <span className="flex items-center gap-0.5">
                 {[1, 2, 3].map((n) => (
@@ -368,31 +361,30 @@ export default function MapScreen() {
           {prefMeta.map((m, idx) => (
             <span
               key={idx}
-              className="flex flex-shrink-0 items-center gap-1 rounded-[20px] bg-teal-soft px-3 py-1.5 text-[12px] font-semibold text-teal"
+              className="flex-shrink-0 rounded-lg border border-line bg-white px-2.5 py-1.5 text-[12.5px] font-semibold text-body"
             >
-              <span className="ms text-[15px]">{m.icon}</span>
               {m.label}
             </span>
           ))}
         </ScrollStrip>
         <button
           onClick={goPreference}
-          className="flex items-center gap-1 whitespace-nowrap rounded-[9px] border border-line bg-white px-3 py-2 text-[12.5px] font-bold text-body transition-colors hover:border-teal/45 hover:text-teal"
+          className="whitespace-nowrap rounded-[9px] border border-line bg-white px-3 py-2 text-[12.5px] font-bold text-body transition-colors hover:border-teal/45 hover:text-teal"
         >
-          <span className="ms text-[15px]">compare_arrows</span>취향 다시 학습
+          취향 다시 학습
         </button>
         <button
           onClick={goSetup}
-          className="flex items-center gap-1 whitespace-nowrap rounded-[9px] border border-line bg-white px-3 py-2 text-[12.5px] font-bold text-body transition-colors hover:border-teal/45 hover:text-teal"
+          className="whitespace-nowrap rounded-[9px] border border-line bg-white px-3 py-2 text-[12.5px] font-bold text-body transition-colors hover:border-teal/45 hover:text-teal"
         >
-          <span className="ms text-[15px]">tune</span>조건
+          조건 수정
         </button>
       </div>
 
       {/* 지도 + 목록 + AI 대화 — 대화가 열리면 지도·리스트가 왼쪽으로 밀리고 대화창이 오른쪽 컬럼으로 자리한다(겹침 없음). */}
       <div className="flex">
         <div className="flex min-w-0 flex-1 flex-wrap">
-          <div className="relative h-[420px] w-full overflow-hidden bg-[#e4f5f2] md:h-[560px] md:min-w-[340px] md:flex-1">
+          <div className="relative h-[420px] w-full overflow-hidden bg-panel md:h-[560px] md:min-w-[340px] md:flex-1">
             {/* 높이는 h-full(부모 560px의 100%)로 준다 — Naver SDK가 컨테이너 position을
               relative로 덮어써 absolute inset-0 기반 높이가 무너지기 때문. */}
             <div
@@ -421,7 +413,7 @@ export default function MapScreen() {
           <div className="flex w-full flex-col border-t border-line-soft md:w-[420px] md:border-l md:border-t-0">
             <div className="flex items-center justify-between gap-2 border-b border-line-soft px-4 py-3">
               <div className="flex items-center gap-2">
-                <span className="text-[15px] font-extrabold text-ink">
+                <span className="text-[15px] font-bold text-ink">
                   {selectedIds ? '선택 지점' : '이 지역'}{' '}
                   <span className="text-teal">{visible.length}</span>
                   <span className="text-[13px] font-bold text-sub">개</span>
@@ -429,9 +421,9 @@ export default function MapScreen() {
                 {selectedIds && (
                   <button
                     onClick={() => setSelectedIds(null)}
-                    className="flex items-center gap-0.5 rounded-md px-1.5 py-1 text-[12px] font-semibold text-sub transition-colors hover:text-teal"
+                    className="rounded-md px-1.5 py-1 text-[12px] font-semibold text-sub transition-colors hover:text-teal"
                   >
-                    <span className="ms text-[15px]">close</span>전체
+                    전체 보기
                   </button>
                 )}
               </div>
@@ -479,7 +471,7 @@ export default function MapScreen() {
                 <div
                   key={h.id}
                   onClick={h.goDetail}
-                  className="group flex cursor-pointer gap-3 border-b border-line-soft px-4 py-3.5 transition-colors hover:bg-teal-ghost/60"
+                  className="group flex cursor-pointer gap-3 border-b border-line-soft px-4 py-3.5 transition-colors hover:bg-panel"
                 >
                   <div className="relative h-24 w-[74px] shrink-0 overflow-hidden rounded-[10px] bg-panel">
                     <img
@@ -488,27 +480,22 @@ export default function MapScreen() {
                       loading="lazy"
                       className="h-full w-full object-cover"
                     />
-                    <span className="absolute left-1.5 top-1.5 rounded-md bg-teal px-1.5 py-0.5 text-[11px] font-extrabold tabular-nums text-white shadow-sm">
-                      {h.score}점
-                    </span>
-                    <span className="absolute bottom-1 left-1.5 rounded bg-ink/55 px-1 text-[10px] font-bold tabular-nums text-white">
-                      #{i + 1}
-                    </span>
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
-                      <span className="truncate text-[14.5px] font-extrabold text-ink">
+                      <span className="truncate text-[14.5px] font-bold text-ink">
+                        <span className="mr-1.5 tabular-nums text-sub">
+                          {i + 1}
+                        </span>
                         {h.name}
                       </span>
-                      {h.tag !== '매입임대' && (
-                        <span className="shrink-0 rounded-[5px] bg-teal-soft px-1.5 py-0.5 text-[10.5px] font-bold text-teal">
-                          {h.tag}
-                        </span>
-                      )}
+                      <span className="ml-auto shrink-0 text-[14px] font-bold tabular-nums text-teal">
+                        {h.score}점
+                      </span>
                       <button
                         onClick={h.toggleFav}
                         aria-label={h.fav ? '관심 해제' : '관심 등록'}
-                        className="ml-auto shrink-0 rounded-full p-1 leading-[0] transition-transform active:scale-90"
+                        className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full leading-[0] transition-transform active:scale-90"
                       >
                         <span
                           className={`ms text-[19px] ${
@@ -519,7 +506,12 @@ export default function MapScreen() {
                         </span>
                       </button>
                     </div>
-                    <p className="mt-0.5 truncate text-[12px] text-sub">
+                    <p className="-mt-2 truncate text-[12px] text-sub">
+                      {h.tag !== '매입임대' && (
+                        <span className="mr-2 font-bold text-body">
+                          {h.tag}
+                        </span>
+                      )}
                       {h.loc}
                     </p>
                     <div className="mt-1.5 flex gap-3.5 text-[12.5px]">
@@ -687,7 +679,7 @@ function FilterSelect({
         aria-expanded={open}
         className={`flex items-center gap-1 rounded-[9px] border px-3 py-2 text-[13px] font-semibold transition-colors ${
           active
-            ? 'border-teal bg-teal-soft text-teal'
+            ? 'border-teal bg-line-soft text-teal'
             : open
               ? 'border-teal text-teal'
               : 'border-line text-body hover:border-teal/45'
@@ -715,7 +707,7 @@ function FilterSelect({
                 role="option"
                 aria-selected={on}
                 onClick={() => pick(v)}
-                className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-[13px] transition-colors hover:bg-teal-ghost ${
+                className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-[13px] transition-colors hover:bg-panel ${
                   on ? 'font-bold text-teal' : 'font-semibold text-body'
                 }`}
               >
@@ -767,7 +759,7 @@ function ScoreFilter({
         aria-expanded={open}
         className={`flex items-center gap-1 rounded-[9px] border px-3 py-2 text-[13px] font-semibold transition-colors ${
           active
-            ? 'border-teal bg-teal-soft text-teal'
+            ? 'border-teal bg-line-soft text-teal'
             : open
               ? 'border-teal text-teal'
               : 'border-line text-body hover:border-teal/45'
@@ -791,7 +783,7 @@ function ScoreFilter({
             <span className="text-[12.5px] font-semibold text-sub">
               최소 적합도
             </span>
-            <span className="rounded-md bg-teal-ghost px-2 py-0.5 text-[12.5px] font-bold tabular-nums text-teal">
+            <span className="text-[13px] font-bold tabular-nums text-teal">
               {active ? `${num} 이상` : '전체'}
             </span>
           </div>
@@ -817,7 +809,7 @@ function ScoreFilter({
                 aria-pressed={num === p}
                 className={`flex-1 rounded-lg border px-2 py-1.5 text-[12.5px] font-bold transition-colors ${
                   num === p
-                    ? 'border-teal bg-teal-soft text-teal'
+                    ? 'border-teal bg-line-soft text-teal'
                     : 'border-line text-body hover:border-teal/45'
                 }`}
               >

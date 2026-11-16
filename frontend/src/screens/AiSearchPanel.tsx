@@ -479,13 +479,11 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
     <div className="flex h-full flex-col bg-white">
       {/* 헤더 */}
       <div className="flex items-center justify-between border-b border-line-soft px-4 py-3">
-        <h2 className="flex items-center gap-1.5 text-[15px] font-extrabold text-ink">
-          <span className="ms text-[19px] text-teal">auto_awesome</span>AI 검색
-        </h2>
+        <h2 className="text-[16px] font-bold text-ink">AI 검색</h2>
         <button
           onClick={onClose}
           aria-label="닫기"
-          className="rounded-lg p-1.5 leading-[0] text-faint transition-colors hover:bg-panel hover:text-body"
+          className="-mr-2 flex h-11 w-11 items-center justify-center rounded-lg leading-[0] text-sub transition-colors hover:bg-panel hover:text-body"
         >
           <span className="ms text-[20px]">close</span>
         </button>
@@ -503,31 +501,21 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
                   </div>
                 </div>
               ) : (
-                <div key={i} className="flex items-start gap-2">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-ghost">
-                    <span className="ms text-[15px] text-teal">
-                      auto_awesome
-                    </span>
-                  </span>
-                  <div className="min-w-0 pt-0.5">
+                <div key={i}>
+                  <div className="min-w-0">
                     <p
                       className={`text-[12.5px] font-semibold leading-relaxed ${m.failed ? 'text-sub' : 'text-body'}`}
                     >
                       {m.summary}
                     </p>
                     {m.unresolved && m.unresolved.length > 0 && (
-                      <div className="mt-2 flex items-start gap-1.5 rounded-lg bg-panel px-2.5 py-2">
-                        <span className="ms mt-px text-[14px] text-faint">
-                          help
+                      <p className="mt-2 rounded-lg bg-panel px-3 py-2 text-[12px] leading-relaxed text-sub">
+                        이해하지 못한 부분이 있어요:{' '}
+                        <span className="font-semibold text-body">
+                          {m.unresolved.join(', ')}
                         </span>
-                        <p className="text-[11.5px] leading-relaxed text-sub">
-                          이 부분은 이해하지 못했어요 —{' '}
-                          <span className="font-semibold text-body">
-                            {m.unresolved.join(', ')}
-                          </span>
-                          . 더 구체적으로 알려주시면 반영할게요.
-                        </p>
-                      </div>
+                        . 더 구체적으로 알려주시면 반영할게요.
+                      </p>
                     )}
                   </div>
                 </div>
@@ -535,22 +523,15 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
             )}
 
             {loading && (
-              <div className="flex items-start gap-2">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-ghost">
-                  <span className="ms animate-pulse text-[15px] text-teal">
-                    auto_awesome
-                  </span>
-                </span>
-                <p className="pt-0.5 text-[12.5px] font-semibold text-body">
-                  생각하고 있어요…
-                </p>
-              </div>
+              <p className="animate-pulse text-[12.5px] font-semibold text-sub">
+                생각하고 있어요…
+              </p>
             )}
 
             {/* 취향 그릴링 — AI가 되묻는 질문의 탭 가능한 보기 */}
             {followup && !loading && (
-              <div className="ml-8 flex flex-col gap-2">
-                <p className="text-[12px] font-semibold text-teal">
+              <div className="flex flex-col gap-2">
+                <p className="text-[13px] font-bold text-ink">
                   {followup.question}
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -558,7 +539,7 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
                     <button
                       key={i}
                       onClick={() => runTurn(o.label, o.tags ?? [])}
-                      className="rounded-full border border-teal/35 bg-teal-ghost px-3 py-1.5 text-[12px] font-semibold text-teal transition-colors hover:bg-teal-soft"
+                      className="rounded-lg border border-line bg-white px-3 py-2 text-[12.5px] font-semibold text-body transition-colors hover:border-teal hover:text-teal"
                     >
                       {o.label}
                     </button>
@@ -566,32 +547,32 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
                 </div>
                 <button
                   onClick={() => runTurn('이제 결과 볼래요', [], true)}
-                  className="self-start text-[11.5px] font-semibold text-sub transition-colors hover:text-teal"
+                  className="self-start py-2 text-[12px] font-semibold text-sub transition-colors hover:text-teal"
                 >
-                  이제 결과 볼래요 →
+                  이제 결과 볼래요
                 </button>
               </div>
             )}
 
             {/* 누적된 이해 조건 — 눌러서 뺄 수 있음(빼면 지도 즉시 갱신) */}
             {parsed && !loading && chips.length > 0 && (
-              <div className="ml-8">
-                <p className="mb-1.5 text-[11.5px] text-sub">
-                  이렇게 이해했어요 · 눌러서 뺄 수 있어요
+              <div>
+                <p className="mb-1.5 text-[12px] text-sub">
+                  이렇게 이해했어요. 눌러서 뺄 수 있어요.
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {chips.map((c) => (
                     <span
                       key={c.key}
-                      className="flex items-center gap-1 rounded-[8px] bg-teal-soft py-1.5 pl-2.5 pr-1.5 text-[12px] font-bold text-teal"
+                      className="flex items-center gap-1 rounded-[8px] border border-line bg-white py-1 pl-2.5 pr-1 text-[12px] font-bold text-body"
                     >
                       {c.label}
                       <button
                         onClick={c.remove}
                         aria-label={`${c.label} 제거`}
-                        className="rounded-full p-0.5 leading-[0] transition-colors hover:bg-teal/15"
+                        className="rounded-md p-1 leading-[0] text-sub transition-colors hover:bg-panel hover:text-body"
                       >
-                        <span className="ms text-[14px] text-teal">close</span>
+                        <span className="ms text-[14px]">close</span>
                       </button>
                     </span>
                   ))}
@@ -600,11 +581,8 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
             )}
           </div>
         ) : (
-          <div className="flex h-full flex-col items-center justify-center gap-2 py-6 text-center">
-            <span className="ms text-[28px] text-teal">auto_awesome</span>
-            <p className="text-[13.5px] font-bold text-ink">
-              무엇을 찾으시나요?
-            </p>
+          <div className="flex h-full flex-col justify-center gap-2 py-6">
+            <p className="text-[16px] font-bold text-ink">무엇을 찾으시나요?</p>
             <p className="text-[12px] leading-relaxed text-sub">
               원하는 조건을 말해주세요.
               <br />
@@ -614,12 +592,9 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
               <button
                 onClick={() => runTurn(favSuggestion.text)}
                 disabled={loading}
-                className="mt-2 flex max-w-full items-center gap-1.5 rounded-full border border-teal/35 bg-teal-ghost px-3 py-1.5 text-[12px] font-semibold text-teal transition-colors hover:bg-teal-soft disabled:opacity-50"
+                className="mt-2 max-w-full truncate rounded-lg border border-teal px-3 py-2 text-left text-[12.5px] font-semibold text-teal transition-colors hover:bg-panel disabled:opacity-50"
               >
-                <span className="ms text-[15px]">favorite</span>
-                <span className="truncate">
-                  찜하신 곳처럼 · {favSuggestion.label}
-                </span>
+                찜하신 곳처럼 {favSuggestion.label} 찾기
               </button>
             )}
             <div className="mt-3 flex w-full flex-col gap-1.5">
@@ -628,9 +603,8 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
                   key={e}
                   onClick={() => runTurn(e)}
                   disabled={loading}
-                  className="flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-left text-[12px] font-semibold text-body transition-colors hover:border-teal/45 hover:bg-teal-ghost hover:text-teal disabled:opacity-50"
+                  className="rounded-lg border border-line bg-white px-3 py-2.5 text-left text-[12.5px] font-semibold text-body transition-colors hover:border-teal/45 hover:text-teal disabled:opacity-50"
                 >
-                  <span className="ms text-[14px] text-faint">search</span>
                   {e}
                 </button>
               ))}
@@ -641,10 +615,10 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
 
       {/* 지도 반영 상태 + 새 대화 */}
       {parsed && (
-        <div className="flex items-center justify-between gap-2 border-t border-line-soft bg-teal-ghost px-4 py-2.5">
-          <span className="flex items-center gap-1.5 text-[12px] font-bold text-teal">
-            <span className="ms text-[16px]">map</span>
-            지도에 반영 중 · {count}곳
+        <div className="flex items-center justify-between gap-2 border-t border-line-soft bg-panel px-4 py-2.5">
+          <span className="text-[12.5px] font-bold text-body">
+            지도에 <span className="tabular-nums text-teal">{count}곳</span>을
+            표시하고 있어요
           </span>
           <button
             onClick={reset}
@@ -667,7 +641,7 @@ export default function AiSearchPanel({ onClose }: { onClose: () => void }) {
                 ? '이어서 답하거나 조건을 더'
                 : '예: 수영구 원룸 카페 근처'
             }
-            className="flex-1 border-none bg-transparent text-[13px] text-ink outline-none placeholder:text-faint"
+            className="flex-1 border-none bg-transparent text-[13px] text-ink outline-none placeholder:text-sub"
           />
           <button
             onClick={() => runTurn(q)}

@@ -103,7 +103,7 @@ export function Select({
                   onMouseEnter={() => setActive(i)}
                   className={`flex w-full items-center justify-between gap-2 rounded-[7px] px-2.5 py-2 text-left text-[13px] transition-colors ${
                     sel
-                      ? 'bg-teal-ghost font-bold text-teal'
+                      ? 'bg-panel font-bold text-teal'
                       : active === i
                         ? 'bg-panel text-body'
                         : 'text-body'
