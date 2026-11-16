@@ -137,6 +137,7 @@ Claude Sonnet 5의 structured outputs로 필터 스키마(예산·지역·유형
 - **원문 안전망** — 되묻기를 낼 때도 문장에 명시된 조건은 함께 추출하게 프롬프트로 강제하고, 모델이 빠뜨린 방 구조·신축·구/군(줄임말 포함)·보증금·월세 상한은 클라이언트가 원문에서 보강한다(모델 값 우선).
 - **안전·비용** — 입력 검증(300자 상한), 모델 출력 zod 재검증을 둔다. 백엔드는 여기에 IP당 슬라이딩 윈도우 레이트리밋과 동일 요청 캐싱(10분 TTL)을 더한다. 배포 환경(`pages.dev`)에는 Cloudflare Rate limiting 규칙을 걸 수 없어서 비용 상한은 Claude Console 월 사용 한도가 담당한다. API 키는 서버(Pages Function 시크릿·백엔드 env)에만 두고 브라우저는 항상 프록시를 거친다.
 - **폴백** — `GEMINI_API_KEY`가 설정돼 있으면 Claude 호출이 실패할 때(사용 한도 소진·장애·거절) Gemini로 다시 요청한다. 한도는 Claude Console의 월 사용 한도로 정한다. 두 모델이 모두 실패하면 대화창에 잠시 후 다시 물어봐 달라는 안내를 띄우고, 답하던 보기를 다시 보여 준다.
+- **운영 상태** — Claude 키가 만료돼(401 invalid x-api-key) 운영 Pages 시크릿에서 `ANTHROPIC_API_KEY`를 뺐고, 현재 운영은 Gemini(`gemini-flash-lite-latest`, 무료 키)만으로 응답한다. Claude를 다시 쓰려면 새 키를 `npx wrangler pages secret put ANTHROPIC_API_KEY`로 넣고 재배포한다.
 
 **잔여:** 비용 모니터링.
 
