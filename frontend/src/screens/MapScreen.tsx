@@ -1,4 +1,4 @@
-import type { MouseEvent, ReactNode } from 'react'
+import type { CSSProperties, MouseEvent, ReactNode } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useStore } from '../store'
 import { useNav } from '../nav'
@@ -382,9 +382,18 @@ export default function MapScreen() {
       </div>
 
       {/* 지도 + 목록 + AI 대화 — 대화가 열리면 지도·리스트가 왼쪽으로 밀리고 대화창이 오른쪽 컬럼으로 자리한다(겹침 없음). */}
-      <div className="flex">
+      {/* 데스크톱 지도 높이 — 화면이 크면 560px에서 620px까지만 늘린다.
+          화면 높이에서 위쪽(헤더·검색·필터 약 277px)과 아래 여백(60px)을 뺀 값을 따른다. */}
+      <div
+        className="flex"
+        style={
+          {
+            '--map-h': 'clamp(560px, calc(100dvh - 337px), 620px)',
+          } as CSSProperties
+        }
+      >
         <div className="flex min-w-0 flex-1 flex-wrap">
-          <div className="relative h-[420px] w-full overflow-hidden bg-panel md:h-[560px] md:min-w-[340px] md:flex-1">
+          <div className="relative h-[420px] w-full overflow-hidden bg-panel md:h-[var(--map-h)] md:min-w-[340px] md:flex-1">
             {/* 높이는 h-full(부모 560px의 100%)로 준다 — Naver SDK가 컨테이너 position을
               relative로 덮어써 absolute inset-0 기반 높이가 무너지기 때문. */}
             <div
@@ -444,7 +453,7 @@ export default function MapScreen() {
                 ))}
               </div>
             </div>
-            <div className="max-h-[500px] overflow-y-auto">
+            <div className="max-h-[500px] overflow-y-auto md:max-h-[calc(var(--map-h)_-_57px)]">
               {isError && <ErrorState />}
               {!isError && isLoading && (
                 <LoadingState label="추천 주택을 불러오는 중…" />
