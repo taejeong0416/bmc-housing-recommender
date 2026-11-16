@@ -1,4 +1,4 @@
-import { useMemo, type ChangeEvent, type ReactNode } from 'react'
+import { useMemo, useState, type ChangeEvent, type ReactNode } from 'react'
 import { useStore } from '../store'
 import { useNav } from '../nav'
 import { selDef, busanDistricts, roomOpts, advancedSelects } from '../data'
@@ -50,6 +50,7 @@ export default function SetupScreen() {
         }) as Partial<StoreState>,
     )
   const setupSelects = selDef.map(([key, label, options]) => ({
+    key,
     label,
     options:
       key === 'rentType'
@@ -65,10 +66,6 @@ export default function SetupScreen() {
   // 신청자격 값은 필터 비관여 — 매입임대 336곳에 공급계층 데이터가 없어 걸러낼 근거가 없다.
   const setAdvanced = (label: string, value: string) =>
     patch((st) => ({ advanced: { ...st.advanced, [label]: value } }))
-  // 신청자격은 비교 시작의 선행 필수조건 — 세 항목 모두 선택돼야 통과.
-  const eligibilityComplete = advancedSelects.every(
-    (a) => !!s.advanced[a.label],
-  )
   // 필터 필드만 memo 키로 — advancedOpen·favorites 등 무관 state 변경엔 재계산하지 않는다.
   const {
     rentType,
@@ -155,6 +152,11 @@ export default function SetupScreen() {
       elevatorRequired: false,
       parkingRequired: false,
     })
+  const [showMissing, setShowMissing] = useState(false)
+  // 세부 조건은 기본값이 아닐 때만 펼친 채로 시작한다.
+  const [detailOpen, setDetailOpen] = useState(
+    () => s.buildYear !== '제한 없음' || s.area !== '전체',
+  )
   const goSwipe = go('swipe')
   const goMap = go('map')
   // 추천 설정 — 랭킹에 실제로 반영되는 두 스위치. 로그인이 없으므로 이 화면이 유일한 변경 지점.
@@ -169,27 +171,50 @@ export default function SetupScreen() {
     toast(next ? '의료 접근을 추천에 반영해요' : '의료 접근 반영을 껐어요')
   }
 
+  // 비교를 한 번이라도 마친 사용자는 헤더 '취향·조건'으로 조건을 고치러 온 것 — 온보딩 단계 표시를 뺀다.
+  const returning = s.comparisonRounds > 0
+  // 신청자격은 비교 시작의 선행 필수조건 — 세 항목 모두 선택돼야 통과.
+  const missingEligibility = advancedSelects.filter((a) => !s.advanced[a.label])
+  // 비교 시작 — 빈 신청 자격이 있으면 막지 않고 첫 빈 칸으로 이동해 알린다.
+  const startCompare = () => {
+    if (missingEligibility.length > 0) {
+      setShowMissing(true)
+      document
+        .getElementById(eligibilityId(missingEligibility[0].label))
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      return
+    }
+    goSwipe()
+  }
+  const rentTypeSelect = setupSelects.find((sel) => sel.key === 'rentType')
+  const detailSelects = setupSelects.filter((sel) => sel.key !== 'rentType')
+  const detailActive = [s.buildYear !== '제한 없음', s.area !== '전체'].filter(
+    Boolean,
+  ).length
+
   return (
     <div className="w-full max-w-[720px] animate-rise">
-      {/* 진행 헤더 — 필수조건(1) → 가상 생활권 비교(2) → 취향 요약(3) */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between">
-          <span className="text-[13px] font-bold text-body">
-            비교 전 필수조건
-          </span>
-          <span className="text-[13px] font-bold tabular-nums text-sub">
-            1/3 단계
-          </span>
+      {!returning && (
+        // 진행 헤더 — 필수조건(1) → 가상 생활권 비교(2) → 취향 요약(3)
+        <div className="mb-6">
+          <div className="flex items-center justify-between">
+            <span className="text-[13px] font-bold text-body">
+              비교 전 필수조건
+            </span>
+            <span className="text-[13px] font-bold tabular-nums text-sub">
+              1/3 단계
+            </span>
+          </div>
+          <div className="mt-3 flex gap-1.5">
+            <span className="h-1 flex-1 rounded-full bg-teal" />
+            <span className="h-1 flex-1 rounded-full bg-line" />
+            <span className="h-1 flex-1 rounded-full bg-line" />
+          </div>
         </div>
-        <div className="mt-3 flex gap-1.5">
-          <span className="h-1 flex-1 rounded-full bg-teal" />
-          <span className="h-1 flex-1 rounded-full bg-line" />
-          <span className="h-1 flex-1 rounded-full bg-line" />
-        </div>
-      </div>
+      )}
 
       <h1 className="text-balance text-[26px] font-bold leading-tight text-ink">
-        신청 자격과 주택 조건을 정해주세요
+        {returning ? '내 조건' : '신청 자격과 주택 조건을 정해주세요'}
       </h1>
 
       <Card className="mt-6 divide-y divide-line-soft px-5 sm:px-8">
@@ -197,22 +222,34 @@ export default function SetupScreen() {
         <Section
           title="신청 자격"
           badge={<span className="text-[13px] font-bold text-teal">필수</span>}
+          sub="정확하지 않아도 괜찮아요. 실제 자격은 BMC 청약센터에서 확인해요."
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {advancedSelects.map((a) => (
-              <Field key={a.label} label={a.label} required>
-                <Select
-                  options={a.options}
-                  value={s.advanced[a.label] ?? ''}
-                  placeholder={ELIGIBILITY_PLACEHOLDER}
-                  onChange={(v) => setAdvanced(a.label, v)}
-                />
-              </Field>
-            ))}
+            {advancedSelects.map((a) => {
+              const missing = showMissing && !s.advanced[a.label]
+              return (
+                <div key={a.label} id={eligibilityId(a.label)}>
+                  <Field label={a.label} required>
+                    <Select
+                      options={a.options}
+                      value={s.advanced[a.label] ?? ''}
+                      placeholder={ELIGIBILITY_PLACEHOLDER}
+                      onChange={(v) => setAdvanced(a.label, v)}
+                      invalid={missing}
+                    />
+                  </Field>
+                  {missing && (
+                    <p
+                      role="alert"
+                      className="mt-1.5 text-[12.5px] font-semibold text-ink"
+                    >
+                      {a.label}을 골라 주세요
+                    </p>
+                  )}
+                </div>
+              )
+            })}
           </div>
-          <p className="mt-3 text-[12.5px] text-sub">
-            실제 신청 자격은 BMC 청약센터에서 확인해 주세요.
-          </p>
         </Section>
 
         <Section title="지역과 예산">
@@ -228,8 +265,7 @@ export default function SetupScreen() {
             <BudgetSlider
               label="보증금 상한"
               value={depositCapLabel(s.depositMax)}
-              min={0}
-              max={5000}
+              max={OPEN_DEPOSIT}
               step={100}
               raw={s.depositMax}
               onChange={onDeposit}
@@ -237,8 +273,7 @@ export default function SetupScreen() {
             <BudgetSlider
               label="월 임대료 상한"
               value={rentCapLabel(s.rentMax)}
-              min={0}
-              max={60}
+              max={OPEN_RENT}
               step={1}
               raw={s.rentMax}
               onChange={onRent}
@@ -266,16 +301,16 @@ export default function SetupScreen() {
               ))}
             </div>
           </Field>
-          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {setupSelects.map((sel) => (
-              <Field key={sel.label} label={sel.label}>
+          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {rentTypeSelect && (
+              <Field label={rentTypeSelect.label}>
                 <Select
-                  options={sel.options}
-                  value={sel.value}
-                  onChange={sel.onChange}
+                  options={rentTypeSelect.options}
+                  value={rentTypeSelect.value}
+                  onChange={rentTypeSelect.onChange}
                 />
               </Field>
-            ))}
+            )}
           </div>
           <div className="mt-5">
             <Field label="꼭 있어야 하는 시설">
@@ -299,29 +334,68 @@ export default function SetupScreen() {
               </div>
             </Field>
           </div>
+
+          {/* 세부 조건 — 대부분 기본값으로 두는 축은 접어 두고, 적용 중이면 개수를 보인다. */}
+          <button
+            type="button"
+            onClick={() => setDetailOpen((o) => !o)}
+            aria-expanded={detailOpen}
+            className="mt-5 flex items-center gap-1 py-1 text-[13px] font-bold text-body transition-colors hover:text-teal"
+          >
+            세부 조건
+            {detailActive > 0 && (
+              <span className="tabular-nums text-teal">
+                {detailActive}개 적용 중
+              </span>
+            )}
+            <span
+              className={`ms text-[18px] text-sub transition-transform ${detailOpen ? 'rotate-180' : ''}`}
+              aria-hidden
+            >
+              expand_more
+            </span>
+          </button>
+          {detailOpen && (
+            <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {detailSelects.map((sel) => (
+                <Field key={sel.label} label={sel.label}>
+                  <Select
+                    options={sel.options}
+                    value={sel.value}
+                    onChange={sel.onChange}
+                  />
+                </Field>
+              ))}
+            </div>
+          )}
         </Section>
 
-        {/* 추천 설정 — 하드필터가 아니라 랭킹 반영 스위치. 언제든 여기서 끄고 켠다. */}
-        <Section title="추천 설정" sub="조건은 그대로 두고 추천 순서만 바꿔요">
-          <div className="divide-y divide-line-soft">
-            <SettingToggle
-              label="취향 학습"
-              sub="찜한 집을 보고 추천을 맞춰요"
-              on={s.favoriteLearningEnabled}
-              onClick={toggleLearning}
-            />
-            <SettingToggle
-              label="의료 접근 중요"
-              sub="병원·약국이 가까운 집을 먼저 보여줘요"
-              on={s.medicalPreferred}
-              onClick={toggleMedical}
-            />
-          </div>
-        </Section>
+        {/* 추천 설정 — 하드필터가 아니라 랭킹 반영 스위치. 비교를 마친 뒤 조건을 고치러 왔을 때만 보인다. */}
+        {returning && (
+          <Section
+            title="추천 설정"
+            sub="조건은 그대로 두고 추천 순서만 바꿔요"
+          >
+            <div className="divide-y divide-line-soft">
+              <SettingToggle
+                label="취향 학습"
+                sub="찜한 집을 보고 추천을 맞춰요"
+                on={s.favoriteLearningEnabled}
+                onClick={toggleLearning}
+              />
+              <SettingToggle
+                label="의료 접근 중요"
+                sub="병원·약국이 가까운 집을 먼저 보여줘요"
+                on={s.medicalPreferred}
+                onClick={toggleMedical}
+              />
+            </div>
+          </Section>
+        )}
       </Card>
 
       {/* 하단 고정 바 — 맞는 매물 수와 다음 단계. 긴 폼을 내려가도 늘 보인다. */}
-      <div className="sticky bottom-4 z-10 mt-4 flex flex-col gap-3 rounded-[16px] border border-line bg-white px-4 py-3 shadow-pop sm:flex-row sm:gap-4 sm:py-4 sm:items-center sm:px-6">
+      <div className="sticky bottom-4 z-10 mt-4 flex flex-col gap-3 rounded-[16px] border border-line bg-white px-4 py-3 shadow-pop sm:flex-row sm:items-center sm:gap-4 sm:px-6 sm:py-4">
         <div className="min-w-0 flex-1">
           <p className="text-[15px] font-bold text-ink">
             {housingsLoading ? (
@@ -339,11 +413,6 @@ export default function SetupScreen() {
               </>
             )}
           </p>
-          {!housingsLoading && canCompare && !eligibilityComplete && (
-            <p className="mt-0.5 text-[12.5px] text-sub">
-              신청 자격 세 항목을 고르면 비교를 시작할 수 있어요.
-            </p>
-          )}
           {!housingsLoading && !canCompare && (
             <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
               <p className="text-[12.5px] text-sub">
@@ -368,26 +437,47 @@ export default function SetupScreen() {
             </div>
           )}
         </div>
-        <div className="grid grid-cols-[2fr_3fr] gap-2 sm:flex">
-          <Button
-            variant="outline"
-            onClick={goMap}
-            className="rounded-[11px] px-3 py-3 text-[13.5px] sm:px-4"
-          >
-            {s.comparisonRounds > 0 ? '기존 취향으로 보기' : '지도 바로 보기'}
-          </Button>
-          <Button
-            onClick={goSwipe}
-            disabled={!canCompare || housingsLoading || !eligibilityComplete}
-            className="whitespace-nowrap rounded-[11px] px-3 py-3 text-[13.5px] sm:px-6 sm:text-[14px]"
-          >
-            가상 생활권 비교 시작
-          </Button>
-        </div>
+        {returning ? (
+          <div className="grid grid-cols-[2fr_3fr] gap-2 sm:flex">
+            <Button
+              variant="outline"
+              onClick={startCompare}
+              disabled={!canCompare || housingsLoading}
+              className="whitespace-nowrap rounded-[11px] px-3 py-3 text-[13.5px] sm:px-4"
+            >
+              취향 비교 다시 하기
+            </Button>
+            <Button
+              onClick={goMap}
+              className="whitespace-nowrap rounded-[11px] px-3 py-3 text-[13.5px] sm:px-6 sm:text-[14px]"
+            >
+              이 조건으로 지도 보기
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-[2fr_3fr] gap-2 sm:flex">
+            <Button
+              variant="outline"
+              onClick={goMap}
+              className="whitespace-nowrap rounded-[11px] px-3 py-3 text-[13.5px] sm:px-4"
+            >
+              지도 바로 보기
+            </Button>
+            <Button
+              onClick={startCompare}
+              disabled={!canCompare || housingsLoading}
+              className="whitespace-nowrap rounded-[11px] px-3 py-3 text-[13.5px] sm:px-6 sm:text-[14px]"
+            >
+              가상 생활권 비교 시작
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   )
 }
+
+const eligibilityId = (label: string) => `eligibility-${label}`
 
 function Section({
   title,
@@ -489,7 +579,6 @@ function SettingToggle({
 function BudgetSlider({
   label,
   value,
-  min,
   max,
   step,
   raw,
@@ -497,7 +586,6 @@ function BudgetSlider({
 }: {
   label: string
   value: string
-  min: number
   max: number
   step: number
   raw: number
@@ -513,12 +601,12 @@ function BudgetSlider({
       </div>
       <input
         type="range"
-        min={min}
+        min={0}
         max={max}
         step={step}
         value={raw}
         onChange={onChange}
-        className="mt-2.5 w-full accent-teal"
+        className="mt-3 w-full accent-teal"
       />
     </div>
   )

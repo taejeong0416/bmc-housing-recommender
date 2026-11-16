@@ -78,7 +78,7 @@ export const buildOpts: string[] = [
 export const advancedSelects: { label: string; options: string[] }[] = [
   {
     label: '소득구간',
-    options: ['제한 없음', '1분위', '2분위', '3분위', '4분위 이상'],
+    options: ['잘 모르겠어요', '1분위', '2분위', '3분위', '4분위 이상'],
   },
   {
     label: '공급계층',

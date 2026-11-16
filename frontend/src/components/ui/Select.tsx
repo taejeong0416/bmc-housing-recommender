@@ -8,6 +8,7 @@ type Props = {
   onChange: (value: string) => void
   placeholder?: string
   disabled?: boolean
+  invalid?: boolean // 필수인데 비어 있음 — 테두리를 진하게 하고 aria-invalid를 단다
   className?: string
 }
 
@@ -17,6 +18,7 @@ export function Select({
   onChange,
   placeholder = '선택',
   disabled = false,
+  invalid = false,
   className = '',
 }: Props) {
   const [open, setOpen] = useState(false)
@@ -73,10 +75,15 @@ export function Select({
         disabled={disabled}
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-invalid={invalid || undefined}
         onClick={() => !disabled && setOpen((o) => !o)}
         onKeyDown={onKey}
         className={`flex w-full items-center justify-between gap-2 rounded-[9px] border bg-white px-3 py-[10px] text-left text-[13px] transition-colors disabled:opacity-50 ${
-          open ? 'border-teal' : 'border-line hover:border-teal/45'
+          open
+            ? 'border-teal'
+            : invalid
+              ? 'border-ink'
+              : 'border-line hover:border-teal/45'
         } ${filled ? 'text-ink' : 'text-faint'} ${className}`}
       >
         <span className="truncate">{filled ? value : placeholder}</span>
