@@ -192,8 +192,71 @@ export default function SetupScreen() {
     Boolean,
   ).length
 
+  // 구별 매물 수 — 지역을 뺀 나머지 조건을 통과한 매물 기준
+  const regionCounts = useMemo(() => {
+    const counts: Record<string, number> = {}
+    for (const h of applyPrefs(housings, { ...prefs, regions: [] }))
+      counts[h.district] = (counts[h.district] ?? 0) + 1
+    return counts
+  }, [housings, prefs])
+  const primary = returning
+    ? { label: '이 조건으로 지도 보기', onClick: goMap, disabled: false }
+    : {
+        label: '가상 생활권 비교 시작',
+        onClick: startCompare,
+        disabled: !canCompare || housingsLoading,
+      }
+  const secondary = returning
+    ? {
+        label: '취향 비교 다시 하기',
+        onClick: startCompare,
+        disabled: !canCompare || housingsLoading,
+      }
+    : { label: '지도 바로 보기', onClick: goMap, disabled: false }
+  const facilities = [
+    s.elevatorRequired && '엘리베이터',
+    s.parkingRequired && '주차',
+  ].filter(Boolean)
+  const summaryRows: [string, string][] = [
+    [
+      '지역',
+      s.regions.length === 0
+        ? '부산 전체'
+        : s.regions.length <= 2
+          ? s.regions.join(', ')
+          : `${s.regions[0]} 외 ${s.regions.length - 1}곳`,
+    ],
+    ['보증금', depositCapLabel(s.depositMax)],
+    ['월 임대료', rentCapLabel(s.rentMax)],
+    ['방 구조', s.houseTypes.join(', ') || '전체'],
+    ['공급 유형', s.rentType],
+    ['필수 시설', facilities.join(', ') || '없음'],
+  ]
+  // 비교할 매물이 모자랄 때 — 이유와 푸는 방법
+  const relaxHint = !housingsLoading && !canCompare && (
+    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+      <p className="text-[12.5px] text-sub">
+        비교하려면 {MIN_COMPARISON_CANDIDATES}곳 이상 필요해요.
+      </p>
+      {biggestConstraint && (
+        <button
+          onClick={() => patch(biggestConstraint.open as Partial<StoreState>)}
+          className="text-[12.5px] font-bold text-teal hover:text-teal-dark"
+        >
+          {biggestConstraint.label} 풀기(+{biggestConstraint.gain}곳)
+        </button>
+      )}
+      <button
+        onClick={resetComparisonFilters}
+        className="text-[12.5px] font-bold text-sub hover:text-teal"
+      >
+        전체 초기화
+      </button>
+    </div>
+  )
+
   return (
-    <div className="w-full max-w-[720px] animate-rise">
+    <div className="w-full max-w-[720px] animate-rise lg:max-w-[1040px]">
       {!returning && (
         // 진행 헤더 — 필수조건(1) → 가상 생활권 비교(2) → 취향 요약(3)
         <div className="mb-6">
@@ -217,185 +280,237 @@ export default function SetupScreen() {
         {returning ? '내 조건' : '신청 자격과 주택 조건을 정해주세요'}
       </h1>
 
-      <Card className="mt-6 divide-y divide-line-soft px-5 sm:px-8">
-        {/* 신청 자격 — 신청 가능한 공고를 가려내는 필수 선행조건 */}
-        <Section
-          title="신청 자격"
-          badge={<span className="text-[13px] font-bold text-teal">필수</span>}
-          sub="정확하지 않아도 괜찮아요. 실제 자격은 BMC 청약센터에서 확인해요."
-        >
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {advancedSelects.map((a) => {
-              const missing = showMissing && !s.advanced[a.label]
-              return (
-                <div key={a.label} id={eligibilityId(a.label)}>
-                  <Field label={a.label} required>
-                    <Select
-                      options={a.options}
-                      value={s.advanced[a.label] ?? ''}
-                      placeholder={ELIGIBILITY_PLACEHOLDER}
-                      onChange={(v) => setAdvanced(a.label, v)}
-                      invalid={missing}
-                    />
-                  </Field>
-                  {missing && (
-                    <p
-                      role="alert"
-                      className="mt-1.5 text-[12.5px] font-semibold text-ink"
-                    >
-                      {a.label}을 골라 주세요
-                    </p>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </Section>
-
-        <Section title="지역과 예산">
-          <Field label="지역">
-            <MultiSelect
-              options={districtOptions}
-              value={s.regions}
-              onChange={(regions) => patch({ regions })}
-              allLabel="부산 전체"
-            />
-          </Field>
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
-            <BudgetSlider
-              label="보증금 상한"
-              value={depositCapLabel(s.depositMax)}
-              max={OPEN_DEPOSIT}
-              step={100}
-              raw={s.depositMax}
-              onChange={onDeposit}
-            />
-            <BudgetSlider
-              label="월 임대료 상한"
-              value={rentCapLabel(s.rentMax)}
-              max={OPEN_RENT}
-              step={1}
-              raw={s.rentMax}
-              onChange={onRent}
-            />
-          </div>
-        </Section>
-
-        <Section title="주택 조건">
-          <Field label="방 구조">
-            <div className="flex flex-wrap gap-2">
-              <Chip
-                active={s.houseTypes.length === 0}
-                onClick={clearGroup('houseTypes')}
-              >
-                전체
-              </Chip>
-              {roomOpts.map((t) => (
-                <Chip
-                  key={t}
-                  active={s.houseTypes.includes(t)}
-                  onClick={mkToggle('houseTypes', t)}
-                >
-                  {t}
-                </Chip>
-              ))}
-            </div>
-          </Field>
-          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {rentTypeSelect && (
-              <Field label={rentTypeSelect.label}>
-                <Select
-                  options={rentTypeSelect.options}
-                  value={rentTypeSelect.value}
-                  onChange={rentTypeSelect.onChange}
-                />
-              </Field>
-            )}
-          </div>
-          <div className="mt-5">
-            <Field label="꼭 있어야 하는 시설">
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                <MustHaveToggle
-                  label="엘리베이터"
-                  active={s.elevatorRequired}
-                  onClick={() =>
-                    patch((st) => ({
-                      elevatorRequired: !st.elevatorRequired,
-                    }))
-                  }
-                />
-                <MustHaveToggle
-                  label="주차 1대 이상"
-                  active={s.parkingRequired}
-                  onClick={() =>
-                    patch((st) => ({ parkingRequired: !st.parkingRequired }))
-                  }
-                />
-              </div>
-            </Field>
-          </div>
-
-          {/* 세부 조건 — 대부분 기본값으로 두는 축은 접어 두고, 적용 중이면 개수를 보인다. */}
-          <button
-            type="button"
-            onClick={() => setDetailOpen((o) => !o)}
-            aria-expanded={detailOpen}
-            className="mt-5 flex items-center gap-1 py-1 text-[13px] font-bold text-body transition-colors hover:text-teal"
-          >
-            세부 조건
-            {detailActive > 0 && (
-              <span className="tabular-nums text-teal">
-                {detailActive}개 적용 중
-              </span>
-            )}
-            <span
-              className={`ms text-[18px] text-sub transition-transform ${detailOpen ? 'rotate-180' : ''}`}
-              aria-hidden
-            >
-              expand_more
-            </span>
-          </button>
-          {detailOpen && (
-            <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {detailSelects.map((sel) => (
-                <Field key={sel.label} label={sel.label}>
-                  <Select
-                    options={sel.options}
-                    value={sel.value}
-                    onChange={sel.onChange}
-                  />
-                </Field>
-              ))}
-            </div>
-          )}
-        </Section>
-
-        {/* 추천 설정 — 하드필터가 아니라 랭킹 반영 스위치. 비교를 마친 뒤 조건을 고치러 왔을 때만 보인다. */}
-        {returning && (
+      <div className="mt-6 lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start lg:gap-6">
+        <Card className="divide-y divide-line-soft px-5 sm:px-8">
+          {/* 신청 자격 — 신청 가능한 공고를 가려내는 필수 선행조건 */}
           <Section
-            title="추천 설정"
-            sub="조건은 그대로 두고 추천 순서만 바꿔요"
+            title="신청 자격"
+            badge={
+              <span className="text-[13px] font-bold text-teal">필수</span>
+            }
+            sub="정확하지 않아도 괜찮아요. 실제 자격은 BMC 청약센터에서 확인해요."
           >
-            <div className="divide-y divide-line-soft">
-              <SettingToggle
-                label="취향 학습"
-                sub="찜한 집을 보고 추천을 맞춰요"
-                on={s.favoriteLearningEnabled}
-                onClick={toggleLearning}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {advancedSelects.map((a) => {
+                const missing = showMissing && !s.advanced[a.label]
+                return (
+                  <div key={a.label} id={eligibilityId(a.label)}>
+                    <Field label={a.label} required>
+                      <Select
+                        options={a.options}
+                        value={s.advanced[a.label] ?? ''}
+                        placeholder={ELIGIBILITY_PLACEHOLDER}
+                        onChange={(v) => setAdvanced(a.label, v)}
+                        invalid={missing}
+                      />
+                    </Field>
+                    {missing && (
+                      <p
+                        role="alert"
+                        className="mt-1.5 text-[12.5px] font-semibold text-ink"
+                      >
+                        {a.label}을 골라 주세요
+                      </p>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </Section>
+
+          <Section title="지역과 예산">
+            <Field label="지역">
+              <MultiSelect
+                options={districtOptions}
+                value={s.regions}
+                onChange={(regions) => patch({ regions })}
+                allLabel="부산 전체"
+                panelTitle="부산 구·군"
+                counts={regionCounts}
+                unit="곳"
               />
-              <SettingToggle
-                label="의료 접근 중요"
-                sub="병원·약국이 가까운 집을 먼저 보여줘요"
-                on={s.medicalPreferred}
-                onClick={toggleMedical}
+            </Field>
+            <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
+              <BudgetSlider
+                label="보증금 상한"
+                value={depositCapLabel(s.depositMax)}
+                max={OPEN_DEPOSIT}
+                step={100}
+                raw={s.depositMax}
+                onChange={onDeposit}
+              />
+              <BudgetSlider
+                label="월 임대료 상한"
+                value={rentCapLabel(s.rentMax)}
+                max={OPEN_RENT}
+                step={1}
+                raw={s.rentMax}
+                onChange={onRent}
               />
             </div>
           </Section>
-        )}
-      </Card>
 
-      {/* 하단 고정 바 — 맞는 매물 수와 다음 단계. 긴 폼을 내려가도 늘 보인다. */}
-      <div className="sticky bottom-4 z-10 mt-4 flex flex-col gap-3 rounded-[16px] border border-line bg-white px-4 py-3 shadow-pop sm:flex-row sm:items-center sm:gap-4 sm:px-6 sm:py-4">
+          <Section title="주택 조건">
+            <Field label="방 구조">
+              <div className="flex flex-wrap gap-2">
+                <Chip
+                  active={s.houseTypes.length === 0}
+                  onClick={clearGroup('houseTypes')}
+                >
+                  전체
+                </Chip>
+                {roomOpts.map((t) => (
+                  <Chip
+                    key={t}
+                    active={s.houseTypes.includes(t)}
+                    onClick={mkToggle('houseTypes', t)}
+                  >
+                    {t}
+                  </Chip>
+                ))}
+              </div>
+            </Field>
+            <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {rentTypeSelect && (
+                <Field label={rentTypeSelect.label}>
+                  <Select
+                    options={rentTypeSelect.options}
+                    value={rentTypeSelect.value}
+                    onChange={rentTypeSelect.onChange}
+                  />
+                </Field>
+              )}
+            </div>
+            <div className="mt-5">
+              <Field label="꼭 있어야 하는 시설">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <MustHaveToggle
+                    label="엘리베이터"
+                    active={s.elevatorRequired}
+                    onClick={() =>
+                      patch((st) => ({
+                        elevatorRequired: !st.elevatorRequired,
+                      }))
+                    }
+                  />
+                  <MustHaveToggle
+                    label="주차 1대 이상"
+                    active={s.parkingRequired}
+                    onClick={() =>
+                      patch((st) => ({ parkingRequired: !st.parkingRequired }))
+                    }
+                  />
+                </div>
+              </Field>
+            </div>
+
+            {/* 세부 조건 — 대부분 기본값으로 두는 축은 접어 두고, 적용 중이면 개수를 보인다. */}
+            <button
+              type="button"
+              onClick={() => setDetailOpen((o) => !o)}
+              aria-expanded={detailOpen}
+              className="mt-5 flex items-center gap-1 py-1 text-[13px] font-bold text-body transition-colors hover:text-teal"
+            >
+              세부 조건
+              {detailActive > 0 && (
+                <span className="tabular-nums text-teal">
+                  {detailActive}개 적용 중
+                </span>
+              )}
+              <span
+                className={`ms text-[18px] text-sub transition-transform ${detailOpen ? 'rotate-180' : ''}`}
+                aria-hidden
+              >
+                expand_more
+              </span>
+            </button>
+            {detailOpen && (
+              <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {detailSelects.map((sel) => (
+                  <Field key={sel.label} label={sel.label}>
+                    <Select
+                      options={sel.options}
+                      value={sel.value}
+                      onChange={sel.onChange}
+                    />
+                  </Field>
+                ))}
+              </div>
+            )}
+          </Section>
+
+          {/* 추천 설정 — 하드필터가 아니라 랭킹 반영 스위치. 비교를 마친 뒤 조건을 고치러 왔을 때만 보인다. */}
+          {returning && (
+            <Section
+              title="추천 설정"
+              sub="조건은 그대로 두고 추천 순서만 바꿔요"
+            >
+              <div className="divide-y divide-line-soft">
+                <SettingToggle
+                  label="취향 학습"
+                  sub="찜한 집을 보고 추천을 맞춰요"
+                  on={s.favoriteLearningEnabled}
+                  onClick={toggleLearning}
+                />
+                <SettingToggle
+                  label="의료 접근 중요"
+                  sub="병원·약국이 가까운 집을 먼저 보여줘요"
+                  on={s.medicalPreferred}
+                  onClick={toggleMedical}
+                />
+              </div>
+            </Section>
+          )}
+        </Card>
+
+        {/* 데스크톱 오른쪽 요약 — 맞는 매물 수, 고른 조건, 다음 단계 */}
+        <aside className="hidden lg:sticky lg:top-24 lg:block">
+          <Card className="p-6">
+            <p className="text-[13px] font-semibold text-sub">
+              조건에 맞는 매물
+            </p>
+            <p
+              className={`mt-1.5 font-display text-[40px] font-bold leading-none tabular-nums ${
+                canCompare ? 'text-teal' : 'text-ink'
+              }`}
+            >
+              {housingsLoading ? '-' : passCandidates.length}
+              <span className="ml-1 text-[18px]">곳</span>
+            </p>
+            {relaxHint}
+            <dl className="mt-5 space-y-2.5 border-t border-line-soft pt-5">
+              {summaryRows.map(([k, v]) => (
+                <div key={k} className="flex justify-between gap-3 text-[13px]">
+                  <dt className="shrink-0 text-sub">{k}</dt>
+                  <dd className="truncate text-right font-semibold text-ink">
+                    {v}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <div className="mt-6 flex flex-col gap-2">
+              <Button
+                onClick={primary.onClick}
+                disabled={primary.disabled}
+                className="rounded-[11px] py-3 text-[14px]"
+              >
+                {primary.label}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={secondary.onClick}
+                disabled={secondary.disabled}
+                className="rounded-[11px] py-3 text-[14px]"
+              >
+                {secondary.label}
+              </Button>
+            </div>
+          </Card>
+        </aside>
+      </div>
+
+      {/* 모바일·태블릿 하단 고정 바 — 긴 폼을 내려가도 매물 수와 다음 단계가 늘 보인다. */}
+      <div className="sticky bottom-4 z-10 mt-4 flex flex-col gap-3 rounded-[16px] border border-line bg-white px-4 py-3 shadow-pop sm:flex-row sm:items-center sm:gap-4 sm:px-6 sm:py-4 lg:hidden">
         <div className="min-w-0 flex-1">
           <p className="text-[15px] font-bold text-ink">
             {housingsLoading ? (
@@ -413,65 +528,25 @@ export default function SetupScreen() {
               </>
             )}
           </p>
-          {!housingsLoading && !canCompare && (
-            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
-              <p className="text-[12.5px] text-sub">
-                비교하려면 {MIN_COMPARISON_CANDIDATES}곳 이상 필요해요.
-              </p>
-              {biggestConstraint && (
-                <button
-                  onClick={() =>
-                    patch(biggestConstraint.open as Partial<StoreState>)
-                  }
-                  className="text-[12.5px] font-bold text-teal hover:text-teal-dark"
-                >
-                  {biggestConstraint.label} 풀기(+{biggestConstraint.gain}곳)
-                </button>
-              )}
-              <button
-                onClick={resetComparisonFilters}
-                className="text-[12.5px] font-bold text-sub hover:text-teal"
-              >
-                전체 초기화
-              </button>
-            </div>
-          )}
+          {relaxHint}
         </div>
-        {returning ? (
-          <div className="grid grid-cols-[2fr_3fr] gap-2 sm:flex">
-            <Button
-              variant="outline"
-              onClick={startCompare}
-              disabled={!canCompare || housingsLoading}
-              className="whitespace-nowrap rounded-[11px] px-3 py-3 text-[13.5px] sm:px-4"
-            >
-              취향 비교 다시 하기
-            </Button>
-            <Button
-              onClick={goMap}
-              className="whitespace-nowrap rounded-[11px] px-3 py-3 text-[13.5px] sm:px-6 sm:text-[14px]"
-            >
-              이 조건으로 지도 보기
-            </Button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-[2fr_3fr] gap-2 sm:flex">
-            <Button
-              variant="outline"
-              onClick={goMap}
-              className="whitespace-nowrap rounded-[11px] px-3 py-3 text-[13.5px] sm:px-4"
-            >
-              지도 바로 보기
-            </Button>
-            <Button
-              onClick={startCompare}
-              disabled={!canCompare || housingsLoading}
-              className="whitespace-nowrap rounded-[11px] px-3 py-3 text-[13.5px] sm:px-6 sm:text-[14px]"
-            >
-              가상 생활권 비교 시작
-            </Button>
-          </div>
-        )}
+        <div className="grid grid-cols-[2fr_3fr] gap-2 sm:flex">
+          <Button
+            variant="outline"
+            onClick={secondary.onClick}
+            disabled={secondary.disabled}
+            className="whitespace-nowrap rounded-[11px] px-3 py-3 text-[13.5px] sm:px-4"
+          >
+            {secondary.label}
+          </Button>
+          <Button
+            onClick={primary.onClick}
+            disabled={primary.disabled}
+            className="whitespace-nowrap rounded-[11px] px-3 py-3 text-[13.5px] sm:px-6 sm:text-[14px]"
+          >
+            {primary.label}
+          </Button>
+        </div>
       </div>
     </div>
   )
