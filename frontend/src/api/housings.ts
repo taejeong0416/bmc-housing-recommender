@@ -14,8 +14,8 @@ export const manwon = (won: number): string =>
 export const rangeLabel = (r: { min: number; max: number }): string =>
   r.max <= 0
     ? '-'
-    : r.min === r.max
-      ? manwon(r.min)
+    : Math.round(r.min / 10000) === Math.round(r.max / 10000)
+      ? manwon(r.max)
       : `${Math.round(r.min / 10000).toLocaleString()}~${manwon(r.max)}`
 
 export function toCard(h: HousingDto): Housing {

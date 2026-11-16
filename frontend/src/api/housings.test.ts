@@ -19,6 +19,9 @@ describe('rangeLabel', () => {
   it('min===max면 단일값', () => {
     expect(rangeLabel({ min: 30_000_000, max: 30_000_000 })).toBe('3,000만원')
   })
+  it('만원 단위로 같아지면 단일값', () => {
+    expect(rangeLabel({ min: 240_000, max: 244_000 })).toBe('24만원')
+  })
   it('범위면 min~max', () => {
     expect(rangeLabel({ min: 4_260_000, max: 62_740_000 })).toBe(
       '426~6,274만원',
