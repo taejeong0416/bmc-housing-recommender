@@ -102,7 +102,7 @@ export function MultiSelect({
               <button
                 type="button"
                 onClick={() => onChange([])}
-                className="text-[13px] font-semibold text-sub transition-colors hover:text-teal"
+                className="rounded-[8px] border border-line bg-white px-2.5 py-1.5 text-[13px] font-semibold text-body transition-colors hover:border-teal/45 hover:text-teal"
               >
                 선택 해제
               </button>
