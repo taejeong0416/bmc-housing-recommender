@@ -38,25 +38,8 @@ const router = createBrowserRouter(
   { basename: import.meta.env.BASE_URL },
 )
 
-// 실제 API(VITE_API_BASE_URL) 미설정 시 MSW 목서버로 generated/housings.json 서빙(개발·Pages 데모).
-async function enableMocking() {
-  if (import.meta.env.VITE_API_BASE_URL) return
-  const { worker } = await import('./mocks/browser')
-  await worker.start({
-    serviceWorker: { url: `${import.meta.env.BASE_URL}mockServiceWorker.js` },
-    onUnhandledRequest: 'bypass',
-  })
-}
-
-// MSW 기동 실패(SW 미지원 브라우저·워커 404 등)해도 앱은 항상 렌더 — 목 없이 뜨면 화면의 에러 상태가 안내한다.
-enableMocking()
-  .catch((err) =>
-    console.error('[msw] 목서버 기동 실패 — 목 없이 렌더합니다:', err),
-  )
-  .finally(() => {
-    ReactDOM.createRoot(document.getElementById('root')!).render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    )
-  })
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />
+  </QueryClientProvider>,
+)
